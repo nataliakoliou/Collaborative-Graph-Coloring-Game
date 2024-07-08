@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import logging
+
 import utils
 from game import Game
 from grid import Grid

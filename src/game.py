@@ -1,6 +1,3 @@
-import random
-import utils
-from torch.nn import SmoothL1Loss, MSELoss, L1Loss
 from collections import namedtuple
 
 class Game:

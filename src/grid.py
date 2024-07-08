@@ -1,5 +1,6 @@
 import random
 from itertools import product, chain
+
 from colors import *
 import utils
 

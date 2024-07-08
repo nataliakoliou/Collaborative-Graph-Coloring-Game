@@ -5,6 +5,7 @@ from itertools import product
 from copy import deepcopy
 import torch.optim as optim
 from collections import namedtuple, deque
+
 import utils
 from model import *
 from colors import *
