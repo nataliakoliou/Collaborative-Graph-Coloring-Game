@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "collaborative-graph-coloring-game"
+version = "0.1.0"
+description = ""
+authors = ["Natalia Koliou <natalykoliou@yahoo.gr>"]
+license = "Apache-2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
