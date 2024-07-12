@@ -121,7 +121,7 @@ def main():
     
     game = Game(env=grid, human=human, robot=None)
     
-    qlearn(game=game, repeats=1000, epsilon=1, cutoff=0.9, visualize=True)
+    qlearn(game=game, repeats=50, epsilon=1, cutoff=0.9, visualize=True)
 
 if __name__ == "__main__":
     main()
