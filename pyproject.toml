@@ -1,5 +1,6 @@
 [tool.poetry]
-name = "collaborative-graph-coloring-game"
+name = "cgcg"
+packages = [ {include = "src"} ]
 version = "0.1.0"
 description = ""
 authors = ["Natalia Koliou <natalykoliou@yahoo.gr>"]
@@ -7,9 +8,14 @@ license = "Apache-2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-
+python = ">=3.9,<4.0"
+torch = "^2.3.1"
+numpy = "^2.0.0"
+matplotlib = "^3.9.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+learner = "src.learner:main"
