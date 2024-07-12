@@ -20,7 +20,7 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
     colors = [player.color for player in players]
 
     explore = int(cutoff * repeats)
-    decay = round(1/explore)
+    decay = round(1/explore, 10)
 
     losses = {type: [] for type in types}
     action_freqs = {type: [] for type in types}
@@ -68,7 +68,8 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
         mistakes.append(env.num_constraints)
         epsilon = max(epsilon - decay, 0)
 
-        logger.info(f"Repeat: {repeat + 1} ~ Steps: {steps} ~ " + " ~ ".join([f"Losses ({type})={losses[type][repeat]:.6f}" for type in types]) + f" ~ Mistakes: {mistakes[repeat]}")
+        logger.info(f"Repeat: {repeat + 1} ~ Steps: {steps} ~ " + " ~ ".join([f"Losses ({type})={losses[type][repeat]:.6f}" for type in types]) + 
+                    f" ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}")
 
     for player in players:
         action_freqs[player.type] = [action.times['Exploitation']/steps for action in player.space]
@@ -123,7 +124,7 @@ def main():
     
     game = Game(env=grid, human=human, robot=None)
     
-    qlearn(game=game, repeats=10, epsilon=1, cutoff=0.9, visualize=True)
+    qlearn(game=game, repeats=50, epsilon=1, cutoff=0.9, visualize=True)
 
 if __name__ == "__main__":
     main()
