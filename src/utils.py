@@ -43,7 +43,7 @@ def get_color(type):
     else:
         raise ValueError("Invalid type.")
 
-def plot(values, labels, func, path, title, colors, ticks=(None,None), names=[None, None], widths=(0.2, 0.2), marker=None, linestyle='solid'):
+def plot(values, labels, func, path, title, colors, width=0.2, ticks=(None,None), names=[None,None], marker=None, linestyle='solid'):
     x_label, y_label = labels
     x_ticks, y_ticks = ticks
     
@@ -58,7 +58,7 @@ def plot(values, labels, func, path, title, colors, ticks=(None,None), names=[No
         if func == plt.plot:
             func(x_values, y_values, color=colors[i], marker=marker, linestyle=linestyle, label=names[i])
         elif func == plt.bar:
-            func(x_values, y_values, color=colors[i], width=widths[i], label=names[i])
+            func(x_values, y_values, color=colors[i], width=width, label=names[i])
     
     plt.title(title)
     plt.xlabel(x_label)
@@ -70,7 +70,7 @@ def plot(values, labels, func, path, title, colors, ticks=(None,None), names=[No
     if y_ticks is not None:
         plt.yticks(*y_ticks, rotation=45, ha="right")
 
-    if names != [None, None]:
+    if names != [None,None]:
         plt.legend()
         
     plt.grid(True)

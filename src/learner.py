@@ -79,7 +79,9 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
 
     if visualize:
 
-        utils.plot(values=[(range(repeats), mistakes)], 
+        repeats_lst = list(range(repeats))
+
+        utils.plot(values=[(repeats_lst, mistakes)], 
                    labels=('Repeat', 'Mistakes'), 
                    func=plt.bar,
                    path=utils.get_path(folder=("static", f"{game.title}"), name="learn_mistakes.png"), 
@@ -87,7 +89,7 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
                    colors=['green']
                    )
         
-        utils.plot(values=[(range(repeats), losses[type]) for type in types],
+        utils.plot(values=[(repeats_lst, losses[type]) for type in types],
                    labels=('Step', 'Loss'),
                    func=plt.plot,
                    path=utils.get_path(folder=("static", f"{game.title}"), name="losses.png"),  
@@ -121,7 +123,7 @@ def main():
     
     game = Game(env=grid, human=human, robot=None)
     
-    qlearn(game=game, repeats=50, epsilon=1, cutoff=0.9, visualize=True)
+    qlearn(game=game, repeats=10, epsilon=1, cutoff=0.9, visualize=True)
 
 if __name__ == "__main__":
     main()
