@@ -6,9 +6,9 @@ from copy import deepcopy
 import torch.optim as optim
 from collections import namedtuple, deque
 
-import utils
-from model import *
-from colors import *
+from . import utils
+from .model import *
+from .colors import *
 
 class ReplayMemory(object):
     def __init__(self, capacity):

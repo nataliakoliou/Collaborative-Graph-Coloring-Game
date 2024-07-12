@@ -1,5 +1,6 @@
 import os
 import random
+import logging
 import matplotlib.pyplot as plt
 from collections import namedtuple
 
@@ -12,18 +13,26 @@ def get_size(struct):
 def encode(k, n):
     if k > n:
         raise ValueError("k should be less than or equal to n")
+    
     encoding = [0 for _ in range(n)]
     encoding[k - 1] = 1
+
     return encoding
 
 def get_id(list, value):
     ids = [i for i, x in enumerate(list) if x == value]
-    return random.choice(ids) if ids else None
 
-def get_path(dir, folder, name):
+    if ids:
+        return random.choice(ids)
+    else:
+        return None
+
+def get_path(folder, name):
     folder = folder if isinstance(folder, tuple) else (folder,)
-    save_dir = os.path.join(dir, *folder)
+    save_dir = os.path.join(*folder)
+
     os.makedirs(save_dir, exist_ok=True)
+    
     return os.path.join(save_dir, name)
 
 def get_color(type):
@@ -70,6 +79,7 @@ def plot(values, labels, func, path, title, colors, ticks=(None,None), names=[No
 def filterout(input, target=None):
     if isinstance(input, list):
         target_func = lambda x: x is not target
+
         return list(filter(target_func, input))
     
     elif isinstance(input, tuple) and hasattr(input, '_fields'):
@@ -82,3 +92,17 @@ def filterout(input, target=None):
         output = namedtuple(class_name, fields)
 
         return output(*values)
+    
+def get_logger(level='DEBUG'):
+    logger = logging.getLogger(__name__)
+
+    level_name = logging.getLevelName(level)
+    logger.setLevel(level_name)
+    
+    formatter = logging.Formatter('%(asctime)s:%(lineno)d:%(levelname)s:%(name)s:%(message)s')
+    
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+    
+    return logger

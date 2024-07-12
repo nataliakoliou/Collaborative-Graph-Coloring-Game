@@ -1,8 +1,8 @@
 import random
 from itertools import product, chain
 
-from colors import *
-import utils
+from .colors import *
+from . import utils
 
 class Grid:
     def __init__(self, rows, cols, merge, minR=2, wR=0.2):
@@ -17,7 +17,8 @@ class Grid:
 
     @property
     def maxR(self):
-        return int(self.minR + self.wR * self.num_blocks)
+        extraR = self.wR * self.num_blocks
+        return int(self.minR + extraR)
     
     @property
     def constraints(self):
@@ -26,7 +27,10 @@ class Grid:
         for block in self.state:
             for id in block.neighbors:
                 neighbor = self.state[id]
-                constraints.add(frozenset({block.id, neighbor.id})) if block.color == neighbor.color else None
+
+                if block.color == neighbor.color:
+                    pair = frozenset({block.id, neighbor.id})
+                    constraints.add(pair)
 
         return len(constraints)
 
@@ -41,6 +45,7 @@ class Grid:
 
             cell.neighbors = [self.grid[i + dr][j + dc] for dr, dc in [(0, -1), (0, 1), (-1, 0), (1, 0)]
                               if Cell(i + dr, j + dc).is_valid(self.rows, self.cols)]
+            
             ids = [neighbor.id for neighbor in cell.neighbors if neighbor.id is not None]
 
             if random.random() < self.merge and ids:
@@ -65,10 +70,14 @@ class Grid:
 
     def load_colors(self):
         max_neighbors = max(len(block.neighbors) for block in self.state)
-        num_colors = max_neighbors + 1; num_encodings = num_colors + 2
+
+        num_colors = max_neighbors + 1
+        num_encodings = num_colors + 2
 
         COLORS[:] = COLORS[:num_colors]
-        HIDDEN.encoding, NC.encoding = utils.encode(k=1, n=num_encodings), utils.encode(k=2, n=num_encodings)
+
+        HIDDEN.encoding = utils.encode(k=1, n=num_encodings)
+        NC.encoding = utils.encode(k=2, n=num_encodings)
 
         for i, color in enumerate(COLORS, start=3):
             color.encoding = utils.encode(k=i, n=num_encodings)
@@ -76,7 +85,8 @@ class Grid:
         self.reset()
 
     def reset(self):
-        [block.set_color(HIDDEN) for block in self.state]
+        for block in self.state:
+            block.set_color(HIDDEN)
 
     def step(self):
         reveal = random.randint(self.minR, self.maxR)
@@ -104,6 +114,7 @@ class Grid:
         action.winner = True
 
         if not bool(action.invalid):
+
             if distinct or not loser:
                 self.state[action.block.id].set_color(action.color)
                 loser = True
@@ -118,13 +129,20 @@ class Grid:
 
         for id in player.action.block.neighbors:
             neighbor = self.state[id]
-            k, m = (k + 1, m) if neighbor.color != player.action.color else (k, m + 1)
+
+            if neighbor.color != player.action.color:
+                k, m = (k + 1, m)
+            else:
+                k, m = (k, m + 1)
 
         s = player.action.invalid * sanction
         g = k * gain
         p = m * penalty
 
-        player.reward = s + g + p if player.action.winner else 0
+        if player.action.winner:
+            player.reward = s + g + p
+        else:
+            player.reward = 0
 
 class Cell:
     def __init__(self, row, col):
@@ -155,7 +173,9 @@ class Block:
 
     def set_color(self, color):
         self.color = color
-        [cell.set_color(color) for cell in self.cells]
+        
+        for cell in self.cells:
+            cell.set_color(color)
 
     def is_hidden(self):
         return isinstance(self.color, Hidden)

@@ -2,24 +2,16 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 import torch.nn as nn
-import logging
 
-import utils
-from game import Game
-from grid import Grid
-from player import Player
+from . import utils
+from .game import Game
+from .grid import Grid
+from .player import Player
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s:%(lineno)d:%(levelname)s:%(name)s:%(message)s')
-stream_handler = logging.StreamHandler()
-stream_handler.setFormatter(formatter)
-logger.addHandler(stream_handler)
-
+logger = utils.get_logger(level='DEBUG')
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-logger.info(f'Device is {device}')
 
-dir = '/content/drive/MyDrive/Repositories/custom_spiel'
+logger.info(f'Device is {device}')
 
 def qlearn(game, repeats, epsilon, cutoff, visualize=True):
     env = game.env
@@ -81,7 +73,7 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
     for player in players:
         action_freqs[player.type] = [action.times['Exploitation']/steps for action in player.space]
 
-        path = utils.get_path(dir=dir, folder=("models", f"{player.type}"), name=f"{game.title}.pth")
+        path = utils.get_path(folder=("models", f"{player.type}"), name=f"{game.title}.pth")
         model = player.policy_net.state_dict()
         torch.save(model, path)
 
@@ -90,14 +82,14 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
         utils.plot(values=[(range(repeats), mistakes)], 
                    labels=('Repeat', 'Mistakes'), 
                    func=plt.bar,
-                   path=utils.get_path(dir=dir, folder=("static", f"{game.title}"), name="learn_mistakes.png"), 
+                   path=utils.get_path(folder=("static", f"{game.title}"), name="learn_mistakes.png"), 
                    title='Mistakes Plot', 
                    colors=['green'])
         
         utils.plot(values=[(range(repeats), losses[type]) for type in types],
                    labels=('Step', 'Loss'),
                    func=plt.plot,
-                   path=utils.get_path(dir=dir, folder=("static", f"{game.title}"), name="losses.png"),  
+                   path=utils.get_path(folder=("static", f"{game.title}"), name="losses.png"),  
                    title='Loss Curve',
                    colors=colors,
                    names=types)
@@ -105,7 +97,7 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
         utils.plot(values=[(list(range(len(action_freqs[type]))), action_freqs[type]) for type in types], 
                    labels=('Action', 'Frequency'),
                    func=plt.bar,
-                   path=utils.get_path(dir=dir, folder=("static", f"{game.title}"), name=f"learn_exploit_stats.png"), 
+                   path=utils.get_path(folder=("static", f"{game.title}"), name=f"learn_exploit_stats.png"), 
                    title='Exploitation Statistics', 
                    colors=colors)
 
@@ -126,7 +118,7 @@ def main():
     
     game = Game(env=grid, human=human, robot=None)
     
-    qlearn(game=game, repeats=100, epsilon=1, cutoff=0.9, visualize=True)
+    qlearn(game=game, repeats=1000, epsilon=1, cutoff=0.9, visualize=True)
 
 if __name__ == "__main__":
     main()
