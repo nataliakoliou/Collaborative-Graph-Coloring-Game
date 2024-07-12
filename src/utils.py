@@ -70,7 +70,9 @@ def plot(values, labels, func, path, title, colors, ticks=(None,None), names=[No
     if y_ticks is not None:
         plt.yticks(*y_ticks, rotation=45, ha="right")
 
-    plt.legend()
+    if names:
+        plt.legend()
+        
     plt.grid(True)
 
     plt.savefig(path)

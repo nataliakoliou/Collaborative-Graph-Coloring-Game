@@ -65,7 +65,7 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
         for player in players:
             losses[player.type].append(player.L / steps)
 
-        mistakes.append(env.constraints)
+        mistakes.append(env.num_constraints)
         epsilon = max(epsilon - decay, 0)
 
         logger.info(f"Repeat: {repeat + 1} ~ Steps: {steps} ~ " + " ~ ".join([f"Losses ({type})={losses[type][repeat]:.6f}" for type in types]) + f" ~ Mistakes: {mistakes[repeat]}")
@@ -84,7 +84,8 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
                    func=plt.bar,
                    path=utils.get_path(folder=("static", f"{game.title}"), name="learn_mistakes.png"), 
                    title='Mistakes Plot', 
-                   colors=['green'])
+                   colors=['green']
+                   )
         
         utils.plot(values=[(range(repeats), losses[type]) for type in types],
                    labels=('Step', 'Loss'),
@@ -92,14 +93,16 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
                    path=utils.get_path(folder=("static", f"{game.title}"), name="losses.png"),  
                    title='Loss Curve',
                    colors=colors,
-                   names=types)
+                   names=types
+                   )
 
         utils.plot(values=[(list(range(len(action_freqs[type]))), action_freqs[type]) for type in types], 
                    labels=('Action', 'Frequency'),
                    func=plt.bar,
                    path=utils.get_path(folder=("static", f"{game.title}"), name=f"learn_exploit_stats.png"), 
                    title='Exploitation Statistics', 
-                   colors=colors)
+                   colors=colors
+                   )
 
 def main():
     grid = Grid(rows=2, cols=2, merge=0.2, minR=2, wR=0.2)

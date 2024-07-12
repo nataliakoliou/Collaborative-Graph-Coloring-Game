@@ -32,7 +32,11 @@ class Grid:
                     pair = frozenset({block.id, neighbor.id})
                     constraints.add(pair)
 
-        return len(constraints)
+        return constraints
+    
+    @property
+    def num_constraints(self):
+        return len(self.constraints)
 
     def load(self):
         self.load_cells()
