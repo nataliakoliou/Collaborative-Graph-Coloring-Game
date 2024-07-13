@@ -1,0 +1,29 @@
+grid:
+  rows: 2
+  cols: 2
+  merge: 0.2
+  minR: 2
+  wR: 0.2
+
+player:
+  type: "human"
+  style: "random"
+  model: "HDQN"
+  criterion:
+    name: "SmoothL1Loss"
+    params:
+      beta: 1.0
+  optimizer:
+    name: "AdamW"
+    params: 
+      lr: 0.001
+      weight_decay: 0.00001
+  tau: 0.005
+  batch_size: 8
+  gamma: 0
+
+qlearn:
+  repeats: 50
+  epsilon: 1
+  cutoff: 0.9
+  visualize: true

@@ -1,4 +1,5 @@
 import os
+import yaml
 import random
 import logging
 import matplotlib.pyplot as plt
@@ -108,3 +109,9 @@ def get_logger(level='DEBUG'):
     logger.addHandler(stream_handler)
     
     return logger
+
+def load_yaml(path):
+    with open(path, 'r') as file:
+        yaml_data = yaml.safe_load(file)
+    
+    return yaml_data

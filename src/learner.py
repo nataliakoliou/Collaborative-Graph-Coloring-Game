@@ -111,18 +111,12 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
 def main():
     config = utils.load_yaml(path=os.path.join(os.path.dirname(__file__), '..', 'config.yaml'))
     
-    grid = Grid(rows=config['grid']['rows'], cols=config['grid']['cols'], merge=config['grid']['merge'], 
-                minR=config['grid']['minR'], wR=config['grid']['wR'])
-    
-    player = Player(type=config['player']['type'], style=config['player']['style'], 
-                    model=config['player']['model'], criterion=config['player']['criterion'], 
-                    optimizer=config['player']['optimizer'], tau=config['player']['tau'], 
-                    batch_size=config['player']['batch_size'], gamma=config['player']['gamma'])
+    grid = Grid(**config['grid'])
+    player = Player(**config['player'])
     
     game = Game(env=grid, human=player, robot=None)
     
-    qlearn(game=game, repeats=config['qlearn']['repeats'], epsilon=config['qlearn']['epsilon'], 
-           cutoff=config['qlearn']['cutoff'], visualize=config['qlearn']['visualize'])
+    qlearn(game=game, **config['qlearn'])
 
 if __name__ == "__main__":
     main()

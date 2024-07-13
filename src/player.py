@@ -25,17 +25,15 @@ class ReplayMemory(object):
         return len(self.memory)
 
 class Player:
-    def __init__(self, type, style, model, criterion, optimizer, lr, tau, batch_size, gamma, weight_decay):
+    def __init__(self, type, style, model, criterion, optimizer, tau, batch_size, gamma):
         self.type = type
         self.style = style
         self.model = model
         self.criterion = criterion
         self.optimizer = optimizer
-        self.lr = lr
         self.tau = tau
         self.batch_size = batch_size
         self.gamma = gamma
-        self.weight_decay = weight_decay
         self.color = utils.get_color(type)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.memory = ReplayMemory(10000)
@@ -64,7 +62,13 @@ class Player:
         self.target_net = globals()[self.model](input=self.features, output=len(self.space)).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
 
-        self.optimizer = getattr(optim, self.optimizer)(self.policy_net.parameters(), lr=self.lr, weight_decay=self.weight_decay)
+        criterion_name = self.criterion['name']
+        criterion_params = self.criterion.get('params', {})
+        self.criterion = getattr(nn, criterion_name)(**criterion_params)
+
+        optimizer_name = self.optimizer['name']
+        optimizer_params = self.optimizer.get('params', {})
+        self.optimizer = getattr(optim, optimizer_name)(self.policy_net.parameters(), **optimizer_params)
 
     def update(self, type, data=None):
         if type == "current":
