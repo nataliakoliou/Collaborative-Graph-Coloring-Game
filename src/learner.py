@@ -2,7 +2,6 @@ import os
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-import torch.nn as nn
 
 from . import utils
 from .game import Game
@@ -20,8 +19,8 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
     types = [player.type for player in players]
     colors = [player.color for player in players]
 
-    explore = int(cutoff * repeats)
-    decay = round(1/explore, 10)
+    max_exploration_steps = cutoff * repeats
+    decay = round(1/max_exploration_steps, 10)
 
     losses = {type: [] for type in types}
     action_freqs = {type: [] for type in types}

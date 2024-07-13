@@ -28,9 +28,9 @@ def get_id(list, value):
     else:
         return None
 
-def get_path(folder, name):
-    folder = folder if isinstance(folder, tuple) else (folder,)
-    save_dir = os.path.join(*folder)
+def get_path(dir, name):
+    dir = dir if isinstance(dir, tuple) else (dir,)
+    save_dir = os.path.join(*dir)
 
     os.makedirs(save_dir, exist_ok=True)
     
