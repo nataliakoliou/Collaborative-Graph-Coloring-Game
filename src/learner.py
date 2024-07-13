@@ -1,3 +1,4 @@
+import os
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -108,23 +109,20 @@ def qlearn(game, repeats, epsilon, cutoff, visualize=True):
                    )
 
 def main():
-    grid = Grid(rows=2, cols=2, merge=0.2, minR=2, wR=0.2)
-    # grid = Grid(rows=4, cols=4, merge=0.3, minR=2, wR=0.2)
-
-    human = Player(type='human', 
-                   style='random',
-                   model='HDQN', 
-                   criterion=nn.SmoothL1Loss(beta=1.0), 
-                   optimizer='AdamW', 
-                   lr=1e-3, 
-                   tau=5e-3, 
-                   batch_size=8, 
-                   gamma=0, 
-                   weight_decay=1e-5)
+    config = utils.load_yaml(path=os.path.join(os.path.dirname(__file__), '..', 'config.yaml'))
     
-    game = Game(env=grid, human=human, robot=None)
+    grid = Grid(rows=config['grid']['rows'], cols=config['grid']['cols'], merge=config['grid']['merge'], 
+                minR=config['grid']['minR'], wR=config['grid']['wR'])
     
-    qlearn(game=game, repeats=50, epsilon=1, cutoff=0.9, visualize=True)
+    player = Player(type=config['player']['type'], style=config['player']['style'], 
+                    model=config['player']['model'], criterion=config['player']['criterion'], 
+                    optimizer=config['player']['optimizer'], tau=config['player']['tau'], 
+                    batch_size=config['player']['batch_size'], gamma=config['player']['gamma'])
+    
+    game = Game(env=grid, human=player, robot=None)
+    
+    qlearn(game=game, repeats=config['qlearn']['repeats'], epsilon=config['qlearn']['epsilon'], 
+           cutoff=config['qlearn']['cutoff'], visualize=config['qlearn']['visualize'])
 
 if __name__ == "__main__":
     main()
