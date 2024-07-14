@@ -115,3 +115,10 @@ def load_yaml(path):
         yaml_data = yaml.safe_load(file)
     
     return yaml_data
+
+def get_adjacent_pos(row, col, direction):
+    effect = {'left': (0, -1), 'right': (0, 1), 'up': (-1, 0), 'down': (1, 0)}
+
+    row_effect, col_effect = effect[direction]
+    
+    return row + row_effect, col + col_effect

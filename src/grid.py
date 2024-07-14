@@ -1,16 +1,25 @@
+import time
 import random
+import pygame
 from itertools import product, chain
 
 from .colors import *
 from . import utils
 
 class Grid:
-    def __init__(self, rows, cols, merge, minR=2, wR=0.2):
+    def __init__(self, rows, cols, merge, minR=2, wR=0.2, viz={}):
         self.rows = rows
         self.cols = cols
         self.merge = merge
         self.minR = minR
         self.wR = wR
+        self.freq = viz['freq']
+        self.cell_size = viz['cell_size']
+        self.border_width = viz['border_width']
+        self.screen_color = globals().get(viz['screen_color'])()
+        self.live = viz['live']
+        self.screen_width = self.cols * self.cell_size + 2 * self.border_width
+        self.screen_height = self.rows * self.cell_size  + 2 * self.border_width
         self.grid = [[Cell(i, j) for j in range(cols)] for i in range(rows)]
         self.state = []
         self.num_blocks = 0
@@ -45,9 +54,9 @@ class Grid:
 
     def load_cells(self):
         for i, j in product(range(self.rows), range(self.cols)):
-            cell = self.grid[i][j]
+            cell = self.get_cell(i, j)
 
-            cell.neighbors = [self.grid[i + dr][j + dc] for dr, dc in [(0, -1), (0, 1), (-1, 0), (1, 0)]
+            cell.neighbors = [self.get_cell(i + dr, j + dc) for dr, dc in [(0, -1), (0, 1), (-1, 0), (1, 0)]
                               if Cell(i + dr, j + dc).is_valid(self.rows, self.cols)]
             
             ids = [neighbor.id for neighbor in cell.neighbors if neighbor.id is not None]
@@ -71,6 +80,17 @@ class Grid:
                 shared |= {neighbor.id for neighbor in cell.neighbors if neighbor.id != block.id}
 
             block.neighbors = list(shared)
+
+    def get_block(self, row, col):
+        cell = self.get_cell(row, col)
+        block = self.state[cell.id]
+
+        return block
+    
+    def get_cell(self, row, col):
+        cell = self.grid[row][col]
+        
+        return cell
 
     def load_colors(self):
         max_neighbors = max(len(block.neighbors) for block in self.state)
@@ -147,6 +167,76 @@ class Grid:
             player.reward = s + g + p
         else:
             player.reward = 0
+
+    def visualize(self, repeat, start, end, title, phase):
+        pygame.init() if repeat==start else None
+
+        if repeat % self.freq == 0:
+
+            screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+            screen.fill(self.screen_color.rgb)
+
+            self.draw_state(screen)
+
+            path = utils.get_path(dir=('static', f'{title}', f'{phase}', 'viz'), 
+                                  name=f'state_repeat_{repeat}.png')
+            pygame.image.save(screen, path)
+
+            if self.live:
+                pygame.display.set_caption("State @ repeat {}".format(repeat))
+                pygame.display.flip()
+
+        pygame.quit() if repeat==end else None
+
+    def draw_state(self, screen):
+        for block in self.state:
+            
+            for cell in block.cells:
+                x = cell.col * self.cell_size + self.border_width
+                y = cell.row * self.cell_size + self.border_width
+
+                pygame.draw.rect(screen, cell.color.rgb, [x, y, self.cell_size, self.cell_size])
+
+                self.draw_borders(screen, cell, x, y)
+
+    def draw_borders(self, screen, cell, x, y):
+        borders = {
+            'left': pygame.Rect(
+                x - self.border_width,
+                y, 
+                self.border_width,
+                self.cell_size
+            ),
+            'right': pygame.Rect(
+                x + self.cell_size, 
+                y, 
+                self.border_width, 
+                self.cell_size
+            ),
+            'up': pygame.Rect(
+                x, 
+                y - self.border_width, 
+                self.cell_size, 
+                self.border_width
+            ),
+            'down': pygame.Rect(
+                x,
+                y + self.cell_size,
+                self.cell_size,
+                self.border_width
+            )
+        }
+
+        for direction, border_rect in borders.items():
+            adj_row, adj_col = utils.get_adjacent_pos(row=cell.row, col=cell.col, direction=direction)
+            
+            if 0 <= adj_row < self.rows and 0 <= adj_col < self.cols:
+                adj_cell = self.get_cell(adj_row, adj_col)
+
+                if cell.id != adj_cell.id:
+                    pygame.draw.rect(screen, self.screen_color.rgb, border_rect)
+            else:
+                pygame.draw.rect(screen, self.screen_color.rgb, border_rect)
 
 class Cell:
     def __init__(self, row, col):

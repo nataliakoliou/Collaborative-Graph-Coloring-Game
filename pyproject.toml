@@ -21,4 +21,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 learner = "src.learner:main"
-visualizer = "src.visualizer:main"

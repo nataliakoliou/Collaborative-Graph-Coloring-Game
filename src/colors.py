@@ -57,6 +57,10 @@ class Teal(Color):
     def __init__(self):
         super().__init__((0, 128, 128), None)
 
+class Black(Color):
+    def __init__(self):
+        super().__init__((0, 0, 0), None)
+
 COLORS = [Red(), Orange(), Yellow(), Green(), Blue(), Pink(), Violet(), Cyan(), Coral(), Teal()]
 HIDDEN=Hidden()
 NC=White()
