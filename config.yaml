@@ -1,11 +1,17 @@
 grid:
-  rows: 2
-  cols: 2
+  rows: 3
+  cols: 3
   merge: 0.2
   minR: 2
   wR: 0.2
+  viz:
+    freq: 10
+    cell_size: 100
+    border_width: 2
+    screen_color: 'Black'
+    live: true
 
-player:
+human:
   type: "human"
   style: "random"
   model: "HDQN"
@@ -23,7 +29,8 @@ player:
   gamma: 0
 
 qlearn:
-  repeats: 50
+  repeats: 5000
   epsilon: 1
   cutoff: 0.9
   visualize: true
+  phase: 'learning'
