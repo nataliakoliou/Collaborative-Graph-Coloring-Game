@@ -11,7 +11,7 @@ from .player import Player
 
 config = utils.load_yaml(path=utils.get_path(dir=(os.path.dirname(__file__), '..'), name='config.yaml'))
 
-logger = utils.get_logger(level=config['logger'])
+logger = utils.get_logger(level=config['track']['logger'])
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 logger.info(f'Device is {device}')
@@ -32,57 +32,59 @@ def qlearn(game, repeats, epsilon, cutoff, visualize, phase):
 
     game.load()
 
-    with tqdm(total=repeats, desc="Learning Progress", unit=" repeat") as pbar:
-        
-        for repeat in range(repeats):
-            env.reset()
+    pbar = tqdm(total=repeats, desc="Learning Progress", unit=" repeat") if config['track']['bar'] else None
 
-            while not game.stage_over():
-                env.step()
+    for repeat in range(repeats):
+        env.reset()
 
-                for player in players:
-                    player.update(type="current", data=env.state)
-
-                    if np.random.rand() < epsilon:
-                        player.explore()
-                    else:
-                        player.exploit()
-
-                intentions = utils.filterout(input=game.actions)
-                actions, distinct, loser = env.coordinate(intentions)
-
-                for action in actions:
-                    loser = env.apply(action, distinct=distinct, loser=loser)
-                
-                for player in players:
-                    env.reward(player=player, metrics=game.metrics)
-
-                    player.update(type="next", data=env.state)
-                    player.expand_memory()
-
-                    player.update(type="current", data=env.state)
-                    player.optimize()
-
-                    player.update(type="net")
-
-                steps += 1
+        while not game.stage_over():
+            env.step()
 
             for player in players:
-                losses[player.type].append(player.L / steps)
+                player.update(type="current", data=env.state)
 
-            mistakes.append(env.num_constraints)
-            epsilon = max(epsilon - decay, 0)
+                if np.random.rand() < epsilon:
+                    player.explore()
+                else:
+                    player.exploit()
 
+            intentions = utils.filterout(input=game.actions)
+            actions, distinct, loser = env.coordinate(intentions)
+
+            for action in actions:
+                loser = env.apply(action, distinct=distinct, loser=loser)
+            
+            for player in players:
+                env.reward(player=player, metrics=game.metrics)
+
+                player.update(type="next", data=env.state)
+                player.expand_memory()
+
+                player.update(type="current", data=env.state)
+                player.optimize()
+
+                player.update(type="net")
+
+            steps += 1
+
+        for player in players:
+            losses[player.type].append(player.L / steps)
+
+        mistakes.append(env.num_constraints)
+        epsilon = max(epsilon - decay, 0)
+
+        if pbar:
             metrics = {"Repeat": repeat + 1, "Steps": steps, "Mistakes": mistakes[repeat], "Epsilon": f"{epsilon:.6f}"}
-            metrics.update({f"Loss ({type})": f"{losses[type][repeat]:.6f}" for type in types})
+            metrics.update({f"{type.capitalize()} Loss": f"{losses[type][repeat]:.6f}" for type in types})
+
             pbar.set_postfix(metrics)
             pbar.update(1)
 
-            logger.info(f"Repeat: {repeat + 1} ~ Steps: {steps} ~ " + 
-                        " ~ ".join([f"Losses ({type})={losses[type][repeat]:.6f}" for type in types]) + 
-                        f" ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}")
+        logger.info(f"Repeat: {repeat + 1} ~ Steps: {steps} ~ " + 
+                    " ~ ".join([f"Losses ({type})={losses[type][repeat]:.6f}" for type in types]) + 
+                    f" ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}")
 
-            env.visualize(repeat=repeat, start=0, end=repeats, title=game.title, phase=phase)
+        env.visualize(repeat=repeat, start=0, end=repeats, title=game.title, phase=phase)
 
     for player in players:
         action_freqs[player.type] = [action.times['Exploitation']/steps for action in player.space]

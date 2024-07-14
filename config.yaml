@@ -1,4 +1,6 @@
-logger: 'CRITICAL'
+track:
+  logger: 'CRITICAL'
+  bar: true
 
 grid:
   rows: 3
