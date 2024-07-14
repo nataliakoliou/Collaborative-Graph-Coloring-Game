@@ -27,7 +27,7 @@ class ReplayMemory(object):
 class Player:
     def __init__(self, type, style, model, criterion, optimizer, tau, batch_size, gamma):
         self.type = type
-        self.style = style
+        self.style = Style(**style)
         self.model = model
         self.criterion = criterion
         self.optimizer = optimizer
@@ -157,3 +157,11 @@ class Action:
     
     def __ne__(self, other):
         return not self.__eq__(other)
+    
+class Style:
+    def __init__(self, name, complexity):
+        self.name = name
+        self.complexity = complexity
+
+    def sth(self):
+        pass

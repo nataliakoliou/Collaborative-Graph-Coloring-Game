@@ -1,13 +1,16 @@
+## Monitoring Parameters ##
 track:
   logger: 'CRITICAL'
   bar: true
 
+## Grid Environment Parameters ##
 grid:
-  rows: 3
-  cols: 3
+  rows: 2
+  cols: 2
   merge: 0.2
   minR: 2
   wR: 0.2
+
   viz:
     freq: 10
     cell_size: 100
@@ -15,25 +18,40 @@ grid:
     screen_color: 'Black'
     live: true
 
+## Human Player Parameters ##
 human:
   type: "human"
-  style: "random"
+
+  style: 
+    name: "random"
+
+    complexity:
+      - 0.2
+      - 0.1
+      - 0.15
+      - 0.25
+      - 0.3
+
   model: "HDQN"
+
   criterion:
     name: "SmoothL1Loss"
     params:
       beta: 1.0
+
   optimizer:
     name: "AdamW"
     params: 
       lr: 0.001
       weight_decay: 0.00001
+
   tau: 0.005
   batch_size: 8
   gamma: 0
 
+## Q-Learning Parameters ##
 qlearn:
-  repeats: 5000
+  repeats: 50
   epsilon: 1
   cutoff: 0.9
   visualize: true

@@ -99,7 +99,7 @@ def qlearn(game, repeats, epsilon, cutoff, visualize, phase):
 
         utils.plot(values=[(repeats_lst, mistakes)], 
                    labels=('Repeat', 'Mistakes'), 
-                   func=plt.bar,
+                   func=plt.plot,
                    path=utils.get_path(dir=("static", f"{game.title}", phase), name="learn_mistakes.png"), 
                    title='Mistakes Plot', 
                    colors=['green']
