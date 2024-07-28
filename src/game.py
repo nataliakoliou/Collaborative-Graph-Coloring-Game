@@ -1,13 +1,14 @@
 from collections import namedtuple
 
 class Game:
-    def __init__(self, env, human, robot, gain=1, penalty=-2, sanction=-10):
+    def __init__(self, env, human, robot, gain, penalty, sanction, prefs):
         self.env = env
         self.human = human
         self.robot = robot
         self.gain = gain
         self.penalty = penalty
         self.sanction = sanction
+        self.prefs = prefs
 
     @property
     def players(self):
@@ -15,8 +16,8 @@ class Game:
     
     @property
     def title(self):
-        human_desc = f"{self.human.type}_{self.human.style}" if self.human else ""
-        robot_desc = f"{self.robot.type}_{self.robot.style}" if self.robot else ""
+        human_desc = f"{self.human.type}_{self.human.style.name}" if self.human else ""
+        robot_desc = f"{self.robot.type}_{self.robot.style.name}" if self.robot else ""
 
         return f"{human_desc}_{robot_desc}".strip('_')
 
@@ -31,7 +32,7 @@ class Game:
     
     @property
     def metrics(self):
-        return (self.gain, self.penalty, self.sanction)
+        return (self.gain, self.penalty, self.sanction, self.prefs)
     
     def load(self):
         self.env.load()

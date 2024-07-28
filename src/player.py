@@ -159,9 +159,27 @@ class Action:
         return not self.__eq__(other)
     
 class Style:
-    def __init__(self, name, complexity):
+    def __init__(self, name, difficulty, taste, minimalism):
         self.name = name
-        self.complexity = complexity
+        self.difficulty = difficulty
+        self.taste = taste
+        self.minimalism = minimalism
 
-    def sth(self):
-        pass
+    def get_difficulty(self, level):
+        for key, value in self.difficulty.items():
+            if '-' in key:
+                start, end = map(int, key.split('-'))
+
+                if start <= level <= end:
+                    return value
+                
+            elif '+' in key:
+                threshold = int(key[:-1])
+
+                if level >= threshold:
+                    return value
+            else:
+                if level == int(key):
+                    return value
+                
+        return "Error: Level is out of range"

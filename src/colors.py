@@ -32,7 +32,7 @@ class Yellow(Color):
 
 class Green(Color):
     def __init__(self):
-        super().__init__((0, 255, "cool", 0), None)
+        super().__init__((0, 255, 0), "cool", None)
 
 class Blue(Color):
     def __init__(self):
@@ -65,3 +65,4 @@ class Black(Color):
 COLORS = [Red(), Orange(), Yellow(), Green(), Blue(), Pink(), Violet(), Cyan(), Coral(), Teal()]
 HIDDEN=Hidden()
 NC=White()
+ALL = COLORS + [HIDDEN, NC]

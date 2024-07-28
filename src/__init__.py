@@ -44,12 +44,12 @@ cgcg/
 ├── pyproject.toml        
 
 
-Environment Rules (Simulation - How the solution's payoff matrix affected)
+Environment Rules (Simulation - How the solution's payoff matrix is affected)
 -----------------------------------------------------------------------------
-1. Blocks with many neighbors are more difficult (time-consuming) to color than blocks with fewer neighbors.
-   Over the stages of the game, ideally, the human should have collected almost the same amount of difficulty 
-   points as the robot. During the simulation, each player collects their difficulty points, and at the end of
-   the game, the difference between those points signifies how much extra time the game needed to end. "Extra 
+1. Blocks with many colored neighbors are more difficult and time-consuming to color than blocks with fewer colored 
+   neighbors. Over the stages of the game, ideally, the human should have collected almost the same amount of 
+   difficulty points as the robot. During the simulation, each player collects their difficulty points, and at the 
+   end of the game, the difference between those points signifies how much extra time the game needed to end. "Extra 
    time" means that at some point, one player had finished coloring while the other continued for that extra 
    time. If this difference is very small, it might be the bare minimum in some environments where a difference 
    of exactly 0 is impossible. However, this is not usually the case. So when dealing with hundreds of simulations, 
@@ -80,7 +80,8 @@ Agents' Response (Learning - How the players' reward function is affected)
    color assignment logic.
 
 3. Agents have preferences for either minimalism or diversity when choosing colors. For example, an agent might 
-   reward themselves with +k or -k for choosing a color that is already present k times in the grid.
+   reward themselves with w*k for choosing a color that is already present k times in the grid, where w is an either
+   positive or negative weight (or zero if indifferent).
 
 Mapping to Air Traffic Management
 ---------------------------------

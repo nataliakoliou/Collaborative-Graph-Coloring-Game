@@ -30,22 +30,21 @@ class Grid:
         return int(self.minR + extraR)
     
     @property
-    def constraints(self):
-        constraints = set()
+    def conflicts(self):
+        conflicts = set()
 
         for block in self.state:
-            for id in block.neighbors:
-                neighbor = self.state[id]
+            for neighbor in block.filtered_neighbors(colors=COLORS):
 
                 if block.color == neighbor.color:
                     pair = frozenset({block.id, neighbor.id})
-                    constraints.add(pair)
+                    conflicts.add(pair)
 
-        return constraints
+        return conflicts
     
     @property
-    def num_constraints(self):
-        return len(self.constraints)
+    def num_conflicts(self):
+        return len(self.conflicts)
 
     def load(self):
         self.load_cells()
@@ -79,7 +78,8 @@ class Grid:
             for cell in block.cells:
                 shared |= {neighbor.id for neighbor in cell.neighbors if neighbor.id != block.id}
 
-            block.neighbors = list(shared)
+            ids = list(shared)
+            block.neighbors = [self.state[id] for id in ids]
 
     def get_block(self, row, col):
         cell = self.get_cell(row, col)
@@ -93,12 +93,7 @@ class Grid:
         return cell
 
     def load_colors(self):
-        max_neighbors = max(len(block.neighbors) for block in self.state)
-
-        num_colors = max_neighbors + 1
-        num_encodings = num_colors + 2
-
-        COLORS[:] = COLORS[:num_colors]
+        num_encodings = len(ALL)
 
         HIDDEN.encoding = utils.encode(k=1, n=num_encodings)
         NC.encoding = utils.encode(k=2, n=num_encodings)
@@ -148,11 +143,13 @@ class Grid:
         return loser
         
     def reward(self, player, metrics):
-        k, m = 0, 0
-        gain, penalty, sanction = metrics
+        k, m, x, y, z = 0, 0, 0, 0, 0
+        gain, penalty, sanction, prefs = metrics
 
-        for id in player.action.block.neighbors:
-            neighbor = self.state[id]
+        colored_neighbors = player.action.block.filtered_neighbors(colors=COLORS)
+        x = player.style.get_difficulty(level=len(colored_neighbors))
+
+        for neighbor in player.action.block.neighbors:
 
             if neighbor.color != player.action.color:
                 k, m = (k + 1, m)
@@ -162,9 +159,10 @@ class Grid:
         s = player.action.invalid * sanction
         g = k * gain
         p = m * penalty
+        pr = (x + y + z) * prefs / 3
 
         if player.action.winner:
-            player.reward = s + g + p
+            player.reward = s + g + p + pr
         else:
             player.reward = 0
 
@@ -263,13 +261,19 @@ class Block:
         self.id = id
         self.color = HIDDEN
         self.cells = []
-        self.neighbors = []
-
+        self.neighbors = []       
+    
     def set_color(self, color):
         self.color = color
         
         for cell in self.cells:
             cell.set_color(color)
+
+    def filtered_neighbors(self, colors=ALL):
+        if colors==ALL:
+            return self.neighbors
+        else:
+            return [neighbor for neighbor in self.neighbors if neighbor.color in colors]
 
     def is_hidden(self):
         return isinstance(self.color, Hidden)

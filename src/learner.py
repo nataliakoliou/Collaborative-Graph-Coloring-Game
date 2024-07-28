@@ -70,7 +70,7 @@ def qlearn(game, repeats, epsilon, cutoff, visualize, phase):
         for player in players:
             losses[player.type].append(player.L / steps)
 
-        mistakes.append(env.num_constraints)
+        mistakes.append(env.num_conflicts)
         epsilon = max(epsilon - decay, 0)
 
         if pbar:
@@ -126,7 +126,7 @@ def main():
     grid = Grid(**config['grid'])
     human = Player(**config['human'])
     
-    game = Game(env=grid, human=human, robot=None)
+    game = Game(env=grid, human=human, robot=None, **config['game'])
     
     qlearn(game=game, **config['qlearn'])
 
