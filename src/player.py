@@ -144,6 +144,7 @@ class Action:
         self.color = color
         self.id = None
         self.invalid = 0
+        self.winner = False
         self.times = {"Exploration": 0, "Exploitation": 0, "Simulation": 0}
 
     def set_invalid(self):
@@ -186,3 +187,6 @@ class Style:
     
     def get_taste(self, color):
         return self.taste.get(color.tone, 0)
+    
+    def get_minimalism(self, freq):
+        return freq * self.minimalism
