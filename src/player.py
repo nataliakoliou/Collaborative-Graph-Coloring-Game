@@ -183,3 +183,6 @@ class Style:
                     return value
                 
         return "Error: Level is out of range"
+    
+    def get_taste(self, color):
+        return self.taste.get(color.tone, 0)

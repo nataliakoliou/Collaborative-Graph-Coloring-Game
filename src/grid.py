@@ -147,10 +147,13 @@ class Grid:
         gain, penalty, sanction, prefs = metrics
 
         colored_neighbors = player.action.block.filtered_neighbors(colors=COLORS)
-        x = player.style.get_difficulty(level=len(colored_neighbors))
+        level = len(colored_neighbors)
+        color = player.action.block.color
+
+        x = player.style.get_difficulty(level=level)
+        y = player.style.get_taste(color=color)
 
         for neighbor in player.action.block.neighbors:
-
             if neighbor.color != player.action.color:
                 k, m = (k + 1, m)
             else:
