@@ -8,7 +8,7 @@ game:
   gain: 1
   penalty: -3
   sanction: -10
-  prefs: 1
+  prefs: 5
 
 ## Grid Environment Parameters ##
 grid:
@@ -19,7 +19,7 @@ grid:
   wR: 0.2
 
   viz:
-    freq: 5
+    freq: 1000
     cell_size: 100
     border_width: 2
     screen_color: Black
@@ -30,7 +30,7 @@ human:
   type: human
 
   style: 
-    name: indifferent
+    name: 1
 
     difficulty:
       "0": 0.3
@@ -65,9 +65,15 @@ human:
 
 ## Q-Learning Parameters ##
 qlearn:
-  repeats: 1000
+  repeats: 10000
   epsilon: 1
   cutoff: 0.5
   patience: 10
   visualize: true
   phase: learning
+
+## Simulation Parameters ##
+simulate:
+  human: 1
+  robot: 2
+  repeats: 500

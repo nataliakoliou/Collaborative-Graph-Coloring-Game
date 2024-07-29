@@ -151,5 +151,5 @@ def get_cpu_usage():
 def get_gpu_usage():
     if torch.cuda.is_available():
         return torch.cuda.memory_allocated() / torch.cuda.get_device_properties(0).total_memory * 100
-        
+    
     return 0

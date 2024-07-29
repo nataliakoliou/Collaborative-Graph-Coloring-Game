@@ -85,7 +85,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase):
 
         if pbar:
             metrics = {"Repeat": repeat + 1, "Steps": steps, "Mistakes": mistakes[repeat], "Epsilon": f"{epsilon:.6f}",
-                       "CPU Usage": f"{utils.get_cpu_usage():.2f}%", "GPU Usage": f"{utils.get_gpu_usage():.2f}%"}
+                       "CPU": f"{utils.get_cpu_usage():.2f}%", "GPU": f"{utils.get_gpu_usage():.2f}%"}
             
             metrics.update({f"{type.capitalize()} Loss": f"{losses[type][repeat]:.6f}" for type in types})
 
@@ -96,7 +96,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase):
                     " ~ ".join([f"Losses ({type})={losses[type][repeat]:.6f}" for type in types]) + 
                     f" ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}")
 
-        env.visualize(repeat=repeat, start=0, end=repeats, title=game.title, phase=phase)
+        env.visualize(repeat=repeat, start=0, end=repeats, title=game.title)
 
         if repeat >= max_explore:
             if any(no_improvement[type] >= patience for type in types):

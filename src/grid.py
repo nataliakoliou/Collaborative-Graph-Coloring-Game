@@ -172,7 +172,7 @@ class Grid:
         else:
             player.reward = 0
 
-    def visualize(self, repeat, start, end, title, phase):
+    def visualize(self, repeat, start, end, title):
         pygame.init() if repeat==start else None
 
         if repeat % self.freq == 0:
@@ -182,8 +182,8 @@ class Grid:
 
             self.draw_state(screen)
 
-            path = utils.get_path(dir=('static', f'{title}', f'{phase}', 'viz'), 
-                                  name=f'state_repeat_{repeat}.png')
+            path = utils.get_path(dir=('static', f'{title}', 'viz'), 
+                                  name=f's{repeat}.png')
             pygame.image.save(screen, path)
 
             if self.live:
