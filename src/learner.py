@@ -84,7 +84,9 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase):
         epsilon = max(epsilon - decay, 0)
 
         if pbar:
-            metrics = {"Repeat": repeat + 1, "Steps": steps, "Mistakes": mistakes[repeat], "Epsilon": f"{epsilon:.6f}"}
+            metrics = {"Repeat": repeat + 1, "Steps": steps, "Mistakes": mistakes[repeat], "Epsilon": f"{epsilon:.6f}",
+                       "CPU Usage": f"{utils.get_cpu_usage():.2f}%", "GPU Usage": f"{utils.get_gpu_usage():.2f}%"}
+            
             metrics.update({f"{type.capitalize()} Loss": f"{losses[type][repeat]:.6f}" for type in types})
 
             pbar.set_postfix(metrics)

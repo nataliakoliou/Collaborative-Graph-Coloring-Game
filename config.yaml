@@ -61,10 +61,11 @@ human:
   tau: 0.005
   batch_size: 8
   gamma: 0
+  memory: 100000
 
 ## Q-Learning Parameters ##
 qlearn:
-  repeats: 10000
+  repeats: 1000
   epsilon: 1
   cutoff: 0.5
   patience: 10

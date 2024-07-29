@@ -80,8 +80,8 @@ Agents' Response (Learning - How the players' reward function is affected)
    color assignment logic.
 
 3. Agents have preferences for either minimalism or diversity when choosing colors. For example, an agent might 
-   reward themselves with w*k for choosing a color that is already present k times in the grid, where w is an either
-   positive or negative weight (or zero if indifferent).
+   reward themselves with w * (k/num_blocks) for choosing a color that is already present k times in the grid,
+   where w is a positive weight either large or small.
 
 Mapping to Air Traffic Management
 ---------------------------------

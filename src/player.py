@@ -25,7 +25,7 @@ class ReplayMemory(object):
         return len(self.memory)
 
 class Player:
-    def __init__(self, type, style, model, criterion, optimizer, tau, batch_size, gamma):
+    def __init__(self, type, style, model, criterion, optimizer, tau, batch_size, gamma, memory):
         self.type = type
         self.style = Style(**style)
         self.model = model
@@ -34,9 +34,9 @@ class Player:
         self.tau = tau
         self.batch_size = batch_size
         self.gamma = gamma
+        self.memory = ReplayMemory(memory)
         self.color = utils.get_color(type)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.memory = ReplayMemory(10000)
         self.policy_net = None
         self.target_net = None
         self.state = []

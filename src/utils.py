@@ -1,6 +1,8 @@
 import os
 import yaml
 import random
+import psutil
+import torch
 import logging
 import numpy as np
 import matplotlib.pyplot as plt
@@ -142,3 +144,12 @@ def aggregate(values, method='mean'):
     
     else:
         raise ValueError(f"Unsupported aggregation method: {method}")
+    
+def get_cpu_usage():
+    return psutil.cpu_percent(interval=None)
+
+def get_gpu_usage():
+    if torch.cuda.is_available():
+        return torch.cuda.memory_allocated() / torch.cuda.get_device_properties(0).total_memory * 100
+        
+    return 0
