@@ -2,6 +2,7 @@ import os
 import yaml
 import random
 import logging
+import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple
 
@@ -122,3 +123,22 @@ def get_adjacent_pos(row, col, direction):
     row_effect, col_effect = effect[direction]
     
     return row + row_effect, col + col_effect
+
+def aggregate(values, method='mean'):
+    if method == 'mean':
+        return np.mean(values)
+    
+    elif method == 'sum':
+        return np.sum(values)
+    
+    elif method == 'median':
+        return np.median(values)
+    
+    elif method == 'min':
+        return np.min(values)
+    
+    elif method == 'max':
+        return np.max(values)
+    
+    else:
+        raise ValueError(f"Unsupported aggregation method: {method}")

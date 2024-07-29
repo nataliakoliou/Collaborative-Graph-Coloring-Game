@@ -13,13 +13,13 @@ game:
 ## Grid Environment Parameters ##
 grid:
   rows: 2
-  cols: 2
-  merge: 0.2
+  cols: 3
+  merge: 0.4
   minR: 2
   wR: 0.2
 
   viz:
-    freq: 10
+    freq: 5
     cell_size: 100
     border_width: 2
     screen_color: Black
@@ -66,6 +66,6 @@ human:
 qlearn:
   repeats: 50
   epsilon: 1
-  cutoff: 0.9
+  cutoff: 0.8
   visualize: true
   phase: learning
