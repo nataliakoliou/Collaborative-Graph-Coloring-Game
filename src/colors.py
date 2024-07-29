@@ -62,7 +62,7 @@ class Black(Color):
     def __init__(self):
         super().__init__((0, 0, 0), "neutral", None)
 
-COLORS = [Red(), Orange(), Yellow(), Green(), Blue(), Pink(), Violet(), Cyan(), Coral(), Teal()]
+COLORS = [Red(), Orange(), Yellow(), Pink(), Coral(), Green(), Blue(), Violet(), Cyan(), Teal()]
 HIDDEN=Hidden()
 NC=White()
 ALL = COLORS + [HIDDEN, NC]

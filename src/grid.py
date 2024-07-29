@@ -1,4 +1,3 @@
-import time
 import random
 import pygame
 from itertools import product, chain
@@ -36,7 +35,7 @@ class Grid:
         for block in self.state:
             for neighbor in block.filtered_neighbors(colors=COLORS):
 
-                if block.color == neighbor.color:
+                if block.color.name == neighbor.color.name:
                     pair = frozenset({block.id, neighbor.id})
                     conflicts.add(pair)
 
@@ -149,14 +148,14 @@ class Grid:
         colored_neighbors = player.action.block.filtered_neighbors(colors=COLORS)
         level = len(colored_neighbors)
         color = player.action.block.color
-        freq = sum(block.color == color for block in self.state)
+        freq = sum(block.color.name == color.name for block in self.state)
 
         x = player.style.get_difficulty(level=level)
         y = player.style.get_taste(color=color)
         z = player.style.get_minimalism(freq=freq)
 
         for neighbor in player.action.block.neighbors:
-            if neighbor.color != player.action.color:
+            if neighbor.color.name != player.action.color.name:
                 k, m = (k + 1, m)
             else:
                 k, m = (k, m + 1)
@@ -278,7 +277,8 @@ class Block:
         if colors==ALL:
             return self.neighbors
         else:
-            return [neighbor for neighbor in self.neighbors if neighbor.color in colors]
+            names = {color.name for color in colors}
+            return [neighbor for neighbor in self.neighbors if neighbor.color.name in names]
 
     def is_hidden(self):
         return isinstance(self.color, Hidden)
