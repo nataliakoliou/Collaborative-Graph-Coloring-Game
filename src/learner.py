@@ -16,16 +16,18 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 logger.info(f'Device is {device}')
 
-def qlearn(game, repeats, epsilon, cutoff, visualize, phase):
+def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase):
     env = game.env
     players = utils.filterout(input=game.players)
     types = [player.type for player in players]
     colors = [player.color for player in players]
 
-    max_exploration_steps = cutoff * repeats
-    decay = round(1/max_exploration_steps, 10)
+    max_explore = cutoff * repeats
+    decay = round(1/max_explore, 10)
 
     losses = {type: [] for type in types}
+    best_losses = {type: float('inf') for type in types}
+    no_improvement = {type: 0 for type in types}
     action_freqs = {type: [] for type in types}
     mistakes = []
     steps = 0
@@ -68,7 +70,15 @@ def qlearn(game, repeats, epsilon, cutoff, visualize, phase):
             steps += 1
 
         for player in players:
-            losses[player.type].append(player.L / steps)
+            loss = player.L / steps
+            losses[player.type].append(loss)
+
+            if repeat >= max_explore:
+                if loss < best_losses[player.type]:
+                    best_losses[player.type] = loss
+                    no_improvement[player.type] = 0
+                else:
+                    no_improvement[player.type] += 1
 
         mistakes.append(env.num_conflicts)
         epsilon = max(epsilon - decay, 0)
@@ -85,6 +95,11 @@ def qlearn(game, repeats, epsilon, cutoff, visualize, phase):
                     f" ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}")
 
         env.visualize(repeat=repeat, start=0, end=repeats, title=game.title, phase=phase)
+
+        if repeat >= max_explore:
+            if any(no_improvement[type] >= patience for type in types):
+                logger.info(f"Early stopping triggered after {repeat + 1} repeats with no improvement.")
+                break
 
     for player in players:
         action_freqs[player.type] = [action.times['Exploitation']/steps for action in player.space]
