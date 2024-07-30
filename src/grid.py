@@ -177,7 +177,7 @@ class Grid:
 
         if repeat % self.freq == 0:
 
-            screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+            screen = pygame.Surface((self.screen_width, self.screen_height))
             screen.fill(self.screen_color.rgb)
 
             self.draw_state(screen)
@@ -187,7 +187,9 @@ class Grid:
             pygame.image.save(screen, path)
 
             if self.live:
+                display = pygame.display.set_mode((self.screen_width, self.screen_height))
                 pygame.display.set_caption("State @ repeat {}".format(repeat))
+                display.blit(screen, (0, 0))
                 pygame.display.flip()
 
         pygame.quit() if repeat==end else None

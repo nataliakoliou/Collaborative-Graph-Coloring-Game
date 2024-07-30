@@ -5,10 +5,10 @@ track:
 
 ## Game Parameters ##
 game:
-  gain: 1
+  gain: 2
   penalty: -3
   sanction: -10
-  prefs: 5
+  prefs: -1
 
 ## Grid Environment Parameters ##
 grid:
@@ -23,7 +23,7 @@ grid:
     cell_size: 100
     border_width: 2
     screen_color: Black
-    live: true
+    live: false
 
 ## Human Player Parameters ##
 human:
@@ -33,17 +33,17 @@ human:
     name: 1
 
     difficulty:
-      "0": 0.3
-      "1-2": 0.25
-      "3-4": 0.2
-      "5-6": 0.15
-      "7+": 0.1
+      "0": 0.05
+      "1": 0.1
+      "2-3": 0.2
+      "4-5": 0.25
+      "6+": 0.4
 
     taste:
-      warm: 0.9
-      cool: 0.1
+      warm: 0.05
+      cool: 0.95
 
-    minimalism: 0.86
+    minimalism: 0.08
 
   model: HDQN
 
