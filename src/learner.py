@@ -16,7 +16,20 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 logger.info(f'Device is {device}')
 
-def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase):
+def statistics(player, k, steps):
+    actions_and_freqs = [
+        (f"(B{action.block.id}, {action.color.name})", action.times['Exploitation'] / steps)
+        for action in player.space
+    ]
+    
+    actions_and_freqs.sort(key=lambda x: x[1], reverse=True)
+    top_actions_and_freqs = actions_and_freqs[:k]
+    
+    actions, freqs = zip(*top_actions_and_freqs)
+    
+    return list(actions), list(freqs)
+
+def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
     env = game.env
     players = utils.filterout(input=game.players)
     types = [player.type for player in players]
@@ -29,6 +42,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase):
     best_losses = {type: float('inf') for type in types}
     no_improvement = {type: 0 for type in types}
     action_freqs = {type: [] for type in types}
+    xticks = {type: [] for type in types}
     mistakes = []
     steps = 0
 
@@ -104,25 +118,22 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase):
                 break
 
     for player in players:
-        action_freqs[player.type] = [action.times['Exploitation']/steps for action in player.space]
-
         path = utils.get_path(dir=("models", f"{player.type}"), name=f"{game.title}.pth")
         model = player.policy_net.state_dict()
         torch.save(model, path)
 
     if visualize:
+        x_values = list(range(repeats))
 
-        repeats_lst = list(range(repeats))
-
-        utils.plot(values=[(repeats_lst, mistakes)], 
+        utils.plot(values=[(x_values, mistakes)], 
                    labels=('Repeat', 'Mistakes'), 
                    func=plt.plot,
-                   path=utils.get_path(dir=("static", f"{game.title}", phase), name="learn_mistakes.png"), 
+                   path=utils.get_path(dir=("static", f"{game.title}", phase), name="mistakes.png"), 
                    title='Mistakes Plot', 
                    colors=['green']
                    )
         
-        utils.plot(values=[(repeats_lst, losses[type]) for type in types],
+        utils.plot(values=[(x_values, losses[type]) for type in types],
                    labels=('Step', 'Loss'),
                    func=plt.plot,
                    path=utils.get_path(dir=("static", f"{game.title}", phase), name="losses.png"),  
@@ -130,14 +141,21 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase):
                    colors=colors,
                    names=types
                    )
+        
+        for player in players:
+            actions, frequencies = statistics(player, k=topk, steps=steps)
 
-        utils.plot(values=[(list(range(len(action_freqs[type]))), action_freqs[type]) for type in types], 
-                   labels=('Action', 'Frequency'),
-                   func=plt.bar,
-                   path=utils.get_path(dir=("static", f"{game.title}", phase), name=f"learn_exploit_stats.png"), 
-                   title='Exploitation Statistics', 
-                   colors=colors
-                   )
+            x_values = list(range(topk))
+            x_ticks = (list(range(topk)), actions)
+            
+            utils.plot(values=[(x_values, frequencies)],
+                       labels=('Action', 'Frequency'),
+                       func=plt.bar,
+                       path=utils.get_path(dir=("static", f"{game.title}", phase), name=f"{player.type}_exploit_stats.png"), 
+                       title=f'{player.type.capitalize()} Exploitation Statistics', 
+                       colors=[player.color],
+                       ticks=(x_ticks, None)
+                       )
 
 def main():
     grid = Grid(**config['grid'])

@@ -16,8 +16,8 @@ class Game:
     
     @property
     def title(self):
-        human_desc = f"h{self.human.style.name}" if self.human else ""
-        robot_desc = f"r{self.robot.style.name}" if self.robot else ""
+        human_desc = f"{self.human.style.name}" if self.human else ""
+        robot_desc = f"{self.robot.style.name}" if self.robot else ""
 
         return f"{human_desc}x{robot_desc}".strip('x')
 

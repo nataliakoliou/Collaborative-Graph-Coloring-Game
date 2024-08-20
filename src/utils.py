@@ -47,7 +47,7 @@ def get_color(type):
     else:
         raise ValueError("Invalid type.")
 
-def plot(values, labels, func, path, title, colors, width=0.2, ticks=(None,None), names=[None,None], marker=None, linestyle='solid'):
+def plot(values, labels, func, path, title, colors, width=0.2, ticks=(None, None), names=[None,None], marker=None, linestyle='solid'):
     x_label, y_label = labels
     x_ticks, y_ticks = ticks
     
@@ -68,10 +68,10 @@ def plot(values, labels, func, path, title, colors, width=0.2, ticks=(None,None)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
-    if x_ticks is not None:
+    if x_ticks:
         plt.xticks(*x_ticks, rotation=45, ha="right")
 
-    if y_ticks is not None:
+    if y_ticks:
         plt.yticks(*y_ticks, rotation=45, ha="right")
 
     if names != [None,None]:
@@ -126,7 +126,11 @@ def get_adjacent_pos(row, col, direction):
     
     return row + row_effect, col + col_effect
 
-def aggregate(values, method='mean'):
+def aggregate(values, weights=None, method='mean'):
+    
+    if weights is not None:
+        values = np.array(values) * np.array(weights)
+
     if method == 'mean':
         return np.mean(values)
     

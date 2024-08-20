@@ -154,7 +154,7 @@ class Grid:
         y = player.style.get_taste(color=color)
         z = player.style.get_minimalism(freq=freq)
 
-        xyz = utils.aggregate(values=(x,y,z), method='mean')
+        xyz = utils.aggregate(values=(x,y,z), weights=prefs, method='mean')
 
         for neighbor in player.action.block.neighbors:
             if neighbor.color.name != player.action.color.name:
@@ -165,7 +165,7 @@ class Grid:
         s = player.action.invalid * sanction
         g = k * gain
         p = m * penalty
-        pr = (1 - player.action.invalid) * xyz * prefs
+        pr = (1 - player.action.invalid) * xyz
 
         if player.action.winner:
             player.reward = s + g + p + pr
