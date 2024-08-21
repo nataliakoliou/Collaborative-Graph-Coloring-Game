@@ -13,6 +13,7 @@ class Grid:
         self.minR = minR
         self.wR = wR
         self.freq = viz['freq']
+        self.k = viz['last_k']
         self.cell_size = viz['cell_size']
         self.border_width = viz['border_width']
         self.screen_color = globals().get(viz['screen_color'])()
@@ -167,17 +168,17 @@ class Grid:
         p = m * penalty
         pr = (1 - player.action.invalid) * xyz
 
-        print(pr)
-
         if player.action.winner:
             player.reward = s + g + p + pr
         else:
             player.reward = 0
+        
+        player.R += player.reward
 
     def visualize(self, repeat, start, end, dir):
         pygame.init() if repeat==start else None
 
-        if repeat % self.freq == 0:
+        if repeat % self.freq == 0 or utils.is_last(current=repeat, final=end, k=self.k):
 
             screen = pygame.Surface((self.screen_width, self.screen_height))
             screen.fill(self.screen_color.rgb)

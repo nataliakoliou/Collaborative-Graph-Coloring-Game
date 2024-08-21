@@ -184,3 +184,6 @@ def get_gpu_usage():
         return torch.cuda.memory_allocated() / torch.cuda.get_device_properties(0).total_memory * 100
     
     return 0
+
+def is_last(current, final, k=5):
+    return current >= (final - k)

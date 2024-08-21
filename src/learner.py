@@ -1,4 +1,5 @@
 import os
+import math
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,7 +21,7 @@ def __stats__(players, topk, steps, game):
     values, ticks, colors, names = [], [], [], []
     labels = ('Action', 'Frequency')
     func = plt.bar
-    path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='stats.png')
+    path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='statistics.png')
     title = 'Statistics'
 
     for player in players:
@@ -78,7 +79,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, topk):
     types = [player.type for player in players]
     colors = [player.color for player in players]
 
-    max_explore = cutoff * repeats
+    max_explore = math.ceil(cutoff * repeats)
     decay = round(1/max_explore, 10)
 
     losses = {type: [] for type in types}
@@ -157,9 +158,9 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, topk):
                     ' ~ '.join([f'Rewards ({type})={rewards[type][repeat]:.6f}' for type in types]) +
                     f' ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}')
 
-        env.visualize(repeat=repeat, start=0, end=repeats, dir=('static', 'learning', f'{game.title}', 'viz'))
-
         if repeat >= max_explore:
+            env.visualize(repeat=repeat, start=max_explore, end=repeats, dir=('static', 'learning', f'{game.title}', 'viz'))
+
             if any(no_improvement[type] >= patience for type in types):
                 logger.info(f'Early stopping triggered after {repeat + 1} repeats with no improvement.')
                 break
