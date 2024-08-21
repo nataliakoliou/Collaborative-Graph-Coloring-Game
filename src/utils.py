@@ -12,11 +12,11 @@ def get_size(struct):
     if isinstance(struct, (dict, list, tuple, set)):
         return len(struct)
     else:
-        raise ValueError("Unsupported structure type")
+        raise ValueError('Unsupported structure type')
     
 def encode(k, n):
     if k > n:
-        raise ValueError("k should be less than or equal to n")
+        raise ValueError('k should be less than or equal to n')
     
     encoding = [0 for _ in range(n)]
     encoding[k - 1] = 1
@@ -40,12 +40,12 @@ def get_path(dir, name):
     return os.path.join(save_dir, name)
 
 def get_color(type):
-    if type == "robot":
-        return "blue"
-    elif type == "human":
-        return "red"
+    if type == 'robot':
+        return 'blue'
+    elif type == 'human':
+        return 'red'
     else:
-        raise ValueError("Invalid type.")
+        raise ValueError('Invalid type.')
 
 def plot(values, labels, func, path, title, colors, width=0.2, ticks=(None, None), names=[None,None], marker=None, linestyle='solid'):
     x_label, y_label = labels
@@ -69,10 +69,10 @@ def plot(values, labels, func, path, title, colors, width=0.2, ticks=(None, None
     plt.ylabel(y_label)
 
     if x_ticks:
-        plt.xticks(*x_ticks, rotation=45, ha="right")
+        plt.xticks(*x_ticks, rotation=45, ha='right')
 
     if y_ticks:
-        plt.yticks(*y_ticks, rotation=45, ha="right")
+        plt.yticks(*y_ticks, rotation=45, ha='right')
 
     if names != [None,None]:
         plt.legend()
@@ -126,11 +126,14 @@ def get_adjacent_pos(row, col, direction):
     
     return row + row_effect, col + col_effect
 
-def aggregate(values, weights=None, method='mean'):
+def aggregate(values, weights=None, method='mean', remove_zeros=True):
     
     if weights is not None:
         values = np.array(values) * np.array(weights)
-
+    
+    if remove_zeros:
+        values = values[values != 0]
+        
     if method == 'mean':
         return np.mean(values)
     
@@ -147,7 +150,7 @@ def aggregate(values, weights=None, method='mean'):
         return np.max(values)
     
     else:
-        raise ValueError(f"Unsupported aggregation method: {method}")
+        raise ValueError(f'Unsupported aggregation method: {method}')
     
 def get_cpu_usage():
     return psutil.cpu_percent(interval=None)

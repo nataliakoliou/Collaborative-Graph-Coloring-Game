@@ -154,7 +154,7 @@ class Grid:
         y = player.style.get_taste(color=color)
         z = player.style.get_minimalism(freq=freq)
 
-        xyz = utils.aggregate(values=(x,y,z), weights=prefs, method='mean')
+        xyz = utils.aggregate(values=(x,y,z), weights=prefs, method='mean', remove_zeros=True)
 
         for neighbor in player.action.block.neighbors:
             if neighbor.color.name != player.action.color.name:
@@ -167,12 +167,14 @@ class Grid:
         p = m * penalty
         pr = (1 - player.action.invalid) * xyz
 
+        print(pr)
+
         if player.action.winner:
             player.reward = s + g + p + pr
         else:
             player.reward = 0
 
-    def visualize(self, repeat, start, end, title):
+    def visualize(self, repeat, start, end, dir):
         pygame.init() if repeat==start else None
 
         if repeat % self.freq == 0:
@@ -182,13 +184,12 @@ class Grid:
 
             self.draw_state(screen)
 
-            path = utils.get_path(dir=('static', f'{title}', 'viz'), 
-                                  name=f's{repeat}.png')
+            path = utils.get_path(dir, name=f's{repeat}.png')
             pygame.image.save(screen, path)
 
             if self.live:
                 display = pygame.display.set_mode((self.screen_width, self.screen_height))
-                pygame.display.set_caption("State @ repeat {}".format(repeat))
+                pygame.display.set_caption('State @ repeat {}'.format(repeat))
                 display.blit(screen, (0, 0))
                 pygame.display.flip()
 
