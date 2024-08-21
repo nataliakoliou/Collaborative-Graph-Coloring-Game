@@ -12,13 +12,13 @@ from .player import Player
 config = utils.load_yaml(path=utils.get_path(dir=(os.path.dirname(__file__), '..'), name='config.yaml'))
 
 logger = utils.get_logger(level=config['track']['logger'])
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 logger.info(f'Device is {device}')
 
 def statistics(player, k, steps):
     actions_and_freqs = [
-        (f"(B{action.block.id}, {action.color.name})", action.times['Exploitation'] / steps)
+        (f'(B{action.block.id}, {action.color.name})', action.times['Exploitation'] / steps)
         for action in player.space
     ]
     
@@ -39,16 +39,15 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
     decay = round(1/max_explore, 10)
 
     losses = {type: [] for type in types}
+    rewards = {type: [] for type in types}
     best_losses = {type: float('inf') for type in types}
     no_improvement = {type: 0 for type in types}
-    action_freqs = {type: [] for type in types}
-    xticks = {type: [] for type in types}
     mistakes = []
     steps = 0
 
     game.load()
 
-    pbar = tqdm(total=repeats, desc="Learning Progress", unit=" repeat") if config['track']['bar'] else None
+    pbar = tqdm(total=repeats, desc='Learning Progress', unit=' repeat') if config['track']['bar'] else None
 
     for repeat in range(repeats):
         env.reset()
@@ -57,7 +56,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
             env.step()
 
             for player in players:
-                player.update(type="current", data=env.state)
+                player.update(type='current', data=env.state)
 
                 if np.random.rand() < epsilon:
                     player.explore()
@@ -73,19 +72,22 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
             for player in players:
                 env.reward(player=player, metrics=game.metrics)
 
-                player.update(type="next", data=env.state)
+                player.update(type='next', data=env.state)
                 player.expand_memory()
 
-                player.update(type="current", data=env.state)
+                player.update(type='current', data=env.state)
                 player.optimize()
 
-                player.update(type="net")
+                player.update(type='net')
 
             steps += 1
 
         for player in players:
             loss = player.L / steps
             losses[player.type].append(loss)
+
+            reward = player.R / steps
+            rewards[player.type].append(reward)
 
             if repeat >= max_explore:
                 if loss < best_losses[player.type]:
@@ -98,27 +100,29 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
         epsilon = max(epsilon - decay, 0)
 
         if pbar:
-            metrics = {"Repeat": repeat + 1, "Steps": steps, "Mistakes": mistakes[repeat], "Epsilon": f"{epsilon:.6f}",
-                       "CPU": f"{utils.get_cpu_usage():.2f}%", "GPU": f"{utils.get_gpu_usage():.2f}%"}
+            metrics = {'Repeat': repeat + 1, 'Steps': steps, 'Mistakes': mistakes[repeat], 'Epsilon': f'{epsilon:.6f}',
+                       'CPU': f'{utils.get_cpu_usage():.2f}%', 'GPU': f'{utils.get_gpu_usage():.2f}%'}
             
-            metrics.update({f"{type.capitalize()} Loss": f"{losses[type][repeat]:.6f}" for type in types})
+            metrics.update({f'{type.capitalize()} Loss': f'{losses[type][repeat]:.6f}' for type in types})
+            metrics.update({f'{type.capitalize()} Reward': f'{rewards[type][repeat]:.6f}' for type in types})
 
             pbar.set_postfix(metrics)
             pbar.update(1)
 
-        logger.info(f"Repeat: {repeat + 1} ~ Steps: {steps} ~ " + 
-                    " ~ ".join([f"Losses ({type})={losses[type][repeat]:.6f}" for type in types]) + 
-                    f" ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}")
+        logger.info(f'Repeat: {repeat + 1} ~ Steps: {steps} ~ ' + 
+                    ' ~ '.join([f'Losses ({type})={losses[type][repeat]:.6f}' for type in types]) + 
+                    ' ~ '.join([f'Rewards ({type})={rewards[type][repeat]:.6f}' for type in types]) +
+                    f' ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}')
 
-        env.visualize(repeat=repeat, start=0, end=repeats, title=game.title)
+        env.visualize(repeat=repeat, start=0, end=repeats, dir=('static', phase, f'{game.title}', 'viz'))
 
         if repeat >= max_explore:
             if any(no_improvement[type] >= patience for type in types):
-                logger.info(f"Early stopping triggered after {repeat + 1} repeats with no improvement.")
+                logger.info(f'Early stopping triggered after {repeat + 1} repeats with no improvement.')
                 break
 
     for player in players:
-        path = utils.get_path(dir=("models", f"{player.type}"), name=f"{game.title}.pth")
+        path = utils.get_path(dir=('models', f'{player.type}'), name=f'{game.title}.pth')
         model = player.policy_net.state_dict()
         torch.save(model, path)
 
@@ -128,7 +132,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
         utils.plot(values=[(x_values, mistakes)], 
                    labels=('Repeat', 'Mistakes'), 
                    func=plt.plot,
-                   path=utils.get_path(dir=("static", f"{game.title}", phase), name="mistakes.png"), 
+                   path=utils.get_path(dir=('static', phase, f'{game.title}'), name='mistakes.png'), 
                    title='Mistakes Plot', 
                    colors=['green']
                    )
@@ -136,8 +140,17 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
         utils.plot(values=[(x_values, losses[type]) for type in types],
                    labels=('Step', 'Loss'),
                    func=plt.plot,
-                   path=utils.get_path(dir=("static", f"{game.title}", phase), name="losses.png"),  
+                   path=utils.get_path(dir=('static', phase, f'{game.title}'), name='losses.png'),  
                    title='Loss Curve',
+                   colors=colors,
+                   names=types
+                   )
+        
+        utils.plot(values=[(x_values, rewards[type]) for type in types],
+                   labels=('Step', 'Reward'),
+                   func=plt.plot,
+                   path=utils.get_path(dir=('static', phase, f'{game.title}'), name='rewards.png'),  
+                   title='Reward Curve',
                    colors=colors,
                    names=types
                    )
@@ -151,7 +164,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
             utils.plot(values=[(x_values, frequencies)],
                        labels=('Action', 'Frequency'),
                        func=plt.bar,
-                       path=utils.get_path(dir=("static", f"{game.title}", phase), name=f"{player.type}_exploit_stats.png"), 
+                       path=utils.get_path(dir=('static', phase, f'{game.title}'), name=f'{player.type}_stats.png'), 
                        title=f'{player.type.capitalize()} Exploitation Statistics', 
                        colors=[player.color],
                        ticks=(x_ticks, None)
@@ -165,5 +178,5 @@ def main():
     
     qlearn(game=game, **config['qlearn'])
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

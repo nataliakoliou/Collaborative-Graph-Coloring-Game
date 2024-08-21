@@ -36,7 +36,7 @@ class Player:
         self.gamma = gamma
         self.memory = ReplayMemory(memory)
         self.color = utils.get_color(type)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.policy_net = None
         self.target_net = None
         self.state = []
@@ -45,13 +45,14 @@ class Player:
         self.action = None
         self.reward = 0
         self.L = 0
+        self.R = 0
     
     @property
     def features(self):
         return len(self.space) + 2*len(self.state)
 
     def load(self, data):
-        self.update("current", data)
+        self.update('current', data)
 
         for counter, (block, color) in enumerate(product(self.state, COLORS)):
             action = Action(block, color)
@@ -71,16 +72,16 @@ class Player:
         self.optimizer = getattr(optim, optimizer_name)(self.policy_net.parameters(), **optimizer_params)
 
     def update(self, type, data=None):
-        if type == "current":
+        if type == 'current':
             self.state = deepcopy(data)
 
             for action in self.space:
                 action.block = self.state[action.block.id]
 
-        elif type == "next":
+        elif type == 'next':
             self.next = deepcopy(data)
 
-        elif type == "net":
+        elif type == 'net':
             tnsd = self.target_net.state_dict()
             pnsd = self.policy_net.state_dict()
 
@@ -90,11 +91,11 @@ class Player:
             self.target_net.load_state_dict(tnsd)
 
         else:
-            raise ValueError("Invalid update type.")
+            raise ValueError('Invalid update type.')
 
     def explore(self):
         self.action = random.choice(self.space)
-        self.action.increment("Exploration")
+        self.action.increment('Exploration')
 
     def exploit(self):
         with torch.no_grad():
@@ -102,7 +103,7 @@ class Player:
             _, id  = self.policy_net(s).max(1)
 
         self.action = self.space[id]
-        self.action.increment("Exploitation")
+        self.action.increment('Exploitation')
 
     def expand_memory(self):
         s = torch.tensor([[block.color.encoding for block in self.state]], dtype=torch.float32).to(self.device)
@@ -145,7 +146,7 @@ class Action:
         self.id = None
         self.invalid = 0
         self.winner = False
-        self.times = {"Exploration": 0, "Exploitation": 0, "Simulation": 0}
+        self.times = {'Exploration': 0, 'Exploitation': 0, 'Simulation': 0}
 
     def set_invalid(self):
         self.invalid = int(not self.block.is_uncolored())
@@ -183,7 +184,7 @@ class Style:
                 if level == int(key):
                     return value
                 
-        return "Error: Level is out of range"
+        return 'Error: Level is out of range'
     
     def get_taste(self, color):
         return self.taste.get(color.tone, 0)
