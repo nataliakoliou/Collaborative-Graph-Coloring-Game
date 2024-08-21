@@ -16,20 +16,63 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 logger.info(f'Device is {device}')
 
-def statistics(player, k, steps):
-    actions_and_freqs = [
-        (f'(B{action.block.id}, {action.color.name})', action.times['Exploitation'] / steps)
-        for action in player.space
-    ]
-    
-    actions_and_freqs.sort(key=lambda x: x[1], reverse=True)
-    top_actions_and_freqs = actions_and_freqs[:k]
-    
-    actions, freqs = zip(*top_actions_and_freqs)
-    
-    return list(actions), list(freqs)
+def __stats__(players, topk, steps, game):
+    values, ticks, colors, names = [], [], [], []
+    labels = ('Action', 'Frequency')
+    func = plt.bar
+    path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='stats.png')
+    title = 'Statistics'
 
-def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
+    for player in players:
+        actions_and_freqs = [
+            (f'(B{action.block.id}, {action.color.name})', action.times['Exploitation'] / steps)
+            for action in player.space
+        ]
+        
+        actions_and_freqs.sort(key=lambda x: x[1], reverse=True)
+        top_actions_and_freqs = actions_and_freqs[:topk]
+        
+        actions, freqs = zip(*top_actions_and_freqs)
+        
+        x_values = list(range(topk))
+        x_ticks = (x_values, list(actions))
+        
+        values.append((x_values, list(freqs)))
+        ticks.append((x_ticks, None))
+        colors.append(player.color)
+        names.append(player.type)
+    
+    return {'values': values, 'labels': labels, 'func': func, 'path': path, 'title': title, 'colors': colors, 'ticks': ticks, 'names': names}
+
+def __rewards__(types, rewards, colors, repeats, game):
+    values = [(list(range(repeats)), rewards[type]) for type in types]
+    labels = ('Step', 'Reward')
+    func = plt.plot
+    path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='rewards.png')
+    title = 'Reward Curve'
+
+    return {'values': values, 'labels': labels, 'func': func, 'path': path, 'title': title, 'colors': colors, 'names': types}
+
+def __losses__(types, losses, colors, repeats, game):
+    values = [(list(range(repeats)), losses[type]) for type in types]
+    labels = ('Step', 'Loss')
+    func = plt.plot
+    path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='losses.png')
+    title = 'Loss Curve'
+
+    return {'values': values, 'labels': labels, 'func': func, 'path': path, 'title': title, 'colors': colors, 'names': types}
+
+def __mistakes__(mistakes, repeats, game):
+    values = [(list(range(repeats)), mistakes)]
+    labels = ('Repeat', 'Mistakes')
+    func = plt.plot
+    path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='mistakes.png')
+    title = 'Mistakes'
+    colors = ['green']
+
+    return {'values': values, 'labels': labels, 'func': func, 'path': path, 'title': title, 'colors': colors}
+
+def qlearn(game, repeats, epsilon, cutoff, patience, visualize, topk):
     env = game.env
     players = utils.filterout(input=game.players)
     types = [player.type for player in players]
@@ -114,7 +157,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
                     ' ~ '.join([f'Rewards ({type})={rewards[type][repeat]:.6f}' for type in types]) +
                     f' ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}')
 
-        env.visualize(repeat=repeat, start=0, end=repeats, dir=('static', phase, f'{game.title}', 'viz'))
+        env.visualize(repeat=repeat, start=0, end=repeats, dir=('static', 'learning', f'{game.title}', 'viz'))
 
         if repeat >= max_explore:
             if any(no_improvement[type] >= patience for type in types):
@@ -127,48 +170,10 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, phase, topk):
         torch.save(model, path)
 
     if visualize:
-        x_values = list(range(repeats))
-
-        utils.plot(values=[(x_values, mistakes)], 
-                   labels=('Repeat', 'Mistakes'), 
-                   func=plt.plot,
-                   path=utils.get_path(dir=('static', phase, f'{game.title}'), name='mistakes.png'), 
-                   title='Mistakes Plot', 
-                   colors=['green']
-                   )
-        
-        utils.plot(values=[(x_values, losses[type]) for type in types],
-                   labels=('Step', 'Loss'),
-                   func=plt.plot,
-                   path=utils.get_path(dir=('static', phase, f'{game.title}'), name='losses.png'),  
-                   title='Loss Curve',
-                   colors=colors,
-                   names=types
-                   )
-        
-        utils.plot(values=[(x_values, rewards[type]) for type in types],
-                   labels=('Step', 'Reward'),
-                   func=plt.plot,
-                   path=utils.get_path(dir=('static', phase, f'{game.title}'), name='rewards.png'),  
-                   title='Reward Curve',
-                   colors=colors,
-                   names=types
-                   )
-        
-        for player in players:
-            actions, frequencies = statistics(player, k=topk, steps=steps)
-
-            x_values = list(range(topk))
-            x_ticks = (list(range(topk)), actions)
-            
-            utils.plot(values=[(x_values, frequencies)],
-                       labels=('Action', 'Frequency'),
-                       func=plt.bar,
-                       path=utils.get_path(dir=('static', phase, f'{game.title}'), name=f'{player.type}_stats.png'), 
-                       title=f'{player.type.capitalize()} Exploitation Statistics', 
-                       colors=[player.color],
-                       ticks=(x_ticks, None)
-                       )
+        utils.plot(**__mistakes__(mistakes, repeats, game))
+        utils.plot(**__losses__(types, losses, colors, repeats, game))
+        utils.plot(**__rewards__(types, rewards, colors, repeats, game))
+        utils.plot(**__stats__(players, topk, steps, game))
 
 def main():
     grid = Grid(**config['grid'])

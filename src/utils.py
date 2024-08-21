@@ -47,36 +47,60 @@ def get_color(type):
     else:
         raise ValueError('Invalid type.')
 
-def plot(values, labels, func, path, title, colors, width=0.2, ticks=(None, None), names=[None,None], marker=None, linestyle='solid'):
+def plot(values, labels, func, path, title, colors, width=0.2, ticks=[], names=[None, None], marker=None, linestyle='solid'):
     x_label, y_label = labels
-    x_ticks, y_ticks = ticks
-    
+
     plt.figure(figsize=(12, 12))
+    ax = plt.gca()
 
     for i, pair in enumerate(values):
         x_values, y_values = pair
 
         if len(y_values) == 0:
             continue
-        
+
+        if ticks:
+            if len(ticks) != len(values):
+                raise ValueError("Ticks and values must have the same length")
+
+            x_ticks, y_ticks = ticks[i]
+        else:
+            x_ticks, y_ticks = None, None
+
         if func == plt.plot:
             func(x_values, y_values, color=colors[i], marker=marker, linestyle=linestyle, label=names[i])
         elif func == plt.bar:
             func(x_values, y_values, color=colors[i], width=width, label=names[i])
-    
+
+        if x_ticks:
+            if i == 0:
+                ax.set_xticks(x_ticks[0])
+                ax.set_xticklabels(x_ticks[1], rotation=45, ha='right')
+            else:
+                ax2 = ax.twiny()
+                ax2.set_xticks(x_ticks[0])
+                ax2.set_xticklabels(x_ticks[1], rotation=45, ha='right')
+                ax2.spines['top'].set_position(('outward', 50 * i))
+                ax2.set_xlim(ax.get_xlim())
+
+        if y_ticks:
+            if i == 0:
+                ax.set_yticks(y_ticks[0])
+                ax.set_yticklabels(y_ticks[1], rotation=45, ha='right')
+            else:
+                ax2 = ax.twinx()
+                ax2.set_yticks(y_ticks[0])
+                ax2.set_yticklabels(y_ticks[1], rotation=45, ha='right')
+                ax2.spines['right'].set_position(('outward', 50 * i))
+                ax2.set_ylim(ax.get_ylim())
+
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
-    if x_ticks:
-        plt.xticks(*x_ticks, rotation=45, ha='right')
-
-    if y_ticks:
-        plt.yticks(*y_ticks, rotation=45, ha='right')
-
-    if names != [None,None]:
+    if names != [None, None]:
         plt.legend()
-        
+
     plt.grid(True)
 
     plt.savefig(path)
@@ -133,7 +157,7 @@ def aggregate(values, weights=None, method='mean', remove_zeros=True):
     
     if remove_zeros:
         values = values[values != 0]
-        
+
     if method == 'mean':
         return np.mean(values)
     
