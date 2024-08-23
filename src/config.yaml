@@ -1,14 +1,14 @@
 ## Monitoring Parameters ##
 track:
-  logger: CRITICAL
-  bar: true
+  logger: INFO
+  bar: false
 
 ## Game Parameters ##
 game:
   gain: 2
   penalty: -3
   sanction: -10
-  prefs: [-1, 0, 0]
+  prefs: [-1, -2, -1]
 
 ## Grid Environment Parameters ##
 grid:
@@ -19,7 +19,7 @@ grid:
   wR: 0.2
 
   viz:
-    freq: 100
+    freq: 10000
     last_k: 5
     cell_size: 100
     border_width: 2
@@ -62,16 +62,16 @@ human:
   tau: 0.005
   batch_size: 8
   gamma: 0
-  memory: 100000
+  memory: 10000000
 
 ## Q-Learning Parameters ##
 qlearn:
-  repeats: 1000
+  repeats: 100000
   epsilon: 1
-  cutoff: 0.5
-  patience: 10
+  cutoff: 0.8
+  patience: 30
   visualize: true
-  topk: 5
+  top_k: 15
 
 ## Simulation Parameters ##
 simulate:
