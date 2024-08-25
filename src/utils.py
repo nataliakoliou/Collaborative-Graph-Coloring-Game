@@ -50,7 +50,7 @@ def get_color(type):
 def plot(values, labels, func, path, title, colors, width=0.2, ticks=[], names=[None, None], marker=None, linestyle='solid'):
     x_label, y_label = labels
 
-    plt.figure(figsize=(12, 12))
+    plt.figure(figsize=(15, 15))
     ax = plt.gca()
 
     for i, pair in enumerate(values):
@@ -123,7 +123,7 @@ def filterout(input, target=None):
 
         return output(*values)
     
-def get_logger(level='DEBUG'):
+def get_logger(level='DEBUG', path=''):
     logger = logging.getLogger(__name__)
 
     level_name = logging.getLevelName(level)
@@ -134,6 +134,10 @@ def get_logger(level='DEBUG'):
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
+
+    file_handler = logging.FileHandler(path)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
     
     return logger
 
@@ -151,12 +155,17 @@ def get_adjacent_pos(row, col, direction):
     return row + row_effect, col + col_effect
 
 def aggregate(values, weights=None, method='mean', remove_zeros=True):
+    values = np.array(values)
     
     if weights is not None:
-        values = np.array(values) * np.array(weights)
-    
-    if remove_zeros:
-        values = values[values != 0]
+        weights = np.array(weights)
+
+        if remove_zeros:
+            mask = weights != 0
+            values = values[mask]
+            weights = weights[mask]
+
+        values = values * weights
 
     if method == 'mean':
         return np.mean(values)
