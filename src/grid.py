@@ -13,7 +13,7 @@ class Grid:
         self.minR = minR
         self.wR = wR
         self.freq = viz['freq']
-        self.k = viz['last_k']
+        self.last_k = viz['last_k']
         self.cell_size = viz['cell_size']
         self.border_width = viz['border_width']
         self.screen_color = globals().get(viz['screen_color'])()
@@ -121,7 +121,7 @@ class Grid:
         if hasattr(actions, 'human') and hasattr(actions, 'robot'):
             distinct = actions.human != actions.robot
         else:
-            distinct = False
+            distinct = True # NOTE: from False to True
 
         actions = list(actions)
         random.shuffle(actions)
@@ -148,7 +148,7 @@ class Grid:
 
         colored_neighbors = player.action.block.filtered_neighbors(colors=COLORS)
         level = len(colored_neighbors)
-        color = player.action.block.color
+        color = player.action.color
         freq = (sum(block.color.name == color.name for block in self.state) - 1) / self.num_blocks
 
         x = player.style.get_difficulty(level=level)
@@ -178,7 +178,7 @@ class Grid:
     def visualize(self, repeat, start, end, dir):
         pygame.init() if repeat==start else None
 
-        if repeat % self.freq == 0 or utils.is_last(current=repeat, final=end, k=self.k):
+        if repeat % self.freq == 0 or utils.is_last(current=repeat, final=end, k=self.last_k ):
 
             screen = pygame.Surface((self.screen_width, self.screen_height))
             screen.fill(self.screen_color.rgb)

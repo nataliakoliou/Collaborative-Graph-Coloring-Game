@@ -12,12 +12,14 @@ from .player import Player
 
 config = utils.load_yaml(path=utils.get_path(dir=(os.path.dirname(__file__), '..'), name='config.yaml'))
 
-logger = utils.get_logger(level=config['track']['logger'])
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+level = config['track']['logger']
+path = utils.get_path(dir=('static'), name='loggings.pth')
+logger = utils.get_logger(level=level, path=path)
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 logger.info(f'Device is {device}')
 
-def __stats__(players, topk, steps, game):
+def __stats__(players, top_k, steps, game):
     values, ticks, colors, names = [], [], [], []
     labels = ('Action', 'Frequency')
     func = plt.bar
@@ -31,11 +33,11 @@ def __stats__(players, topk, steps, game):
         ]
         
         actions_and_freqs.sort(key=lambda x: x[1], reverse=True)
-        top_actions_and_freqs = actions_and_freqs[:topk]
+        top_actions_and_freqs = actions_and_freqs[:top_k]
         
         actions, freqs = zip(*top_actions_and_freqs)
         
-        x_values = list(range(topk))
+        x_values = list(range(top_k))
         x_ticks = (x_values, list(actions))
         
         values.append((x_values, list(freqs)))
@@ -73,7 +75,7 @@ def __mistakes__(mistakes, repeats, game):
 
     return {'values': values, 'labels': labels, 'func': func, 'path': path, 'title': title, 'colors': colors}
 
-def qlearn(game, repeats, epsilon, cutoff, patience, visualize, topk):
+def qlearn(game, repeats, epsilon, cutoff, patience, visualize, top_k):
     env = game.env
     players = utils.filterout(input=game.players)
     types = [player.type for player in players]
@@ -124,6 +126,8 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, topk):
 
                 player.update(type='net')
 
+                assert env.state[player.action.block.id].color.name == player.action.block.color.name, ("Color mismatch!")
+
             steps += 1
 
         for player in players:
@@ -153,16 +157,18 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, topk):
             pbar.set_postfix(metrics)
             pbar.update(1)
 
-        logger.info(f'Repeat: {repeat + 1} ~ Steps: {steps} ~ ' + 
-                    ' ~ '.join([f'Losses ({type})={losses[type][repeat]:.6f}' for type in types]) + 
-                    ' ~ '.join([f'Rewards ({type})={rewards[type][repeat]:.6f}' for type in types]) +
-                    f' ~ Mistakes: {mistakes[repeat]} ~ Epsilon: {epsilon:.6f}')
+        logger.info(f"Repeat: {repeat + 1}, Steps: {steps}, " +
+                    ", ".join([f"{type.capitalize()} Loss: {losses[type][repeat]:.6f}" for type in types]) + ", " +
+                    ", ".join([f"{type.capitalize()} Reward: {rewards[type][repeat]:.6f}" for type in types]) + ", " +
+                    f"Mistakes: {mistakes[repeat]}, Epsilon: {epsilon:.6f}, " +
+                    f"CPU: {utils.get_cpu_usage():.2f}%, GPU: {utils.get_gpu_usage():.2f}%")
 
         if repeat >= max_explore:
             env.visualize(repeat=repeat, start=max_explore, end=repeats, dir=('static', 'learning', f'{game.title}', 'viz'))
 
             if any(no_improvement[type] >= patience for type in types):
                 logger.info(f'Early stopping triggered after {repeat + 1} repeats with no improvement.')
+                repeats = repeat + 1
                 break
 
     for player in players:
@@ -174,7 +180,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, topk):
         utils.plot(**__mistakes__(mistakes, repeats, game))
         utils.plot(**__losses__(types, losses, colors, repeats, game))
         utils.plot(**__rewards__(types, rewards, colors, repeats, game))
-        utils.plot(**__stats__(players, topk, steps, game))
+        utils.plot(**__stats__(players, top_k, steps, game))
 
 def main():
     grid = Grid(**config['grid'])

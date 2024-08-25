@@ -187,7 +187,7 @@ class Style:
         return 'Error: Level is out of range'
     
     def get_taste(self, color):
-        return self.taste.get(color.tone, 0)
+        return self.taste[color.tone]
     
     def get_minimalism(self, freq):
         return freq * self.minimalism
