@@ -184,9 +184,18 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, top_k):
 
 def main():
     grid = Grid(**config['grid'])
-    human = Player(**config['human'])
+
+    if 'human' in config:
+        human = Player(**config['human'])
+    else:
+        human = None
+
+    if 'robot' in config:
+        robot = Player(**config['robot'])
+    else:
+        robot = None
     
-    game = Game(env=grid, human=human, robot=None, **config['game'])
+    game = Game(env=grid, human=human, robot=robot, **config['game'])
     
     qlearn(game=game, **config['qlearn'])
 
