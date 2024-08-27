@@ -16,8 +16,8 @@ grid:
   wR: 0.2
 
   viz:
-    freq: 1000
-    last_k: 5
+    freq: 50
+    last_k: -1
     cell_size: 100
     border_width: 2
     screen_color: Black
@@ -60,10 +60,44 @@ human:
   gamma: 0
   memory: 10000000
 
-qlearn:
-  repeats: 100000
-  epsilon: 1
-  cutoff: 0.7
-  patience: 50
+robot:
+  type: robot
+
+  style: 
+    name: serene
+
+    difficulty:
+      '0': -0.05
+      '1': -0.1
+      '2-3': -0.2
+      '4-5': -0.25
+      '6+': -0.4
+
+    taste:
+      warm: 0
+      cool: -1
+
+    minimalism: -0.08
+
+  model: HDQN
+
+  criterion:
+    name: SmoothL1Loss
+    params:
+      beta: 1.0
+
+  optimizer:
+    name: AdamW
+    params: 
+      lr: 0.001
+      weight_decay: 0.00001
+
+  tau: 0.005
+  batch_size: 8
+  gamma: 0
+  memory: 10000000
+
+simulate:
+  repeats: 1000
   visualize: true
   top_k: 15

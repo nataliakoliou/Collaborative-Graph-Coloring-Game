@@ -52,19 +52,30 @@ class Grid:
         self.load_colors()
 
     def load_cells(self):
-        for i, j in product(range(self.rows), range(self.cols)):
-            cell = self.get_cell(i, j)
+        saved_grid = utils.load_pickle(name='env')
 
-            cell.neighbors = [self.get_cell(i + dr, j + dc) for dr, dc in [(0, -1), (0, 1), (-1, 0), (1, 0)]
-                              if Cell(i + dr, j + dc).is_valid(self.rows, self.cols)]
+        if saved_grid is None:
+            for i, j in product(range(self.rows), range(self.cols)):
+                cell = self.get_cell(i, j)
+
+                cell.neighbors = [self.get_cell(i + dr, j + dc) for dr, dc in [(0, -1), (0, 1), (-1, 0), (1, 0)]
+                                if Cell(i + dr, j + dc).is_valid(self.rows, self.cols)]
+                
+                ids = [neighbor.id for neighbor in cell.neighbors if neighbor.id is not None]
+
+                if random.random() < self.merge and ids:
+                    cell.id = random.choice(ids)
+                else:
+                    cell.id = self.num_blocks
+                    self.num_blocks += 1
             
-            ids = [neighbor.id for neighbor in cell.neighbors if neighbor.id is not None]
+            utils.save_pickle(data=self.grid, name='env')
 
-            if random.random() < self.merge and ids:
-                cell.id = random.choice(ids)
-            else:
-                cell.id = self.num_blocks
-                self.num_blocks += 1
+        else:
+            self.grid = saved_grid
+        
+            unique_ids = set(cell.id for row in self.grid for cell in row)
+            self.num_blocks = len(unique_ids)
 
     def load_state(self):
         self.state = [Block(id) for id in range(self.num_blocks)]
@@ -108,11 +119,12 @@ class Grid:
             block.set_color(HIDDEN)
 
     def step(self):
-        reveal = random.randint(self.minR, self.maxR)
+        intended_reveal = random.randint(self.minR, self.maxR)
         hidden_blocks = [block for block in self.state if block.is_hidden()]
-        r = min(len(hidden_blocks), reveal)
+
+        actual_reveal = min(len(hidden_blocks), intended_reveal)
         
-        for block in random.sample(hidden_blocks, r):
+        for block in random.sample(hidden_blocks, actual_reveal):
             block.set_color(NC)
     
     def coordinate(self, actions):
@@ -121,7 +133,7 @@ class Grid:
         if hasattr(actions, 'human') and hasattr(actions, 'robot'):
             distinct = actions.human != actions.robot
         else:
-            distinct = True # NOTE: from False to True
+            distinct = True
 
         actions = list(actions)
         random.shuffle(actions)

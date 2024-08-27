@@ -1,0 +1,103 @@
+track:
+  logger: INFO
+  bar: false
+
+game:
+  gain: 2
+  penalty: -3
+  sanction: -10
+  prefs: [0, 1, 0]
+
+grid:
+  rows: 2
+  cols: 3
+  merge: 0.4
+  minR: 2
+  wR: 0.2
+
+  viz:
+    freq: 50
+    last_k: -1
+    cell_size: 100
+    border_width: 2
+    screen_color: Black
+    live: false
+
+human:
+  type: human
+
+  style: 
+    name: serene
+
+    difficulty:
+      '0': -0.05
+      '1': -0.1
+      '2-3': -0.2
+      '4-5': -0.25
+      '6+': -0.4
+
+    taste:
+      warm: 0
+      cool: -1
+
+    minimalism: -0.08
+
+  model: HDQN
+
+  criterion:
+    name: SmoothL1Loss
+    params:
+      beta: 1.0
+
+  optimizer:
+    name: AdamW
+    params: 
+      lr: 0.001
+      weight_decay: 0.00001
+
+  tau: 0.005
+  batch_size: 8
+  gamma: 0
+  memory: 10000000
+
+robot:
+  type: robot
+
+  style: 
+    name: serene
+
+    difficulty:
+      '0': -0.05
+      '1': -0.1
+      '2-3': -0.2
+      '4-5': -0.25
+      '6+': -0.4
+
+    taste:
+      warm: 0
+      cool: -1
+
+    minimalism: -0.08
+
+  model: HDQN
+
+  criterion:
+    name: SmoothL1Loss
+    params:
+      beta: 1.0
+
+  optimizer:
+    name: AdamW
+    params: 
+      lr: 0.001
+      weight_decay: 0.00001
+
+  tau: 0.005
+  batch_size: 8
+  gamma: 0
+  memory: 10000000
+
+simulate:
+  repeats: 1000
+  visualize: true
+  top_k: 15

@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import random
@@ -39,6 +40,7 @@ class Player:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.policy_net = None
         self.target_net = None
+        self.path = utils.get_path(dir=('models', f'{self.type}'), name=f'{self.style.name}.pth')
         self.state = []
         self.next = []
         self.space = []
@@ -60,6 +62,10 @@ class Player:
             self.space.append(action)
 
         self.policy_net = globals()[self.model](input=self.features, output=len(self.space)).to(self.device)
+
+        if os.path.exists(self.path):
+            self.policy_net.load_state_dict(torch.load(self.path, weights_only=True))
+
         self.target_net = globals()[self.model](input=self.features, output=len(self.space)).to(self.device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
 

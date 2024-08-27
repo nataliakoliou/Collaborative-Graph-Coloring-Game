@@ -172,7 +172,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, top_k):
                 break
 
     for player in players:
-        path = utils.get_path(dir=('models', f'{player.type}'), name=f'{game.title}.pth')
+        path = utils.get_path(dir=('models', f'{player.type}'), name=f'{player.style.name}.pth')
         model = player.policy_net.state_dict()
         torch.save(model, path)
 

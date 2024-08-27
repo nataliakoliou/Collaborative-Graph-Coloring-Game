@@ -1,6 +1,7 @@
 import os
 import yaml
 import random
+import pickle
 import psutil
 import torch
 import logging
@@ -194,5 +195,29 @@ def get_gpu_usage():
     
     return 0
 
-def is_last(current, final, k=5):
+def is_last(current, final, k=-1):
+    # current will never exceed final during normal execution, so any value of current that is greater than or equal to final i.e., final + 1, is effectively out of bounds.
     return current >= (final - k)
+
+def load_model(path):
+    model = torch.load(path)
+    model.eval()
+
+    return model
+
+def save_pickle(data, name):
+    path = get_path(dir='static', name=f'{name}.pkl')
+
+    with open(path, 'wb') as f:
+        pickle.dump(data, f)
+
+def load_pickle(name):
+    path = get_path(dir='static', name=f'{name}.pkl')
+
+    try:
+        with open(path, 'rb') as f:
+            data = pickle.load(f)
+        return data
+
+    except FileNotFoundError:
+        return None
