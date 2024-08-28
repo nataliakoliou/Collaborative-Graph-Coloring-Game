@@ -51,6 +51,12 @@ def get_color(type):
 def plot(values, labels, func, path, title, colors, width=0.2, ticks=[], names=[None, None], marker=None, linestyle='solid'):
     x_label, y_label = labels
 
+    handles = []
+
+    num_plots = len(values)
+    total_width = num_plots * width
+    offsets = [-total_width/2 + i * width + width/2 for i in range(num_plots)]
+
     plt.figure(figsize=(15, 15))
     ax = plt.gca()
 
@@ -69,9 +75,12 @@ def plot(values, labels, func, path, title, colors, width=0.2, ticks=[], names=[
             x_ticks, y_ticks = None, None
 
         if func == plt.plot:
-            func(x_values, y_values, color=colors[i], marker=marker, linestyle=linestyle, label=names[i])
+            handle, = func(x_values, y_values, color=colors[i], marker=marker, linestyle=linestyle, label=names[i])
         elif func == plt.bar:
-            func(x_values, y_values, color=colors[i], width=width, label=names[i])
+            x_values = [x + offsets[i] for x in x_values]
+            handle = func(x_values, y_values, color=colors[i], width=width, label=names[i])
+
+        handles.append(handle)
 
         if x_ticks:
             if i == 0:
@@ -79,31 +88,36 @@ def plot(values, labels, func, path, title, colors, width=0.2, ticks=[], names=[
                 ax.set_xticklabels(x_ticks[1], rotation=45, ha='right')
             else:
                 ax2 = ax.twiny()
+
                 ax2.set_xticks(x_ticks[0])
-                ax2.set_xticklabels(x_ticks[1], rotation=45, ha='right')
+                ax2.set_xticklabels(x_ticks[1])
+
                 ax2.spines['top'].set_position(('outward', 50 * i))
                 ax2.set_xlim(ax.get_xlim())
+
+                plt.setp(ax2.get_xticklabels(), rotation=45, ha='right')
 
         if y_ticks:
             if i == 0:
                 ax.set_yticks(y_ticks[0])
-                ax.set_yticklabels(y_ticks[1], rotation=45, ha='right')
+                ax.set_yticklabels(y_ticks[1])
             else:
                 ax2 = ax.twinx()
+                
                 ax2.set_yticks(y_ticks[0])
-                ax2.set_yticklabels(y_ticks[1], rotation=45, ha='right')
+                ax2.set_yticklabels(y_ticks[1])
+                
                 ax2.spines['right'].set_position(('outward', 50 * i))
                 ax2.set_ylim(ax.get_ylim())
 
     plt.title(title)
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
 
-    if names != [None, None]:
-        plt.legend()
+    if names:
+        plt.legend(handles=handles, labels=names)
 
     plt.grid(True)
-
     plt.savefig(path)
     plt.close()
 

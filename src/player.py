@@ -5,6 +5,7 @@ import random
 from itertools import product
 from copy import deepcopy
 import torch.optim as optim
+import torch.nn.functional as F
 from collections import namedtuple, deque
 
 from . import utils
@@ -111,6 +112,17 @@ class Player:
         self.action = self.space[id]
         self.action.increment('Exploitation')
 
+    def select(self):
+        with torch.no_grad():
+            s = torch.tensor([[block.color.encoding for block in self.state]], dtype=torch.float32).to(self.device)
+            qvalues = self.policy_net(s)
+            probs = F.softmax(qvalues, dim=1)
+
+            id = torch.multinomial(probs, 1).item()
+
+        self.action = self.space[id]
+        self.action.increment('Selection')
+
     def expand_memory(self):
         s = torch.tensor([[block.color.encoding for block in self.state]], dtype=torch.float32).to(self.device)
         a = torch.tensor([[self.action.id]]).to(self.device)
@@ -152,7 +164,7 @@ class Action:
         self.id = None
         self.invalid = 0
         self.winner = False
-        self.times = {'Exploration': 0, 'Exploitation': 0, 'Simulation': 0}
+        self.times = {'Exploration': 0, 'Exploitation': 0, 'Selection': 0}
 
     def set_invalid(self):
         self.invalid = int(not self.block.is_uncolored())

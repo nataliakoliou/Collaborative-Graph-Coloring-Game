@@ -28,7 +28,7 @@ def __stats__(players, top_k, steps, game):
 
     for player in players:
         actions_and_freqs = [
-            (f'(B{action.block.id}, {action.color.name})', action.times['Exploitation'] / steps)
+            (f'(B{action.block.id}, {action.color.name})', action.times['Selection'] / steps)
             for action in player.space
         ]
         
@@ -89,7 +89,7 @@ def simulate(game, repeats, visualize, top_k):
             for player in players:
                 player.update(type='current', data=env.state)
 
-                player.exploit()
+                player.select()
 
             intentions = utils.filterout(input=game.actions)
             actions, distinct, loser = env.coordinate(intentions)
