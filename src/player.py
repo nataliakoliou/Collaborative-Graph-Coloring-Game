@@ -112,13 +112,21 @@ class Player:
         self.action = self.space[id]
         self.action.increment('Exploitation')
 
-    def select(self):
+    def select(self, power=4):
+        torch.set_printoptions(precision=6, sci_mode=False)
+
         with torch.no_grad():
             s = torch.tensor([[block.color.encoding for block in self.state]], dtype=torch.float32).to(self.device)
             qvalues = self.policy_net(s)
-            probs = F.softmax(qvalues, dim=1)
+
+            exp_qvalues = torch.exp(qvalues)
+            norm_qvalues = exp_qvalues / exp_qvalues.sum()
+
+            sharp_qvalues = norm_qvalues ** power
+            probs = sharp_qvalues / sharp_qvalues.sum()
 
             id = torch.multinomial(probs, 1).item()
+            print(f"Chosen action {id} has prob: {probs[0, id].item()}")
 
         self.action = self.space[id]
         self.action.increment('Selection')

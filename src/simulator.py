@@ -103,6 +103,8 @@ def simulate(game, repeats, visualize, top_k):
 
                 assert env.state[player.action.block.id].color.name == player.action.block.color.name, ("Color mismatch!")
 
+            print("#################################################################################")
+            
             steps += 1
 
         for player in players:

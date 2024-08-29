@@ -135,6 +135,9 @@ class Grid:
         else:
             distinct = True
 
+        for player_type, action in actions._asdict().items():  # Assuming actions is a namedtuple or similar
+            print(f"Player of type {player_type} wants to paint block {action.block.id} with color {action.color.name}")
+
         actions = list(actions)
         random.shuffle(actions)
     
@@ -152,6 +155,8 @@ class Grid:
             else:
                 action.winner = False
         
+        print(f"Block ({action.block.id},{action.color.name}) is winner: {action.winner}")
+        
         return loser
         
     def reward(self, player, metrics):
@@ -163,17 +168,26 @@ class Grid:
         color = player.action.color
         freq = (sum(block.color.name == color.name for block in self.state) - 1) / self.num_blocks
 
+        print(f"Player {player.type} wants to paint block {player.action.block.id} with color {color.name}.")
+
         x = player.style.get_difficulty(level=level)
         y = player.style.get_taste(color=color)
         z = player.style.get_minimalism(freq=freq)
 
+        print(f"Taste score (y): {y}")
+
         xyz = utils.aggregate(values=(x,y,z), weights=prefs, method='mean', remove_zeros=True)
+
+        print(f"Aggregated preference score (xyz): {xyz}")
 
         for neighbor in player.action.block.neighbors:
             if neighbor.color.name != player.action.color.name:
                 k, m = (k + 1, m)
             else:
                 k, m = (k, m + 1)
+
+        print(f"Number of different-colored neighbors (k): {k}")
+        print(f"Number of same-colored neighbors (m): {m}")
 
         s = player.action.invalid * sanction
         g = k * gain
@@ -186,6 +200,11 @@ class Grid:
             player.reward = 0
         
         player.R += player.reward
+
+        print(f"Detailed reward breakdown for Player {player.type}:")
+        print(f"Reward = (Sanction score + Gain score + Penalty score + Preference score)")
+        print(f"Reward = ({s} + {g} + {p} + {pr})")
+        print(f"Player {player.type} got reward: {player.reward:.2f}")
 
     def visualize(self, repeat, start, end, dir):
         pygame.init() if repeat==start else None
