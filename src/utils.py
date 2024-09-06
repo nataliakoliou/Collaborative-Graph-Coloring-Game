@@ -1,5 +1,6 @@
 import os
 import yaml
+import json
 import random
 import pickle
 import psutil
@@ -169,7 +170,7 @@ def get_adjacent_pos(row, col, direction):
     
     return row + row_effect, col + col_effect
 
-def aggregate(values, weights=None, method='mean', remove_zeros=True):
+def aggregate(values, weights=None, method='mean', remove_zeros=False):
     values = np.array(values)
     
     if weights is not None:
@@ -219,19 +220,36 @@ def load_model(path):
 
     return model
 
-def save_pickle(data, name):
-    path = get_path(dir='static', name=f'{name}.pkl')
+def save_pickle(data, dir='static', name=''):
+    path = get_path(dir, name=f'{name}.pkl')
 
     with open(path, 'wb') as f:
         pickle.dump(data, f)
 
-def load_pickle(name):
-    path = get_path(dir='static', name=f'{name}.pkl')
+def load_pickle(dir='static', name=''):
+    path = get_path(dir, name=f'{name}.pkl')
 
     try:
         with open(path, 'rb') as f:
             data = pickle.load(f)
         return data
 
+    except FileNotFoundError:
+        return None
+    
+def save_json(data, dir='static', name=''):
+    path = get_path(dir, name=f'{name}.json')
+
+    with open(path, 'w') as f:
+        json.dump(data, f)
+
+def load_json(dir='static', name=''):
+    path = get_path(dir, name=f'{name}.json')
+
+    try:
+        with open(path, 'r') as f:
+            data = json.load(f)
+        return data
+    
     except FileNotFoundError:
         return None

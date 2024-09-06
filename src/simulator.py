@@ -103,8 +103,6 @@ def simulate(game, repeats, visualize, top_k):
 
                 assert env.state[player.action.block.id].color.name == player.action.block.color.name, ("Color mismatch!")
 
-            print("#################################################################################")
-            
             steps += 1
 
         for player in players:
@@ -127,6 +125,9 @@ def simulate(game, repeats, visualize, top_k):
                     f"CPU: {utils.get_cpu_usage():.2f}%, GPU: {utils.get_gpu_usage():.2f}%")
 
         env.visualize(repeat=repeat, start=0, end=repeats, dir=('static', 'simulation', f'{game.title}', 'viz'))
+    
+    payoffs = {type: utils.aggregate(values=rewards[type]) for type in types}
+    utils.save_json(data=payoffs, dir=('static', 'payoffs'), name=game.title)
 
     if visualize:
         utils.plot(**__mistakes__(mistakes, repeats, game))
