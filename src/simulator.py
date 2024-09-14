@@ -127,7 +127,7 @@ def simulate(game, repeats, visualize, top_k):
         env.visualize(repeat=repeat, start=0, end=repeats, dir=('static', 'simulation', f'{game.title}', 'viz'))
     
     payoffs = {type: utils.aggregate(values=rewards[type]) for type in types}
-    utils.save_json(data=payoffs, dir=('static', 'payoffs'), name=game.title)
+    utils.save_json(data=payoffs, dir=('static', 'evaluation', 'payoffs'), name=game.title)
 
     if visualize:
         utils.plot(**__mistakes__(mistakes, repeats, game))
