@@ -16,6 +16,7 @@ pyyaml = "^6.0.1"
 pygame = "^2.6.0"
 tqdm = "^4.66.1"
 psutil = "^5.9.4"
+open_spiel = "^1.5"
 
 [build-system]
 requires = ["poetry-core"]
@@ -23,3 +24,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 learner = "src.learner:main"
+simulator = "src.simulator:main"
+evaluator = "src.evaluator:main"
