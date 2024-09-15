@@ -1,0 +1,69 @@
+track:
+  logger: INFO
+  bar: false
+
+game:
+  gain: 2
+  penalty: -3
+  sanction: -10
+  prefs: ~
+
+grid:
+  rows: 3
+  cols: 3
+  merge: 0.4
+  minR: 2
+  wR: 0.2
+
+  viz:
+    freq: 500
+    last_k: 5
+    cell_size: 100
+    border_width: 2
+    screen_color: Black
+    live: false
+
+human:
+  type: human
+
+  style: 
+    name: serene
+
+    difficulty:
+      '0': 0
+      '1': 0
+      '2-3': 0
+      '4-5': 0
+      '6+': 0
+
+    taste:
+      warm: 0
+      cool: -1
+
+    minimalism: 0
+
+  model: HDQN
+
+  criterion:
+    name: SmoothL1Loss
+    params:
+      beta: 1.0
+
+  optimizer:
+    name: AdamW
+    params: 
+      lr: 0.001
+      weight_decay: 0.00001
+
+  tau: 0.005
+  batch_size: 8
+  gamma: 0
+  memory: 10000000
+
+qlearn:
+  repeats: 100000
+  epsilon: 1
+  cutoff: 0.9
+  patience: 50
+  visualize: true
+  top_k: 15
