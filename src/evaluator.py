@@ -1,5 +1,6 @@
 import os
 import json
+import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from open_spiel.python.egt import alpharank
@@ -9,6 +10,15 @@ from open_spiel.python.egt import utils as egt_utils
 from . import utils
 
 np.set_printoptions(suppress=True, precision=18)
+
+config = utils.load_yaml(path=utils.get_path(dir=(os.path.dirname(__file__), '..'), name='config.yaml'))
+
+level = config['track']['logger']
+path = utils.get_path(dir=('static', 'evaluation'), name='loggings.pth')
+logger = utils.get_logger(level=level, path=path)
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+logger.info(f'Device is {device}')
 
 def init_metagame(dir):
     json_files = [f for f in os.listdir(dir) if f.endswith('.json')]
@@ -29,7 +39,10 @@ def init_metagame(dir):
             data.append((human_style, robot_style, payoffs))
 
     human_metastrats = sorted(list(human_styles))
+    logger.info(f'Human meta-strategies: {human_metastrats}')
+    
     robot_metastrats = sorted(list(robot_styles))
+    logger.info(f'Robot meta-strategies: {robot_metastrats}')
 
     payoff_matrix = np.zeros((2, len(human_metastrats), len(robot_metastrats)))
 
