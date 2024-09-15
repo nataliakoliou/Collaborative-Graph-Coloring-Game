@@ -8,6 +8,8 @@ from open_spiel.python.egt import utils as egt_utils
 
 from . import utils
 
+np.set_printoptions(suppress=True, precision=18)
+
 def init_metagame(dir):
     json_files = [f for f in os.listdir(dir) if f.endswith('.json')]
 
