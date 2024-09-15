@@ -27,7 +27,7 @@ human:
   type: human
 
   style: 
-    name: indifferent
+    name: W
 
     difficulty:
       '0': 0
@@ -38,7 +38,7 @@ human:
 
     taste:
       warm: 0
-      cool: 0
+      cool: -1
 
     minimalism: 0
 
@@ -60,44 +60,10 @@ human:
   gamma: 0
   memory: 10000000
 
-robot:
-  type: robot
-
-  style: 
-    name: indifferent
-
-    difficulty:
-      '0': 0
-      '1': 0
-      '2-3': 0
-      '4-5': 0
-      '6+': 0
-
-    taste:
-      warm: 0
-      cool: 0
-
-    minimalism: 0
-
-  model: HDQN
-
-  criterion:
-    name: SmoothL1Loss
-    params:
-      beta: 1.0
-
-  optimizer:
-    name: AdamW
-    params: 
-      lr: 0.001
-      weight_decay: 0.00001
-
-  tau: 0.005
-  batch_size: 8
-  gamma: 0
-  memory: 10000000
-
-simulate:
-  repeats: 5000
+qlearn:
+  repeats: 100000
+  epsilon: 1
+  cutoff: 0.9
+  patience: 50
   visualize: true
   top_k: 15

@@ -27,7 +27,7 @@ human:
   type: human
 
   style: 
-    name: serene
+    name: I
 
     difficulty:
       '0': 0
@@ -38,7 +38,7 @@ human:
 
     taste:
       warm: 0
-      cool: -1
+      cool: 0
 
     minimalism: 0
 

@@ -23,11 +23,11 @@ grid:
     screen_color: Black
     live: false
 
-human:
-  type: human
+robot:
+  type: robot
 
   style: 
-    name: indifferent
+    name: I
 
     difficulty:
       '0': 0
