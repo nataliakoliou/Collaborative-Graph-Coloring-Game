@@ -11,7 +11,7 @@ from .player import Player
 config = utils.load_yaml(path=utils.get_path(dir=(os.path.dirname(__file__), '..'), name='config.yaml'))
 
 level = config['track']['logger']
-path = utils.get_path(dir=('static', 'simulation', f'{config['game'].title}'), name='loggings.pth')
+path = utils.get_path(dir=('static', 'simulation', config['game']['title']), name='loggings.pth')
 logger = utils.get_logger(level=level, path=path)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

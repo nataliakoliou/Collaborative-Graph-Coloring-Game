@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 class Game:
-    def __init__(self, env, human, robot, gain, penalty, sanction, prefs):
+    def __init__(self, env, human, robot, gain, penalty, sanction, prefs, title):
         self.env = env
         self.human = human
         self.robot = robot
@@ -9,17 +9,11 @@ class Game:
         self.penalty = penalty
         self.sanction = sanction
         self.prefs = prefs
+        self.title = title
 
     @property
     def players(self):
         return [self.human, self.robot]
-    
-    @property
-    def title(self):
-        human_desc = f'{self.human.style.name}' if self.human else ''
-        robot_desc = f'{self.robot.style.name}' if self.robot else ''
-
-        return f'{human_desc}_x_{robot_desc}'.strip('_x_')
 
     @property
     def actions(self):

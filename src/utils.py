@@ -180,6 +180,9 @@ def aggregate(values, weights=None, method='mean', remove_zeros=False):
             mask = weights != 0
             values = values[mask]
             weights = weights[mask]
+        
+        if len(values) == 0:
+            return 0
 
         values = values * weights
 
@@ -211,7 +214,6 @@ def get_gpu_usage():
     return 0
 
 def is_last(current, final, k=-1):
-    # current will never exceed final during normal execution, so any value of current that is greater than or equal to final i.e., final + 1, is effectively out of bounds.
     return current >= (final - k)
 
 def load_model(path):
