@@ -26,6 +26,8 @@ def __stats__(players, top_k, steps, game):
     path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='statistics.png')
     title = 'Statistics'
 
+    stats = {player.type: [] for player in players}
+
     for player in players:
         actions_and_freqs = [
             (f'(B{action.block.id}, {action.color.name})', action.times['Exploitation'] / steps)
@@ -44,6 +46,10 @@ def __stats__(players, top_k, steps, game):
         ticks.append((x_ticks, None))
         colors.append(player.color)
         names.append(player.type)
+
+        stats[player.type].append({'actions': actions, 'freqs': list(freqs)})
+    
+    utils.save_json(data=stats, dir=('static', 'learning', f'{game.title}'), name='stats')
     
     return {'values': values, 'labels': labels, 'func': func, 'path': path, 'title': title, 'colors': colors, 'ticks': ticks, 'names': names}
 
@@ -162,7 +168,7 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, top_k):
                     ", ".join([f"{type.capitalize()} Reward: {rewards[type][repeat]:.6f}" for type in types]) + ", " +
                     f"Mistakes: {mistakes[repeat]}, Epsilon: {epsilon:.6f}, " +
                     f"CPU: {utils.get_cpu_usage():.2f}%, GPU: {utils.get_gpu_usage():.2f}%")
-
+        
         if repeat >= max_explore:
             env.visualize(repeat=repeat, start=max_explore, end=repeats, dir=('static', 'learning', f'{game.title}', 'viz'))
 

@@ -24,6 +24,8 @@ def __stats__(players, top_k, steps, game):
     path = utils.get_path(dir=('static', 'simulation', f'{game.title}'), name='statistics.png')
     title = 'Statistics'
 
+    stats = {player.type: [] for player in players}
+
     for player in players:
         actions_and_freqs = [
             (f'(B{action.block.id}, {action.color.name})', action.times['Selection'] / steps)
@@ -42,6 +44,10 @@ def __stats__(players, top_k, steps, game):
         ticks.append((x_ticks, None))
         colors.append(player.color)
         names.append(player.type)
+
+        stats[player.type].append({'actions': actions, 'freqs': list(freqs)})
+    
+    utils.save_json(data=stats, dir=('static', 'learning', f'{game.title}'), name='stats')
     
     return {'values': values, 'labels': labels, 'func': func, 'path': path, 'title': title, 'colors': colors, 'ticks': ticks, 'names': names}
 
