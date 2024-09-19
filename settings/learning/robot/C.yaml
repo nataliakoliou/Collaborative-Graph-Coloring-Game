@@ -6,8 +6,8 @@ game:
   gain: 2
   penalty: -3
   sanction: -10
-  prefs: ~
-  title: I
+  prefs: [0, 1, 0]
+  title: C
 
 grid:
   rows: 4
@@ -24,11 +24,11 @@ grid:
     screen_color: Black
     live: false
 
-human:
-  type: human
+robot:
+  type: robot
 
   style: 
-    name: I
+    name: C
 
     difficulty:
       '0': 0
@@ -40,7 +40,7 @@ human:
       '6+': 0
 
     taste:
-      warm: 0
+      warm: -1
       cool: 0
 
     minimalism: 0
