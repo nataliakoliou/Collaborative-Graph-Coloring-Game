@@ -3,8 +3,8 @@ track:
   bar: false
 
 game:
-  gain: 2
-  penalty: -3
+  gain: 1
+  penalty: -2
   sanction: -10
   prefs: ~
   title: I
@@ -18,7 +18,7 @@ grid:
 
   viz:
     freq: 500
-    last_k: 5
+    last_k: 10
     cell_size: 100
     border_width: 2
     screen_color: Black
@@ -31,19 +31,28 @@ robot:
     name: I
 
     difficulty:
-      '0': 0
-      '1': 0
-      '2': 0
-      '3': 0
-      '4': 0
-      '5': 0
-      '6+': 0
+      '0':  0
+      '1':  0
+      '2':  0
+      '3':  0
+      '4':  0
+      '5':  0
+      '6':  0
+      '7+': 0
 
     taste:
       warm: 0
       cool: 0
 
-    minimalism: 0
+    minimalism: 
+      '0':  0
+      '1':  0
+      '2':  0
+      '3':  0
+      '4':  0
+      '5':  0
+      '6':  0
+      '7+': 0
 
   model: ConvDQN
 
@@ -55,18 +64,18 @@ robot:
   optimizer:
     name: AdamW
     params: 
-      lr: 0.001
+      lr: 0.0005
       weight_decay: 0.00001
 
   tau: 0.005
-  batch_size: 8
+  batch_size: 32
   gamma: 0
   memory: 10000000
 
 qlearn:
-  repeats: 100000
+  repeats: 5000
   epsilon: 1
-  cutoff: 0.9
+  cutoff: 0.98
   patience: 50
   visualize: true
   top_k: 20
