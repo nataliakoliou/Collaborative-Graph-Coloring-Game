@@ -3,11 +3,11 @@ track:
   bar: false
 
 game:
-  gain: 2
-  penalty: -3
+  gain: 1
+  penalty: -2
   sanction: -10
   prefs: ~
-  title: I_x_I
+  title: I
 
 grid:
   rows: 4
@@ -17,8 +17,8 @@ grid:
   wR: 0.2
 
   viz:
-    freq: 500
-    last_k: 5
+    freq: 1000
+    last_k: 10
     cell_size: 100
     border_width: 2
     screen_color: Black
@@ -31,19 +31,28 @@ human:
     name: I
 
     difficulty:
-      '0': 0
-      '1': 0
-      '2': 0
-      '3': 0
-      '4': 0
-      '5': 0
-      '6+': 0
+      '0':  0
+      '1':  0
+      '2':  0
+      '3':  0
+      '4':  0
+      '5':  0
+      '6':  0
+      '7+': 0
 
     taste:
       warm: 0
       cool: 0
 
-    minimalism: 0
+    minimalism: 
+      '0':  0
+      '1':  0
+      '2':  0
+      '3':  0
+      '4':  0
+      '5':  0
+      '6':  0
+      '7+': 0
 
   model: ConvDQN
 
@@ -55,11 +64,11 @@ human:
   optimizer:
     name: AdamW
     params: 
-      lr: 0.001
+      lr: 0.0005
       weight_decay: 0.00001
 
   tau: 0.005
-  batch_size: 8
+  batch_size: 32
   gamma: 0
   memory: 10000000
 
@@ -70,19 +79,28 @@ robot:
     name: I
 
     difficulty:
-      '0': 0
-      '1': 0
-      '2': 0
-      '3': 0
-      '4': 0
-      '5': 0
-      '6+': 0
+      '0':  0
+      '1':  0
+      '2':  0
+      '3':  0
+      '4':  0
+      '5':  0
+      '6':  0
+      '7+': 0
 
     taste:
       warm: 0
       cool: 0
 
-    minimalism: 0
+    minimalism: 
+      '0':  0
+      '1':  0
+      '2':  0
+      '3':  0
+      '4':  0
+      '5':  0
+      '6':  0
+      '7+': 0
 
   model: ConvDQN
 
@@ -94,11 +112,11 @@ robot:
   optimizer:
     name: AdamW
     params: 
-      lr: 0.001
+      lr: 0.0005
       weight_decay: 0.00001
 
   tau: 0.005
-  batch_size: 8
+  batch_size: 32
   gamma: 0
   memory: 10000000
 

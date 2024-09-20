@@ -68,14 +68,14 @@ human:
       weight_decay: 0.00001
 
   tau: 0.005
-  batch_size: 32
+  batch_size: 64
   gamma: 0
   memory: 10000000
 
 qlearn:
-  repeats: 5000
+  repeats: 2800
   epsilon: 1
-  cutoff: 0.98
+  cutoff: 1
   patience: 50
   visualize: true
   top_k: 20
