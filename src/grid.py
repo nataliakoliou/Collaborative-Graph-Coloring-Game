@@ -160,7 +160,7 @@ class Grid:
         
     def reward(self, player, metrics):
         k, m, x, y, z = 0, 0, 0, 0, 0
-        gain, penalty, delay, sanction, prefs = metrics
+        gain, penalty, sanction, delay, prefs = metrics
 
         colored_neighbors = player.action.block.filtered_neighbors(colors=COLORS)
         level = len(colored_neighbors)

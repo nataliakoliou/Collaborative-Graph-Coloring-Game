@@ -1,14 +1,14 @@
 from collections import namedtuple
 
 class Game:
-    def __init__(self, env, human, robot, gain, penalty, delay, sanction, prefs, title):
+    def __init__(self, env, human, robot, gain, penalty, sanction, delay, prefs, title):
         self.env = env
         self.human = human
         self.robot = robot
         self.gain = gain
         self.penalty = penalty
-        self.delay = delay
         self.sanction = sanction
+        self.delay = delay
         self.prefs = prefs
         self.title = title
 
