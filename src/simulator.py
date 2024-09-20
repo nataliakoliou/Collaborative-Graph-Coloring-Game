@@ -33,8 +33,11 @@ def __stats__(players, top_k, steps, game):
         ]
         
         actions_and_freqs.sort(key=lambda x: x[1], reverse=True)
-        top_actions_and_freqs = actions_and_freqs[:top_k]
         
+        all_actions, all_freqs = zip(*actions_and_freqs)
+        stats[player.type].append({'actions': all_actions, 'freqs': list(all_freqs)})
+
+        top_actions_and_freqs = actions_and_freqs[:top_k]
         actions, freqs = zip(*top_actions_and_freqs)
         
         x_values = list(range(top_k))

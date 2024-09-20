@@ -35,8 +35,11 @@ def __stats__(players, top_k, steps, game):
         ]
         
         actions_and_freqs.sort(key=lambda x: x[1], reverse=True)
+
+        all_actions, all_freqs = zip(*actions_and_freqs)
+        stats[player.type].append({'actions': all_actions, 'freqs': list(all_freqs)})
+
         top_actions_and_freqs = actions_and_freqs[:top_k]
-        
         actions, freqs = zip(*top_actions_and_freqs)
         
         x_values = list(range(top_k))
@@ -46,8 +49,6 @@ def __stats__(players, top_k, steps, game):
         ticks.append((x_ticks, None))
         colors.append(player.color)
         names.append(player.type)
-
-        stats[player.type].append({'actions': actions, 'freqs': list(freqs)})
     
     utils.save_json(data=stats, dir=('static', 'learning', f'{game.title}'), name='stats')
     
@@ -55,7 +56,7 @@ def __stats__(players, top_k, steps, game):
 
 def __rewards__(types, rewards, colors, repeats, game):
     values = [(list(range(repeats)), rewards[type]) for type in types]
-    labels = ('Step', 'Reward')
+    labels = ('Repeat', 'Reward')
     func = plt.plot
     path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='rewards.png')
     title = 'Reward Curve'
@@ -64,7 +65,7 @@ def __rewards__(types, rewards, colors, repeats, game):
 
 def __losses__(types, losses, colors, repeats, game):
     values = [(list(range(repeats)), losses[type]) for type in types]
-    labels = ('Step', 'Loss')
+    labels = ('Repeat', 'Loss')
     func = plt.plot
     path = utils.get_path(dir=('static', 'learning', f'{game.title}'), name='losses.png')
     title = 'Loss Curve'

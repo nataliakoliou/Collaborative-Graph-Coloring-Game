@@ -161,7 +161,7 @@ class Grid:
         colored_neighbors = player.action.block.filtered_neighbors(colors=COLORS)
         level = len(colored_neighbors)
         color = player.action.color
-        freq = (sum(block.color.name == color.name for block in self.state) - 1) / self.num_blocks
+        freq = sum(block.color.name == color.name for block in self.state)
 
         x = player.style.get_difficulty(level=level)
         y = player.style.get_taste(color=color)
@@ -184,7 +184,7 @@ class Grid:
             player.reward = s + g + p + pr
         else:
             player.reward = 0
-        
+       
         player.R += player.reward
 
     def visualize(self, repeat, start, end, dir):

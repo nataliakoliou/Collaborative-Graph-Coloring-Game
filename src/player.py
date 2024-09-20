@@ -214,4 +214,20 @@ class Style:
         return self.taste[color.tone]
     
     def get_minimalism(self, freq):
-        return freq * self.minimalism
+        for key, value in self.minimalism.items():
+            if '-' in key:
+                start, end = map(int, key.split('-'))
+
+                if start <= freq <= end:
+                    return value
+                
+            elif '+' in key:
+                threshold = int(key[:-1])
+
+                if freq >= threshold:
+                    return value
+            else:
+                if freq == int(key):
+                    return value
+                     
+        return 'Error: Frequence is out of range'
