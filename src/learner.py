@@ -170,9 +170,9 @@ def qlearn(game, repeats, epsilon, cutoff, patience, visualize, top_k):
                     f"Mistakes: {mistakes[repeat]}, Epsilon: {epsilon:.6f}, " +
                     f"CPU: {utils.get_cpu_usage():.2f}%, GPU: {utils.get_gpu_usage():.2f}%")
         
+        env.visualize(repeat=repeat, start=0, end=repeats, dir=('static', 'learning', f'{game.title}', 'viz'))
+        
         if repeat >= max_explore:
-            env.visualize(repeat=repeat, start=max_explore, end=repeats, dir=('static', 'learning', f'{game.title}', 'viz'))
-
             if any(no_improvement[type] >= patience for type in types):
                 logger.info(f'Early stopping triggered after {repeat + 1} repeats with no improvement.')
                 repeats = repeat + 1

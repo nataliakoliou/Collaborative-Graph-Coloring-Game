@@ -127,9 +127,9 @@ def simulate(game, repeats, visualize, top_k):
             pbar.set_postfix(metrics)
             pbar.update(1)
 
-        logger.info(f"Repeat: {repeat + 1}, Steps: {steps}, " +
-                    ", ".join([f"{type.capitalize()} Reward: {rewards[type][repeat]:.6f}" for type in types]) + ", " +
-                    f"CPU: {utils.get_cpu_usage():.2f}%, GPU: {utils.get_gpu_usage():.2f}%")
+        logger.info(f"Repeat: {repeat + 1}, Steps: {steps}, " +f"Mistakes: {mistakes[repeat]}, " +
+                ", ".join([f"{type.capitalize()} Reward: {rewards[type][repeat]:.6f}" for type in types]) + ", " +
+                f"CPU: {utils.get_cpu_usage():.2f}%, GPU: {utils.get_gpu_usage():.2f}%")
 
         env.visualize(repeat=repeat, start=0, end=repeats, dir=('static', 'simulation', f'{game.title}', 'viz'))
     

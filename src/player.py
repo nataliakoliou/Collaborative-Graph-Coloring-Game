@@ -169,6 +169,7 @@ class Action:
         self.color = color
         self.id = None
         self.invalid = 0
+        self.delayed = 0
         self.winner = False
         self.times = {'Exploration': 0, 'Exploitation': 0, 'Selection': 0}
 

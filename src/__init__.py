@@ -30,15 +30,15 @@ The repository is organized as follows:
 cgcg/
 ├── src/
 │   ├── __init__.py        
-│   ├── learner.py     
-│   ├── simulator.py   
+│   ├── colors.py    
 │   ├── evaluator.py   
-│   ├── utils.py       
-│   ├── grid.py         
-│   ├── player.py      
-│   ├── game.py        
-│   ├── colors.py      
-│   ├── model.py      
+│   ├── game.py   
+│   ├── grid.py          
+│   ├── learner.py      
+│   ├── model.py    
+│   ├── player.py       
+│   ├── simulator.py     
+│   ├── utils.py     
 ├── config.yaml         
 ├── README.md            
 ├── pyproject.toml        

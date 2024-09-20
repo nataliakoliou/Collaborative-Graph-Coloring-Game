@@ -135,6 +135,10 @@ class Grid:
         else:
             distinct = True
 
+        for player in ['human', 'robot']:
+            if hasattr(actions, player):
+                setattr(getattr(actions, player), 'delayed', int(not distinct))
+
         actions = list(actions)
         random.shuffle(actions)
     
@@ -156,7 +160,7 @@ class Grid:
         
     def reward(self, player, metrics):
         k, m, x, y, z = 0, 0, 0, 0, 0
-        gain, penalty, sanction, prefs = metrics
+        gain, penalty, delay, sanction, prefs = metrics
 
         colored_neighbors = player.action.block.filtered_neighbors(colors=COLORS)
         level = len(colored_neighbors)
@@ -176,14 +180,15 @@ class Grid:
                 k, m = (k, m + 1)
 
         s = player.action.invalid * sanction
+        d = player.action.delayed * delay
         g = k * gain
         p = m * penalty
         pr = (1 - player.action.invalid) * xyz
 
         if player.action.winner:
-            player.reward = s + g + p + pr
+            player.reward = s + d + g + p + pr
         else:
-            player.reward = 0
+            player.reward = d
        
         player.R += player.reward
 
