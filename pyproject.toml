@@ -17,7 +17,6 @@ pygame = "^2.6.0"
 tqdm = "^4.66.1"
 psutil = "^5.9.4"
 open_spiel = "^1.5"
-ruamel-yaml = "*"
 
 [build-system]
 requires = ["poetry-core"]
@@ -28,4 +27,3 @@ learner = "src.learner:main"
 simulator = "src.simulator:main"
 evaluator = "src.evaluator:main"
 designer = "src.designer:main"
-temp = "src.temp:main"
