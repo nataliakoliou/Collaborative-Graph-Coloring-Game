@@ -9,7 +9,7 @@ level = config['track']['logger']
 path = utils.get_path(dir=('static', 'learning', config['game']['title']), name='loggings.pth')
 logger = utils.get_logger(level=level, path=path)
 
-def retrieve_logs(base_dir='static/learning'):
+def retrieve_logs(base_dir):
     logs = {"repeat": {},"loss": {}, "reward": {}, "mistakes": {},"epsilon": {},"cpu": {},"gpu": {}}
 
     for game_title in os.listdir(base_dir):
@@ -47,10 +47,10 @@ def retrieve_logs(base_dir='static/learning'):
         logs["cpu"][game_title] = cpu
         logs["gpu"][game_title] = gpu
 
-    utils.save_json(data=logs, dir=('static', 'learning'), name='full_loggings')
+    utils.save_json(data=logs, dir=base_dir, name='full_loggings')
 
-def __logs__(include, title, labels, colors, func):
-    logs = utils.load_json(dir=('static', 'learning'), name='full_loggings')
+def __logs__(base_dir, include, title, labels, colors, func):
+    logs = utils.load_json(dir=base_dir, name='full_loggings')
     
     x_key = labels[0].lower()
     y_key = labels[1].lower()
@@ -68,7 +68,7 @@ def __logs__(include, title, labels, colors, func):
         values.append((padded_x_values, padded_y_values))
 
     include_str = ''.join(include)
-    output_path = utils.get_path(dir=('static', 'learning'), name=f'{y_key}_{include_str}.png')
+    output_path = utils.get_path(dir=base_dir, name=f'{y_key}_{include_str}.png')
     
     utils.plot(values=values, labels=labels, func=func, path=output_path, title=title, colors=colors, names=include)
 
@@ -100,7 +100,7 @@ def __stats__(base_dir, sub_dirs, top_k, title, labels, colors, func):
             output_path = utils.get_path(dir=('static', 'learning', game_title), name='statistics.png')
 
             utils.plot(values=values, labels=labels, func=func, path=output_path, title=title, colors=colors, ticks=ticks, names=names)
-
+    
 def main():
     retrieve_logs(base_dir='static/learning')
 
@@ -112,7 +112,8 @@ def main():
               colors=['blue', 'red'],
               func=plt.bar)
 
-    __logs__(include=['I', 'C'],
+    __logs__(base_dir='static/learning',
+             include=['I', 'C'],
              title='Loss Curves', 
              labels=('Repeat', 'Loss'), 
              colors=['blue', 'red'],
