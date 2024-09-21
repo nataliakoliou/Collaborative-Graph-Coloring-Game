@@ -107,8 +107,8 @@ def main():
 
     alpha_rank(payoffs=payoff_matrix, 
                strategies=metastrats,
-               alpha=1e0,
-               population_size=5,
+               alpha=0.1,
+               population_size=20,
                num_top_strats_to_print=49,
                num_top_profiles=12,
                payoffs_are_hpt_format=False)
