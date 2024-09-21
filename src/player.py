@@ -186,8 +186,9 @@ class Action:
         return not self.__eq__(other)
     
 class Style:
-    def __init__(self, name, difficulty, taste, minimalism):
+    def __init__(self, name, weights, difficulty, taste, minimalism):
         self.name = name
+        self.weights = weights
         self.difficulty = difficulty
         self.taste = taste
         self.minimalism = minimalism

@@ -160,7 +160,7 @@ class Grid:
         
     def reward(self, player, metrics):
         k, m, x, y, z = 0, 0, 0, 0, 0
-        gain, penalty, sanction, delay, prefs = metrics
+        gain, penalty, sanction, delay = metrics
 
         colored_neighbors = player.action.block.filtered_neighbors(colors=COLORS)
         level = len(colored_neighbors)
@@ -171,7 +171,7 @@ class Grid:
         y = player.style.get_taste(color=color)
         z = player.style.get_minimalism(freq=freq)
 
-        xyz = utils.aggregate(values=(x,y,z), weights=prefs, method='mean', remove_zeros=True)
+        xyz = utils.aggregate(values=(x,y,z), weights=player.style.weights, method='mean', remove_zeros=True)
 
         for neighbor in player.action.block.neighbors:
             if neighbor.color.name != player.action.color.name:

@@ -142,6 +142,13 @@ def simulate(game, repeats, visualize, top_k):
         utils.plot(**__stats__(players, top_k, steps, game))
 
 def main():
+    """dir = utils.get_path(dir=(os.path.dirname(__file__), 'settings', 'simulation'))
+    files = [f for f in os.listdir(dir) if f.endswith('.yaml')]
+    
+    for file in files:
+        path = utils.get_path(dir=dir, name=file)
+        config = utils.load_yaml(path=path)"""
+
     grid = Grid(**config['grid'])
 
     if 'human' in config:

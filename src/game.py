@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 class Game:
-    def __init__(self, env, human, robot, gain, penalty, sanction, delay, prefs, title):
+    def __init__(self, env, human, robot, gain, penalty, sanction, delay, title):
         self.env = env
         self.human = human
         self.robot = robot
@@ -9,7 +9,6 @@ class Game:
         self.penalty = penalty
         self.sanction = sanction
         self.delay = delay
-        self.prefs = prefs
         self.title = title
 
     @property
@@ -27,7 +26,7 @@ class Game:
     
     @property
     def metrics(self):
-        return (self.gain, self.penalty, self.sanction, self.delay, self.prefs)
+        return (self.gain, self.penalty, self.sanction, self.delay)
     
     def load(self):
         self.env.load()
