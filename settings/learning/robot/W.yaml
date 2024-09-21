@@ -6,7 +6,7 @@ game:
   gain: 1
   penalty: -2
   sanction: -10
-  prefs: [0, 1, 0]
+  delay: -0.5
   title: W
 
 grid:
@@ -17,7 +17,7 @@ grid:
   wR: 0.2
 
   viz:
-    freq: 500
+    freq: 280
     last_k: 10
     cell_size: 100
     border_width: 2
@@ -29,6 +29,7 @@ robot:
 
   style: 
     name: W
+    weights: [0, 1, 0]
 
     difficulty:
       '0':  0
@@ -44,15 +45,12 @@ robot:
       warm: 1
       cool: -1
 
-    minimalism: 
+    minimalism:
       '0':  0
       '1':  0
       '2':  0
       '3':  0
-      '4':  0
-      '5':  0
-      '6':  0
-      '7+': 0
+      '4+': 0
 
   model: ConvDQN
 

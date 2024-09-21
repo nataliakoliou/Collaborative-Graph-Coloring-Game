@@ -7,8 +7,8 @@ game:
   penalty: -2
   sanction: -10
   delay: -0.5
-  title: I_x_I
-  
+  title: A_x_C
+
 grid:
   rows: 4
   cols: 5
@@ -28,18 +28,18 @@ human:
   type: human
 
   style:
-    name: I
-    weights:
+    name: A
+    weights: [1, 0, 0]
 
     difficulty:
-      '0': 0
-      '1': 0
-      '2': 0
-      '3': 0
-      '4': 0
-      '5': 0
-      '6': 0
-      '7+': 0
+      '0': -1.0
+      '1': -0.71
+      '2': -0.43
+      '3': -0.14
+      '4': 0.14
+      '5': 0.43
+      '6': 0.71
+      '7+': 1.0
 
     taste:
       warm: 0
@@ -74,8 +74,8 @@ robot:
   type: robot
 
   style:
-    name: I
-    weights:
+    name: C
+    weights: [0, 1, 0]
 
     difficulty:
       '0': 0
@@ -88,8 +88,8 @@ robot:
       '7+': 0
 
     taste:
-      warm: 0
-      cool: 0
+      warm: -1
+      cool: 1
 
     minimalism:
       '0': 0

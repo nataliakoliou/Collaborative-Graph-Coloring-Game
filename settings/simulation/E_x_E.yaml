@@ -7,7 +7,7 @@ game:
   penalty: -2
   sanction: -10
   delay: -0.5
-  title: I_x_I
+  title: E_x_E
   
 grid:
   rows: 4
@@ -28,8 +28,8 @@ human:
   type: human
 
   style:
-    name: I
-    weights:
+    name: E
+    weights: [0, 0, 1]
 
     difficulty:
       '0': 0
@@ -46,11 +46,11 @@ human:
       cool: 0
 
     minimalism:
-      '0': 0
-      '1': 0
-      '2': 0
-      '3': 0
-      '4+': 0
+      '0': 1.0
+      '1': 0.5
+      '2': 0.0
+      '3': -0.5
+      '4+': -1.0
 
   model: ConvDQN
 
@@ -74,8 +74,8 @@ robot:
   type: robot
 
   style:
-    name: I
-    weights:
+    name: E
+    weights: [0, 0, 1]
 
     difficulty:
       '0': 0
@@ -92,11 +92,11 @@ robot:
       cool: 0
 
     minimalism:
-      '0': 0
-      '1': 0
-      '2': 0
-      '3': 0
-      '4+': 0
+      '0': 1.0
+      '1': 0.5
+      '2': 0.0
+      '3': -0.5
+      '4+': -1.0
 
   model: ConvDQN
 

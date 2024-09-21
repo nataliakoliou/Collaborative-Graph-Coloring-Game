@@ -7,7 +7,7 @@ game:
   penalty: -2
   sanction: -10
   delay: -0.5
-  title: I
+  title: A
 
 grid:
   rows: 4
@@ -24,22 +24,22 @@ grid:
     screen_color: Black
     live: false
 
-robot:
-  type: robot
+human:
+  type: human
 
   style: 
-    name: I
-    weights: ~
+    name: A
+    weights: [1, 0, 0]
 
     difficulty:
-      '0':  0
-      '1':  0
-      '2':  0
-      '3':  0
-      '4':  0
-      '5':  0
-      '6':  0
-      '7+': 0
+      '0':  -1.0
+      '1':  -0.71
+      '2':  -0.43
+      '3':  -0.14
+      '4':  0.14
+      '5':  0.43
+      '6':  0.71
+      '7+': 1.0
 
     taste:
       warm: 0
