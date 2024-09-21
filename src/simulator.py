@@ -134,7 +134,7 @@ def simulate(game, repeats, visualize, top_k, logger):
 
 def main():
 
-    dir = utils.get_path(dir=(os.path.dirname(__file__), 'settings', 'simulation'))
+    dir = os.path.join(os.path.dirname(__file__), '..', 'settings', 'simulation')
     files = [f for f in os.listdir(dir) if f.endswith('.yaml')]
 
     for file in files:
