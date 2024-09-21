@@ -8,14 +8,35 @@ from .game import Game
 from .grid import Grid
 from .player import Player
 
-config = utils.load_yaml(path=utils.get_path(dir=(os.path.dirname(__file__), '..'), name='config.yaml'))
+dir = utils.get_path(dir=(os.path.dirname(__file__), 'settings', 'simulation'))
+files = [f for f in os.listdir(dir) if f.endswith('.yaml')]
 
-level = config['track']['logger']
-path = utils.get_path(dir=('static', 'simulation', config['game']['title']), name='loggings.pth')
-logger = utils.get_logger(level=level, path=path)
+for file in files:
+    path = utils.get_path(dir=dir, name=file)
+    config = utils.load_yaml(path=path)
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-logger.info(f'Device is {device}')
+    level = config['track']['logger']
+    path = utils.get_path(dir=('static', 'simulation', config['game']['title']), name='loggings.pth')
+    logger = utils.get_logger(level=level, path=path)
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    logger.info(f'Device is {device}')
+
+    grid = Grid(**config['grid'])
+
+    if 'human' in config:
+        human = Player(**config['human'])
+    else:
+        human = None
+
+    if 'robot' in config:
+        robot = Player(**config['robot'])
+    else:
+        robot = None
+    
+    game = Game(env=grid, human=human, robot=robot, **config['game'])
+    
+    simulate(game=game, **config['simulate'])
 
 def __stats__(players, top_k, steps, game):
     values, ticks, colors, names = [], [], [], []
@@ -85,7 +106,7 @@ def simulate(game, repeats, visualize, top_k):
 
     game.load()
 
-    pbar = tqdm(total=repeats, desc='Simulation Progress', unit=' repeat') if config['track']['bar'] else None
+    pbar = None # tqdm(total=repeats, desc='Simulation Progress', unit=' repeat') if config['track']['bar'] else None
 
     for repeat in range(repeats):
         env.reset()
@@ -142,28 +163,8 @@ def simulate(game, repeats, visualize, top_k):
         utils.plot(**__stats__(players, top_k, steps, game))
 
 def main():
-    """dir = utils.get_path(dir=(os.path.dirname(__file__), 'settings', 'simulation'))
-    files = [f for f in os.listdir(dir) if f.endswith('.yaml')]
-    
-    for file in files:
-        path = utils.get_path(dir=dir, name=file)
-        config = utils.load_yaml(path=path)"""
 
-    grid = Grid(**config['grid'])
-
-    if 'human' in config:
-        human = Player(**config['human'])
-    else:
-        human = None
-
-    if 'robot' in config:
-        robot = Player(**config['robot'])
-    else:
-        robot = None
-    
-    game = Game(env=grid, human=human, robot=robot, **config['game'])
-    
-    simulate(game=game, **config['simulate'])
+    print("done")
 
 if __name__ == '__main__':
     main()
