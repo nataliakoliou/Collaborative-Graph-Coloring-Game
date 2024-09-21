@@ -55,18 +55,46 @@ def init_metagame(dir):
 
     return payoff_matrix, (human_metastrats, robot_metastrats)
 
-def alpha_rank(payoff_matrix, metastrats, payoffs_are_hpt_format=False):
-    rhos, rho_m, pi, _, _ = alpharank.compute(payoff_matrix, m=5, alpha=1e1)
-    alpharank.print_results(payoff_matrix, payoffs_are_hpt_format, rhos=rhos, rho_m=rho_m, pi=pi)
+def draw_payoff_matrix(payoff_matrix, human_metastrats, robot_metastrats):
+    num_rows = len(human_metastrats)
+    num_cols = len(robot_metastrats)
 
-    human_metastrats, robot_metastrats = metastrats
-    strat_labels = {0: human_metastrats, 1: robot_metastrats}
-    egt_utils.print_rankings_table(payoff_matrix, pi, strat_labels, num_top_strats_to_print=12)
+    _, ax = plt.subplots(figsize=(num_cols, num_rows))
 
-    m_network_plotter = alpharank_visualizer.NetworkPlot(payoff_matrix, rhos, rho_m, pi, strat_labels, num_top_profiles=8)
+    ax.set_axis_off()
+    table_data = [[f"({payoff_matrix[0, i, j]:.2f}, {payoff_matrix[1, i, j]:.2f})"
+                   for j in range(num_cols)] for i in range(num_rows)]
+
+    table = ax.table(cellText=table_data, rowLabels=human_metastrats, colLabels=robot_metastrats, loc='center')
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1.2, 1.2)
+
+    png_path = utils.get_path(dir=('static', 'evaluation'), name='matrix.png')
+
+    plt.savefig(png_path, dpi=600, bbox_inches='tight')
+    plt.close()
+
+    txt_path = utils.get_path(dir=('static', 'evaluation'), name='payoffs.txt')
+    
+    with open(txt_path, 'w') as txt_file:
+        for i, human_strat in enumerate(human_metastrats):
+            for j, robot_strat in enumerate(robot_metastrats):
+                entry = f'({human_strat}, {robot_strat}): ({payoff_matrix[0, i, j]:.2f}, {payoff_matrix[1, i, j]:.2f})\n'
+                txt_file.write(entry)
+
+def alpha_rank(payoffs, strategies, alpha, population_size, num_top_strats_to_print, num_top_profiles, payoffs_are_hpt_format=False):
+    rhos, rho_m, pi, _, _ = alpharank.compute(payoffs, m=population_size, alpha=alpha)
+    alpharank.print_results(payoffs, payoffs_are_hpt_format, rhos=rhos, rho_m=rho_m, pi=pi)
+
+    human_strategies, robot_strategies = strategies
+    strat_labels = {0: human_strategies, 1: robot_strategies}
+    egt_utils.print_rankings_table(payoffs, pi, strat_labels, num_top_strats_to_print)
+
+    m_network_plotter = alpharank_visualizer.NetworkPlot(payoffs, rhos, rho_m, pi, strat_labels, num_top_profiles)
     m_network_plotter.compute_and_draw_network()
 
-    net_path = utils.get_path(dir=('static', 'evaluation'), name='network')
+    net_path = utils.get_path(dir=('static', 'evaluation'), name='network.png')
     plt.savefig(net_path, dpi=600)
     plt.close()
 
@@ -74,7 +102,16 @@ def main():
     dir = utils.get_path(dir=('static', 'evaluation'), name='payoffs')
     
     payoff_matrix, metastrats = init_metagame(dir=dir)
-    alpha_rank(payoff_matrix, metastrats)
+
+    draw_payoff_matrix(payoff_matrix, *metastrats)
+
+    alpha_rank(payoffs=payoff_matrix, 
+               strategies=metastrats,
+               alpha=1e0,
+               population_size=5,
+               num_top_strats_to_print=49,
+               num_top_profiles=12,
+               payoffs_are_hpt_format=False)
 
 if __name__ == '__main__':
     main()
