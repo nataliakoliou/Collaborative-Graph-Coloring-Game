@@ -67,11 +67,11 @@ human:
 
   tau: 0.005
   batch_size: 64
-  gamma: 0
+  gamma: 0.7
   memory: 10000000
 
 qlearn:
-  repeats: 2800
+  repeats: 10000
   epsilon: 1
   cutoff: 1
   patience: 50

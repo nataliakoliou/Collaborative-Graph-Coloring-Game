@@ -8,7 +8,6 @@ game:
   sanction: -10
   delay: -0.5
   title: C_x_M
-  
 grid:
   rows: 4
   cols: 5
@@ -39,7 +38,7 @@ human:
       '4': 0
       '5': 0
       '6': 0
-      '7+': 0
+      7+: 0
 
     taste:
       warm: -1
@@ -50,7 +49,7 @@ human:
       '1': 0
       '2': 0
       '3': 0
-      '4+': 0
+      4+: 0
 
   model: ConvDQN
 
@@ -67,7 +66,7 @@ human:
 
   tau: 0.005
   batch_size: 64
-  gamma: 0
+  gamma: 0.7
   memory: 10000000
 
 robot:
@@ -85,7 +84,7 @@ robot:
       '4': 0
       '5': 0
       '6': 0
-      '7+': 0
+      7+: 0
 
     taste:
       warm: 0
@@ -96,7 +95,7 @@ robot:
       '1': -0.5
       '2': 0.0
       '3': 0.5
-      '4+': 1.0
+      4+: 1.0
 
   model: ConvDQN
 
@@ -113,7 +112,7 @@ robot:
 
   tau: 0.005
   batch_size: 64
-  gamma: 0
+  gamma: 0.7
   memory: 10000000
 
 simulate:
