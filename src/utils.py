@@ -49,7 +49,7 @@ def get_color(type):
     else:
         raise ValueError('Invalid type.')
 
-def plot(values, labels, func, path, title, colors, width=0.2, ticks=[], names=[None, None], marker=None, linestyle='solid'):
+def plot(values, labels, func, path, title, colors, width=0.2, ticks=[], names=[None, None], marker=None, linestyle='solid', linewidth=2.5, shift=0, fill=False):
     x_label, y_label = labels
 
     handles = []
@@ -76,7 +76,15 @@ def plot(values, labels, func, path, title, colors, width=0.2, ticks=[], names=[
             x_ticks, y_ticks = None, None
 
         if func == plt.plot:
-            handle, = func(x_values, y_values, color=colors[i], marker=marker, linestyle=linestyle, label=names[i])
+            y_shifted = [y + (i * shift) for y in y_values]
+            handle, = func(x_values, y_shifted, color=colors[i], marker=marker, linestyle=linestyle, linewidth=linewidth, label=names[i])
+            
+            if fill:
+                y_upper = [y + 0.05 for y in y_values]
+                y_lower = [y - 0.05 for y in y_values]
+
+                plt.fill_between(x_values, y_lower, y_upper, color=colors[i], alpha=0.2)
+        
         elif func == plt.bar:
             x_values = [x + offsets[i] for x in x_values]
             handle = func(x_values, y_values, color=colors[i], width=width, label=names[i])
