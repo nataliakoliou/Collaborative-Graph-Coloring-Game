@@ -1,0 +1,216 @@
+\documentclass[12pt]{article}
+
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ left=25mm,
+ right=25mm,
+ }
+
+\usepackage[LGR, T1]{fontenc}
+\usepackage{fontspec}
+\setmainfont{Georgia}
+
+\usepackage{graphicx,float}
+
+\usepackage[toc,page]{appendix}
+
+\usepackage{hyperref}
+
+\usepackage{biblatex}
+\addbibresource{example.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%% Uncomment for the Greek Version %%%%%%%%%%%%%%%%%%%%%%%
+% \title{Τίτλος Διπλωματικής}
+% \author{Από  \\~\\ \Large{Όνομα Επώνυμο} \\~\\}
+% \date{Υποβάλλεται \\[12pt]
+%       για την εκπλήρωση των προϋποθέσεων λήψης  \\[12pt]
+%       Μεταπτυχιακού Διπλώματος  \\[12pt]
+%       στην «Τεχνητή Νοημοσύνη» \\[12pt]
+%       στο \\[12pt]
+%       ΠΑΝΕΠΙΣΤΗΜΙΟ ΠΕΙΡΑΙΩΣ \\[15pt]
+%       Μήνας 20ΧΧ \\[30pt]
+%       \footnotesize{Πανεπιστήμιο Πειραιώς, ΕΚΕΦΕ «ΔΗΜΟΚΡΙΤΟΣ». Κάτοχος όλων των δικαιωμάτων} }
+
+\title{MSc Thesis Title}
+\author{by  \\~\\ \Large{Name Surname} \\~\\}
+\date{Submitted \\[14pt]
+      in partial fulfilment of the requirements for the degree of \\[14pt]
+      Master of Artificial Intelligence \\[14pt]
+      at the \\[14pt]
+      UNIVERSITY OF PIRAEUS \\[20pt]
+      Month 20ΧΧ \\[40pt]
+      \footnotesize{University of Piraeus, NCSR “Demokritos”.  All rights              reserved.} }
+
+\begin{document}
+
+\begin{figure}
+  \makebox[\textwidth][c]{\includegraphics[scale=0.5]{images/Header.png}}
+\end{figure}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%% Uncomment for the Greek Version %%%%%%%%%%%%%%%%%%%%%%%
+% Συγγραφέας . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\\
+% \begin{flushright}
+%     ΔΠΜΣ «Τεχνητή Νοημοσύνη»\\ Μήνας  00, 20XX \\[4\baselineskip]
+% \end{flushright}
+
+% Έγινε αποδεκτό από . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+% \begin{flushright}
+%     Όνομα Επώνυμο \\ 
+%     Ακαδημαϊκός Τίτλος \\
+%     Επιβλέπων/ουσα \\[6\baselineskip]
+% \end{flushright}
+
+% Έγινε αποδεκτό από . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+% \begin{flushright}
+%     Όνομα Επώνυμο \\ 
+%     Ακαδημαϊκός Τίτλος \\
+%     Μέλος Εξεταστικής Επιτροπής \\[6\baselineskip]
+% \end{flushright}
+
+% Έγινε αποδεκτό από . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+% \begin{flushright}
+%     Όνομα Επώνυμο  \\ 
+%     Ακαδημαϊκός Τίτλος \\
+%     Μέλος Εξεταστικής Επιτροπής 
+% \end{flushright}
+
+
+Author . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\\
+\begin{flushright}
+    II-MSc “Artificial Intelligence” \\ Month  00, 20XX \\[4\baselineskip]
+\end{flushright}
+
+Certified by. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+\begin{flushright}
+    Name Surname \\ 
+    Academic Title \\
+    Thesis Supervisor \\[6\baselineskip]
+\end{flushright}
+
+Certified by. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+\begin{flushright}
+    Name Surname \\ 
+    Academic Title \\
+    Member of  Examination Committee \\[6\baselineskip]
+\end{flushright}
+
+Certified by. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+\begin{flushright}
+    Name Surname \\ 
+    Academic Title \\
+    Member of  Examination Committee
+\end{flushright}
+
+\newpage
+
+\include{sections/abstract}
+
+\newpage
+
+\include{sections/acknowledgments}
+
+\newpage
+
+\tableofcontents
+
+\include{sections/imagelist}
+
+\newpage
+
+\include{sections/tablelist}
+
+\newpage
+
+\include{sections/introduction}
+
+\newpage
+
+\include{sections/formatting}
+
+\newpage
+
+\include{sections/section3}
+
+\newpage
+
+\include{sections/section4}
+
+\newpage
+
+\include{sections/section5}
+
+\newpage
+
+\include{sections/section6}
+
+\newpage
+
+\include{sections/conclusions}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%% Uncomment for the Greek Version %%%%%%%%%%%%%%%%%%%%%%%
+% \printbibliography[title={Βιβλιογραφία}]
+
+\printbibliography
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%% Uncomment for the Greek Version %%%%%%%%%%%%%%%%%%%%%%%
+% \renewcommand\appendixpagename{Παραρτήματα}
+
+% \begin{appendices}
+%     \section*{Παράρτημα A}
+% \end{appendices}
+
+\begin{appendices}
+    \section*{Appendix A}
+    Ενδεικτική Δομή Διπλωματικής. Ισχύει κυρίως για διπλωματικές «Πληροφορικού» περιεχομένου που περιγράφουν κάποια υλοποίηση συστήματος. Τα κεφάλαια 2 και 3 μπορεί να συμπτυχθούν σε ένα, ανάλογα με την περίσταση – ρωτήστε τους επιβλέποντες. Το ίδιο ισχύει και για τα κεφάλαια 5 και 6. \\~\\
+
+    \makebox[\textwidth][c]{
+        \begin{tabular}{|c|l|c|}
+         \hline
+         Κεφάλαια & \multicolumn{1}{|c|}{Περιεχόμενο} & \multicolumn{1}{| p{3cm} |}{\centering Μέγεθος (Σελίδες)} \\
+         \hline\hline
+         Εξόφυλλο & Βλ. πρότυπο  & 1 \\ 
+         \hline
+         Αφιέρωση & Προαιρετικό & 1 \\
+         \hline
+         Πρόλογος & \multicolumn{1}{| p{10cm} |}{Εξήγηση του τίτλου της διπλωματικής. Λίγα λόγια για το σύστημα και γενικά για την επιστημονική περιοχή στην οποία κινείται η εργασία. Που εκπονήθηκε, υπό ποιόν καθηγητή, ευχαριστίες.}  & 1/2-1 \\
+         \hline
+         Περιεχόμενα & \multicolumn{1}{| p{10cm} |}{Περιεχόμενα (μέχρι και επιπέδου 3)} & 3-4 \\
+         \hline
+         1 Εισαγωγή & \multicolumn{1}{| p{10cm} |}{Επανάληψη προλόγου με πιο αναλυτικά λόγια Ανάλυση (1 παράγραφος) για το κάθε κεφάλαιο της εργασίας} & 2-5 \\
+         \hline
+         2 & \multicolumn{1}{| p{10cm} |}{Σύντομη περιγραφή του γενικότερου επιστημονικού/τεχνικού πεδίου που πραγματεύεται η διπλωματική} & 10-15 \\
+         \hline
+         3 & \multicolumn{1}{| p{10cm} |}{Σύντομη περιγραφή του ειδικότερου θέματος/προβλήματος που πραγματεύεται η διπλωματική} & 10-15 \\
+         \hline
+         4 & \multicolumn{1}{| p{10cm} |}{Σύντομη περιγραφή του εργαλείου/εργαλείων που χρησιμοποιεί η διπλωματική (αν υπάρχουν)} & 10-15 \\
+         \hline
+         5 & \multicolumn{1}{| p{10cm} |}{Γενικότερη (αφηρημένη) περιγραφή της λύσης που δόθηκε στο πρόβλημα (π.χ. αρχιτεκτονική του συστήματος)} & 5-10 \\
+         \hline
+         6 & \multicolumn{1}{| p{10cm} |}{Περιγραφή της υλοποίησης - εικόνες (screenshots), σύντομα τμήματα κώδικα (επεξηγημένα)} & 15-20 \\
+         \hline
+         7 & \multicolumn{1}{| p{10cm} |}{Επίλογος - Συμπεράσματα - Μελλοντική εργασία Κριτική αναφορά στα πεπραχθέντα της εργασίας Προβλήματα, Δυσκολίες που αντιμετωπίστηκαν Θέματα που δεν λύθηκαν και τίθενται ως μελλοντικός στόχος άλλων διπλωματικών} & 2-5 \\
+         \hline
+         Βιβλιογραφία & \multicolumn{1}{| p{10cm} |}{Βιβλία - εργασίες - Web links που χρησιμοποιήθηκαν ή κρίνονται απαραίτητα για τον αναγνώστη} & 1-2 \\
+         \hline
+         Παραρτήματα & \multicolumn{1}{| p{10cm} |}{Κώδικας (ολόκληρος ή σημαντικά μόνο τμήματα αν είναι μεγάλος) User Manual (αν είναι μεγάλο και δεν έχει ενσωματωθεί στο κεφάλαιο της υλοποίησης)} & 30-40 max  \\
+         \hline
+         \multicolumn{2}{|r|}{\textbf{ΣΥΝΟΛΟ}} & \textbf{90-130} \\
+         \hline
+        \end{tabular}}
+\end{appendices}
+
+\end{document}
