@@ -20,6 +20,21 @@ logger = utils.get_logger(level=level, path=path)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 logger.info(f'Device is {device}')
 
+def min_max_scaling(matrix, new_min, new_max):
+    flattened = matrix.flatten()
+
+    min_val = np.min(flattened)
+    max_val = np.max(flattened)
+
+    scaled_matrix = np.empty_like(matrix, dtype=float)
+    
+    for i in range(matrix.shape[0]):
+        for j in range(matrix.shape[1]):
+            for k in range(matrix.shape[2]):
+                scaled_matrix[i, j, k] = new_min + (matrix[i, j, k] - min_val) * (new_max - new_min) / (max_val - min_val)
+    
+    return scaled_matrix
+
 def init_metagame(dir):
     json_files = [f for f in os.listdir(dir) if f.endswith('.json')]
 
@@ -53,7 +68,9 @@ def init_metagame(dir):
         payoff_matrix[0, human_idx, robot_idx] = payoffs['human']
         payoff_matrix[1, human_idx, robot_idx] = payoffs['robot']
 
-    return payoff_matrix, (human_metastrats, robot_metastrats)
+    scaled_payoff_matrix = min_max_scaling(matrix=payoff_matrix, new_min=1, new_max=2)
+
+    return scaled_payoff_matrix, (human_metastrats, robot_metastrats)
 
 def draw_payoff_matrix(payoff_matrix, human_metastrats, robot_metastrats):
     num_rows = len(human_metastrats)
@@ -94,6 +111,11 @@ def alpha_rank(payoffs, strategies, alpha, population_size, num_top_strats_to_pr
     m_network_plotter = alpharank_visualizer.NetworkPlot(payoffs, rhos, rho_m, pi, strat_labels, num_top_profiles)
     m_network_plotter.compute_and_draw_network()
 
+    plt.gcf().set_size_inches(14, 14)
+
+    for text in plt.gca().texts:
+        text.set_fontsize(10)
+
     net_path = utils.get_path(dir=('static', 'evaluation'), name='network.png')
     plt.savefig(net_path, dpi=600)
     plt.close()
@@ -107,10 +129,10 @@ def main():
 
     alpha_rank(payoffs=payoff_matrix, 
                strategies=metastrats,
-               alpha=0.1,
-               population_size=20,
-               num_top_strats_to_print=49,
-               num_top_profiles=12,
+               alpha=1,
+               population_size=100,
+               num_top_strats_to_print=10,
+               num_top_profiles=9,
                payoffs_are_hpt_format=False)
 
 if __name__ == '__main__':
