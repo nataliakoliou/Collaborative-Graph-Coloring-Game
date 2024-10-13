@@ -8,15 +8,6 @@ from .game import Game
 from .grid import Grid
 from .player import Player
 
-config = utils.load_yaml(path=utils.get_path(dir=(os.path.dirname(__file__), '..'), name='config.yaml'))
-
-level = config['track']['logger']
-path = utils.get_path(dir=('static', 'simulation', config['game']['title']), name='loggings.pth')
-logger = utils.get_logger(level=level, path=path)
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-logger.info(f'Device is {device}')
-
 def __stats__(players, top_k, steps, game):
     values, ticks, colors, names = [], [], [], []
     labels = ('Action', 'Frequency')
@@ -73,7 +64,7 @@ def __mistakes__(mistakes, repeats, game):
 
     return {'values': values, 'labels': labels, 'func': func, 'path': path, 'title': title, 'colors': colors}
 
-def simulate(game, repeats, visualize, top_k):
+def simulate(game, repeats, visualize, top_k, config, logger):
     env = game.env
     players = utils.filterout(input=game.players)
     types = [player.type for player in players]
@@ -142,21 +133,38 @@ def simulate(game, repeats, visualize, top_k):
         utils.plot(**__stats__(players, top_k, steps, game))
 
 def main():
-    grid = Grid(**config['grid'])
+    dir = os.path.join(os.path.dirname(__file__), '..', 'settings', 'simulation')
+    files = [f for f in os.listdir(dir) if f.endswith('.yaml')]
 
-    if 'human' in config:
-        human = Player(**config['human'])
-    else:
-        human = None
+    for file in files:
+        path = utils.get_path(dir=dir, name=file)
+        config = utils.load_yaml(path=path)
 
-    if 'robot' in config:
-        robot = Player(**config['robot'])
-    else:
-        robot = None
-    
-    game = Game(env=grid, human=human, robot=robot, **config['game'])
-    
-    simulate(game=game, **config['simulate'])
+        level = config['track']['logger']
+        path = utils.get_path(dir=('static', 'simulation', config['game']['title']), name='loggings.pth')
+        logger = utils.get_logger(level=level, path=path)
+
+        if logger.hasHandlers():
+            logger.handlers.clear()
+
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        logger.info(f'Device is {device}')
+
+        grid = Grid(**config['grid'])
+
+        if 'human' in config:
+            human = Player(**config['human'])
+        else:
+            human = None
+
+        if 'robot' in config:
+            robot = Player(**config['robot'])
+        else:
+            robot = None
+        
+        game = Game(env=grid, human=human, robot=robot, **config['game'])
+        
+        simulate(game=game, **config['simulate'], config=config, logger=logger)
 
 if __name__ == '__main__':
     main()

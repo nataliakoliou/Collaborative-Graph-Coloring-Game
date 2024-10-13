@@ -263,3 +263,12 @@ def load_json(dir='static', name=''):
     
     except FileNotFoundError:
         return None
+
+def clear_pngs(dir):
+    dir = dir if isinstance(dir, tuple) else (dir,)
+    dir = os.path.join(*dir)
+
+    for filename in os.listdir(dir):
+        if filename.endswith('.png'):
+            file_path = os.path.join(dir, filename)
+            os.remove(file_path)
