@@ -18,29 +18,19 @@
 \usepackage{hyperref}
 
 \usepackage{biblatex}
-\addbibresource{example.bib}
+\addbibresource{refs.bib}
 
-%%%%%%%%%%%%%%%%%%%%%%% Uncomment for the Greek Version %%%%%%%%%%%%%%%%%%%%%%%
-% \title{Τίτλος Διπλωματικής}
-% \author{Από  \\~\\ \Large{Όνομα Επώνυμο} \\~\\}
-% \date{Υποβάλλεται \\[12pt]
-%       για την εκπλήρωση των προϋποθέσεων λήψης  \\[12pt]
-%       Μεταπτυχιακού Διπλώματος  \\[12pt]
-%       στην «Τεχνητή Νοημοσύνη» \\[12pt]
-%       στο \\[12pt]
-%       ΠΑΝΕΠΙΣΤΗΜΙΟ ΠΕΙΡΑΙΩΣ \\[15pt]
-%       Μήνας 20ΧΧ \\[30pt]
-%       \footnotesize{Πανεπιστήμιο Πειραιώς, ΕΚΕΦΕ «ΔΗΜΟΚΡΙΤΟΣ». Κάτοχος όλων των δικαιωμάτων} }
+\usepackage{pdfpages}
 
-\title{MSc Thesis Title}
-\author{by  \\~\\ \Large{Name Surname} \\~\\}
+\title{Ranking Joint Policies in Dynamic Games using Evolutionary Dynamics}
+\author{by  \\~\\ \Large{Natalia Koliou} \\~\\}
 \date{Submitted \\[14pt]
       in partial fulfilment of the requirements for the degree of \\[14pt]
       Master of Artificial Intelligence \\[14pt]
       at the \\[14pt]
       UNIVERSITY OF PIRAEUS \\[20pt]
-      Month 20ΧΧ \\[40pt]
-      \footnotesize{University of Piraeus, NCSR “Demokritos”.  All rights              reserved.} }
+      December 2024 \\[40pt]
+      \footnotesize{University of Piraeus, NCSR “Demokritos”. All rights reserved.} }
 
 \begin{document}
 
@@ -52,46 +42,15 @@
 \thispagestyle{empty}
 \newpage
 
-%%%%%%%%%%%%%%%%%%%%%%% Uncomment for the Greek Version %%%%%%%%%%%%%%%%%%%%%%%
-% Συγγραφέας . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\\
-% \begin{flushright}
-%     ΔΠΜΣ «Τεχνητή Νοημοσύνη»\\ Μήνας  00, 20XX \\[4\baselineskip]
-% \end{flushright}
-
-% Έγινε αποδεκτό από . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-% \begin{flushright}
-%     Όνομα Επώνυμο \\ 
-%     Ακαδημαϊκός Τίτλος \\
-%     Επιβλέπων/ουσα \\[6\baselineskip]
-% \end{flushright}
-
-% Έγινε αποδεκτό από . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-% \begin{flushright}
-%     Όνομα Επώνυμο \\ 
-%     Ακαδημαϊκός Τίτλος \\
-%     Μέλος Εξεταστικής Επιτροπής \\[6\baselineskip]
-% \end{flushright}
-
-% Έγινε αποδεκτό από . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-% \begin{flushright}
-%     Όνομα Επώνυμο  \\ 
-%     Ακαδημαϊκός Τίτλος \\
-%     Μέλος Εξεταστικής Επιτροπής 
-% \end{flushright}
-
-
 Author . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\\
 \begin{flushright}
-    II-MSc “Artificial Intelligence” \\ Month  00, 20XX \\[4\baselineskip]
+    II-MSc “Artificial Intelligence” \\ December 28, 2024 \\[4\baselineskip]
 \end{flushright}
 
 Certified by. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 \begin{flushright}
-    Name Surname \\ 
+    George Vouros \\ 
     Academic Title \\
     Thesis Supervisor \\[6\baselineskip]
 \end{flushright}
@@ -121,7 +80,11 @@ Certified by. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 
 \newpage
 
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
 \tableofcontents
+\newpage
 
 \include{sections/imagelist}
 
@@ -132,6 +95,10 @@ Certified by. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 \newpage
 
 \include{sections/introduction}
+
+\newpage
+
+\include{sections/scientific-paper}
 
 \newpage
 
@@ -159,19 +126,9 @@ Certified by. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 
 \newpage
 
-%%%%%%%%%%%%%%%%%%%%%%% Uncomment for the Greek Version %%%%%%%%%%%%%%%%%%%%%%%
-% \printbibliography[title={Βιβλιογραφία}]
-
 \printbibliography
 
 \newpage
-
-%%%%%%%%%%%%%%%%%%%%%%% Uncomment for the Greek Version %%%%%%%%%%%%%%%%%%%%%%%
-% \renewcommand\appendixpagename{Παραρτήματα}
-
-% \begin{appendices}
-%     \section*{Παράρτημα A}
-% \end{appendices}
 
 \begin{appendices}
     \section*{Appendix A}
