@@ -21,6 +21,7 @@
 \addbibresource{refs.bib}
 
 \usepackage{pdfpages}
+\usepackage{titlesec}
 
 \title{Ranking Joint Policies in Dynamic Games using Evolutionary Dynamics}
 \author{by  \\~\\ \Large{Natalia Koliou} \\~\\}
@@ -31,6 +32,13 @@
       UNIVERSITY OF PIRAEUS \\[20pt]
       December 2024 \\[40pt]
       \footnotesize{University of Piraeus, NCSR “Demokritos”. All rights reserved.} }
+
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsection}.\arabic{subsubsection}}
+\newcommand{\thesubsubsubsection}{\arabic{subsection}.\arabic{subsubsection}.\arabic{subsubsubsection}}
+
+\setcounter{secnumdepth}{4}
 
 \begin{document}
 
@@ -73,61 +81,33 @@ Certified by. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 \newpage
 
 \include{sections/abstract}
-
 \newpage
 
 \include{sections/acknowledgments}
-
 \newpage
-
-\renewcommand{\thesection}{\Roman{section}}
-\renewcommand{\thesubsection}{\arabic{subsection}}
 
 \tableofcontents
 \newpage
 
 \include{sections/imagelist}
-
 \newpage
 
 \include{sections/tablelist}
-
 \newpage
 
 \include{sections/introduction}
-
 \newpage
 
 \include{sections/scientific-paper}
-
 \newpage
 
-\include{sections/formatting}
-
+\include{sections/literature-study}
 \newpage
 
-\include{sections/section3}
-
-\newpage
-
-\include{sections/section4}
-
-\newpage
-
-\include{sections/section5}
-
-\newpage
-
-\include{sections/section6}
-
-\newpage
-
-\include{sections/conclusions}
-
+\include{sections/conclusion}
 \newpage
 
 \printbibliography
-
 \newpage
 
 \begin{appendices}
