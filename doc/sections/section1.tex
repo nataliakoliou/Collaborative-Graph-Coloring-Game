@@ -6,8 +6,10 @@
 
     The study of strategic decision-making is divided into two main fields: Classical Game Theory (CGT) and Evolutionary Game Theory (EGT). Classical Game Theory focuses on games with actual players and their strategies. A key solution concept in CGT is the \emph{Nash equilibrium}, which identifies the strategy profiles in which no player can improve their outcome by unilaterally changing their strategy, assuming the strategies of others remain unchanged \cite{doi:10.1073/pnas.36.1.48}. On the other hand, Evolutionary Game Theory examines indirect outcomes that occur when players adopt policies, also known as styles of play, rather than specific strategies. Here, equilibrium is based on the evolution of behaviors over time, often described using concepts like \emph{Markov-Conley chains} (MCCs). In MCCs, the long-term dynamics of agent interactions are captured in a strategy space, where each point represents a possible strategy. The graph formed by these strategies consists of strongly connected components, where each node represents a strategy, and edges represent the transitions between strategies. Once players enter these components, they tend to remain, indicating equilibrium \cite{omidshafiei2019alpharank}.\\~\\
 
-    In static games, where payoff matrices are known, finding \emph{Nash equilibria} is relatively straightforward. For example, consider the payoff matrix for the Rock-Paper-Scissors game in Table~\ref{tab:rps_payoff}. The mixed-strategy \emph{Nash equilibrium} occurs when both players randomize their choices uniformly across Rock, Paper, and Scissors. However, in dynamic settings, where decision making is sequential, one must account for the dynamics of agents' interactions over time. In these settings, we need to analyze agents' behavior in terms of their payoffs, identifying joint strategies that result into agents' stable behaviors. To illustrate how complexity increases as a game unfolds over time, consider a repeated version of the Rock-Paper-Scissors game played over two stages. The payoff matrix for this 2-stage game, as shown in Table~\ref{tab:rps_2stage_payoff}, is significantly larger than in the static case. 
-    
+    In static games, where payoff matrices are known, finding \emph{Nash equilibria} is relatively straightforward. For example, consider the payoff matrix for the Rock-Paper-Scissors game in Table~\ref{tab:rps_payoff}. The mixed-strategy \emph{Nash equilibrium} occurs when both players randomize their choices uniformly across Rock, Paper, and Scissors. However, in dynamic settings, where decision making is sequential, one must account for the dynamics of agents' interactions over time. In these settings, we need to analyze agents' behavior in terms of their payoffs, identifying joint strategies that result into stable behaviors. Although CGT provides a robust foundation for understanding static interactions, its solution concepts cannot easily reveal equilibria across sequences of actions; the number of possible policies is extremeley difficult to define, especially in games with many players that unfold over a large number of rounds. Evolutionary approaches have shown great potential towards this aim.\\~\\
+
+    The main idea in EGTA is to approximate the otherwise intractable dynamics of a dynamic game by transforming it into an empirical game—an abstract representation derived from sampled interactions among policies. This approach enables researchers to explore equilibria, within the policy space, sidestepping the computational complexity of evaluating every possible strategy in games with sequential actions and many players. Instead of analyzing the entire strategy space, it focuses on policy evaluation, identifying stable behaviors when adopted by agents over multiple interactions.
+
     \begin{table}[t]
         \centering
         \caption{Payoff matrix for the Rock-Paper-Scissors game.}
@@ -21,44 +23,65 @@
         \end{tabular}
     \end{table}
     
-    The rows and columns represent the possible strategies that players can adopt across both stages, while the values in each cell reflect the sum of the payoffs from each individual round. In this case, the mixed-strategy Nash equilibrium involves both players randomizing equally among the strategies 
-    \(R{-}R\), \(P{-}P\), and \(S{-}S\), each with a probability of \(\frac{1}{3}\), while assigning zero probability to all other strategies.\\~\\
-
-    Although CGT provides a robust foundation for understanding static interactions, its solution concepts cannot easily reveal equilibria across sequences of actions; the number of possible policies is extremeley difficult to define, especially in games with many players that unfold over a large number of rounds. Evolutionary approaches have shown great potential towards this aim.\\~\\
-
-    \begin{table}[t] 
-        \centering 
-        \caption{Payoff matrix for a 2-stage repeated Rock-Paper-Scissors game.}
-        \vspace{0.6em}
-        \label{tab:rps_2stage_payoff} 
-        \begin{tabular}{c|c c c c c c c c c} 
-                & R-R  & R-P  & R-S  & P-R  & P-P  & P-S  & S-R  & S-P  & S-S \\ \hline
-            R-R & 0,0  & -1,1 & 1,-1 & -1,1 & -2,2 & 0,0  & 0,0  & 0,0  & -2,2 \\
-            R-P & 1,-1 & 0,0  & -1,1 & 0,0  & -1,1 & -2,2 & 2,-2 & 1,-1 & 0,0 \\
-            R-S & -1,1 & 1,-1 & 0,0  & -2,2 & 0,0  & -1,1 & 0,0  & 2,-2 & 1,-1 \\
-            P-R & 1,-1 & 0,0  & 2,-2 & 0,0  & -1,1 & 1,-1 & -1,1 & 2,-2 & 0,0 \\
-            P-P & 2,-2 & 1,-1 & 0,0  & 1,-1 & 0,0  & -1,1 & 0,0  & 1,-1 & -2,2 \\
-            P-S & 0,0  & 2,-2 & 1,-1 & -1,1 & 1,-1 & 0,0  & -2,2 & 0,0  & -1,1 \\
-            S-R & -1,1 & -2,2 & 0,0  & 1,-1 & 0,0  & 2,-2 & 0,0  & 1,-1 & 1,-1 \\
-            S-P & 0,0  & -1,1 & -2,2 & 2,-2 & 1,-1 & 0,0  & 1,-1 & 0,0  & -1,1 \\
-            S-S & -2,2 & 0,0  & -1,1 & 0,0  & 2,-2 & -1,1 & -1,1 & 1,-1 & 0,0 \\
-    \end{tabular} 
-\end{table}
-    
-\end{flushleft}
-
-\begin{flushleft}
-    ....
 \end{flushleft}
 
 \subsubsection{Dynamic Games}
 
 \begin{flushleft}
-    ....\\~\\
-
-    ....\\~\\
     
-    ....\\~\\
+    Dynamic games are mathematical models that describe the interactions between agents controlling a system whose state evolves over time \cite{dynamicgames/krawczyk-jacek}. These systems rely on the current state and the actions of the agents to determine future states. Dynamic games are particularly useful for studying scenarios where the consequences of decisions unfold progressively and agents plan their strategies accordingly. Examples of dynamic games include economic competition, military strategy, and even board games like chess, where each move shapes the future course of the game. The complexity of these games arises from the need to account for the temporal dependencies of actions, making it necessary for players to consider long-term consequences in their decision-making process.\\~\\
+
+    Formally, a dynamic game can be represented as a tuple:
+    %
+    \begin{equation}
+        G = (S, K, A, T, P)
+        \label{eq:dyngame}
+    \end{equation}
+    %
+    where $S$ represents a finite set of states, $K$ is the set of players, and $A = (A^k \times A^{-k})$ is the set of joined actions, with $A^k$ corresponding to the action set available to player $k$. $A^{-k}$ denotes the action set available to players other than $k$. The transition matrix $T$ describes how states evolve over time, determining the next state of the system based on the current state and the actions chosen by the players. Finally, $P^k: S \times (A^k \times A^{-k})$ \allowbreak $\times S \to \mathbb{R}^K$ is the payoff function for player $k$, given the current joint state, the action chosen by player $k$ and the actions of the other agents, and the resulting state.\\~\\
+
+    This study primarily focuses on stochastic dynamic games, a concept initially introduced by L.S. Shapley in 1953 \cite{Shapley1953StochasticG}. In stochastic games, the outcome of players' actions is influenced by probabilistic events, introducing an element of uncertainty in the future states of the game. These games are commonly referred to as Markov games \cite{Shoham_Leyton-Brown_2008}, as the system's state at any given time depends not only on the players' decisions but also on the inherent randomness of the environment. The transition function $T$ in a stochastic game is defined as a probability distribution over next states. Specifically, $T: S \times A \to \Delta(S)$, where $\Delta(S)$ is a probability distribution over the states, given a state and joint action. For example, in a game like poker, while a player's strategy influences the course of the game, the outcome is also affected by random events, such as drawing a high-value hand (flush) or a low-value hand (pair of twos). In such games, players, when planning their actions, must account for both the actions of their opponents and the dynamics of the environment.\\~\\
+
+    In dynamic games, players aim to decide on the course of their joint actions over time, often referred to as a joint policy, to maximize their accumulated discounted rewards:
+    %
+    \begin{equation}
+        \sum_{s_{t+1} \in S} T(s_t, (a_t^k, a_t^{-k}), s_{t+1}) \cdot P^k(s_t, (a_t^k, a_t^{-k}), s_{t+1})
+        \label{eq:acc_rewards}
+    \end{equation}      
+    %
+    where $\gamma \in (0, 1)$ is the discount factor that reflects the relative importance of future rewards compared to immediate rewards. Here, $T$ represents the transition from state $s_t$ to the state $s_{t+1}$, and $P^k(s_{t}, (a^k, a^{-k}), s_{t+1})$ is the reward the player receives for choosing action $a^k$, given the actions $a^{-k}$ of the other players, at state $s_{t}$, and resulting into state $s_{t+1}$.
+
 \end{flushleft}
 
 \subsubsection{Empirical Games}
+
+\begin{flushleft}
+
+    Empirical Game Theory Analysis (EGTA) provides a framework that uses empirical methods to analyze player interactions within complex game environments \cite{Levet2016GameT}. These methods are used to define game components, such as payoff matrices, based on observed interactions, rather than relying on predefined rules. Simulation is one such method, where agents repeatedly play a game, and payoffs are collected based on the outcomes of these interactions. Other techniques include sampling, where a subset of the action space is explored to approximate the payoffs for a wider set of actions, and machine learning methods to identify players' behavior and estimate outcomes based on historical data \cite{wellman2024empiricalgametheoreticanalysissurvey}. Empirical techniques are applied in cases where the action space is too large and complex to define manually, making payoff matrices impossible to generate from simple rules and assumptions.\\~\\
+
+    An empirical game, also known as a meta-game, provides an abstract representation of strategic interactions derived from an underlying dynamic game. Formally, it is a \emph{Normal Form Game} defined as:
+    %
+    \begin{equation}
+        G = (K, \mathcal{S}tr, P)
+        \label{eq:nfg}
+    \end{equation}        
+    % 
+    where $K$ represents the set of players, $\mathcal{S}tr$ is the set of strategies available to them, and $P$ is the payoff function.\\~\\
+    
+    In the context of empirical games, the strategies in $\mathcal{S}tr$ do not correspond to specific actions in the underlying game, but rather to higher-level policies —referred to as styles of play— that abstract agents' behaviors over time. This abstraction simplifies the analysis by focusing on the aggregate outcomes rather than the detailed sequence of individual actions. $\mathcal{S}tr^k$ denotes the strategies of agent $k$ and $\mathcal{S}tr^{-k}$ the set of strategies of agents other than $k$. The set of strategy profiles, i.e. agents' joint strategies, is defined to be:
+    %
+    \begin{equation}
+        \mathcal{SP} = \mathcal{S}_i \mid \mathcal{S}_i = (str_i^1, str_i^2, \dots, str_i^K).
+        \label{eq:strategy_profiles}
+    \end{equation}
+    %
+    where $str_i^k \in \mathcal{S}tr^k$, and $i = 1, \dots,$ represents the profile index. The payoff matrix of an empirical game can be generated using empirical analysis techniques. Here, we focus on simulation, where agents engaged in the underlying game act according to policies adhering to specific strategies\footnote{Subsequently, we use the terms \emph{action} and \emph{policy} when speaking about the underlying game, and the term \emph{strategies} or \emph{styles of play} when speaking about the empirical game.}. The payoff function $P$ of the empirical game is computed from simulations for each strategy profile as follows:
+    %
+    \begin{equation}
+        P^k(str^k, str^{-k}) =\frac{1}{N} \cdot \sum_{i=1}^{N} P^k_{i}(str^k, str^{-k})
+        \label{eq:meta_payoff}
+    \end{equation}
+    %
+    where $N$ is the number of simulation runs, $str^k$ represents player $k$'s strategy, $str^{-k}$ denotes the strategies of the other players, and $P^k_{i}(str^k, str^{-k})$ (with an abuse of notation) represents the payoff player $k$ receives in simulation run $i$ when playing strategy $str^k$ against the strategies of the other players. It must be noted that in contrast to dynamic games the payoff function does not take states as arguments, as the outcomes are determined by agents' joint strategies, i.e. $P^k: (\mathcal{S}tr^k \times \mathcal{S}tr^{-k}) \to \mathbb{R}^K$ \cite{omidshafiei2019alpharank}. If we aggregate these expected payoffs into a matrix, we get the empirical payoff matrix whose dimensionality is $\prod_{k=1}^K\mathcal{S}tr^k$. Each entry represents the expected payoff for strategy $str^k$ against strategy $str^{-k}$.
+
+\end{flushleft}
