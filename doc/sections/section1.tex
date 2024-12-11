@@ -75,7 +75,9 @@
         \label{eq:strategy_profiles}
     \end{equation}
     %
-    where $str_i^k \in \mathcal{S}tr^k$, and $i = 1, \dots,$ represents the profile index. The payoff matrix of an empirical game can be generated using empirical analysis techniques. Here, we focus on simulation, where agents engaged in the underlying game act according to policies adhering to specific strategies\footnote{Subsequently, we use the terms \emph{action} and \emph{policy} when speaking about the underlying game, and the term \emph{strategies} or \emph{styles of play} when speaking about the empirical game.}. The payoff function $P$ of the empirical game is computed from simulations for each strategy profile as follows:
+    where $str_i^k \in \mathcal{S}tr^k$, and $i = 1, \dots,$ represents the profile index. The payoff matrix of an empirical game can be generated using empirical analysis techniques. Here, we focus on simulation, where agents engaged in the underlying game act according to policies adhering to specific strategies\footnote{Subsequently, we use the terms \emph{action} and \emph{policy} when speaking about the underlying game, and the term \emph{strategies} or \emph{styles of play} when speaking about the empirical game.}.\\~\\
+    
+    In a similar way, the payoff function $P$ reflects how well a strategy profile performs against others over multiple interactions. In empirical game theory, a common approach to building the payoff matrix is through simulations. This involves running simulations of every possible pair of meta-strategies multiple times and recording the outcomes. Specifically, the payoff function $P^k(str^k, str^{-k})$ for player $k$ is defined as:
     %
     \begin{equation}
         P^k(str^k, str^{-k}) =\frac{1}{N} \cdot \sum_{i=1}^{N} P^k_{i}(str^k, str^{-k})
