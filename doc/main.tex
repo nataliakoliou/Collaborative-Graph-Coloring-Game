@@ -25,6 +25,7 @@
 \usepackage{longtable}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{amsthm}
 
 \title{Ranking Joint Policies in Dynamic Games using Evolutionary Dynamics}
 \author{by  \\~\\ \Large{Natalia Koliou} \\~\\}
@@ -39,7 +40,10 @@
 \renewcommand{\thesection}{\Roman{section}}
 \renewcommand{\thesubsection}{\arabic{subsection}}
 \renewcommand{\thesubsubsection}{\arabic{subsection}.\arabic{subsubsection}}
-\newcommand{\thesubsubsubsection}{\arabic{subsection}.\arabic{subsubsection}.\arabic{subsubsubsection}}
+
+\newtheoremstyle{italicdefinition}{1em}{1em}{\itshape}{}{\itshape}{.}{1em}{}                      
+\theoremstyle{italicdefinition}
+\newtheorem{definition}{Definition}[subsection]
 
 \setcounter{secnumdepth}{4}
 

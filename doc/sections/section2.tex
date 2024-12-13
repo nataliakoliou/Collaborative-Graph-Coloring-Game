@@ -30,26 +30,26 @@
 
         Blocks can be either (a) colored by the agents, (b) white (free to be colored) or (c) hidden (their colors cannot be observed and they can not be re-colored by the agents). Initially all blocks in the grid are white and hidden. These hidden blocks are symbolically represented in gray. Let $G$ denote the grid environment, $B$ the set of blocks in that environment and $CR$ the set of possible colors that an agent can use for coloring blocks. Then our first assumption is that every block $b$ in $B$ can potentially be assigned any color $c$ from $CR$:
         %
-        \begin{eqnarray}
+        \begin{equation}
             \forall b \in B, \, \forall c \in CR, \, (b, c) \in R 
             \label{eq:bc}
-        \end{eqnarray}
+        \end{equation}
         %
 
         The set of agents' actions $A$ is defined to be the Cartesian product of the set of blocks $B$ and the set of the available colors $CR$, denoted as:
         %
-        \begin{eqnarray}
+        \begin{equation}
             A = B \times CR = \{(b, c) \mid b \in B, \, c \in CR\} 
             \label{eq:action_space}
-        \end{eqnarray}
+        \end{equation}
         %
 
         To specify states, let $CR^*$ include the elements of $CR$, and two additional elements representing hidden and white blocks: $CR^* = CR \cup \{\text{hidden}, \text{white}\}$. We define state $s$ as the Cartesian product of $B$ and $CR^*$, denoted as:
         %
-        \begin{eqnarray}
+        \begin{equation}
             s = \{(b_i, c_i), i=1, \dots, |B|\}, s.t. \forall b \in B, \, \exists \text{a unique } c \in CR^*\text{, with } (b,c) \in s
             \label{eq:state}
-        \end{eqnarray}
+        \end{equation}
         %
 
         We consider the Graph Coloring Game (GCG) to be a two-player game that unfolds over multiple rounds. At the beginning of each round, the environment reveals the color of some of the hidden blocks, if any. The number of blocks that get un-hidden is random, which implies that the state of the graph is influenced not only by the agents' actions. We therefore consider the game to be stochastic. After the state update from the environment, the agents simultaneously choose their actions. As soon as all blocks in $B$ are uncovered and colored, the game ends.
