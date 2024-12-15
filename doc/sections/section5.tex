@@ -5,6 +5,7 @@
     ......\\~\\
 
     \subsubsection{Defining Styles of Play}
+    \label{sec:5.1}
 
     \begin{flushleft}
 
@@ -139,7 +140,7 @@
 
         The values in the payoff matrix are computed in terms of the delay and the quality of the solution according to the game's constraints (gain, penalty, and sanction), excluding preferences. This ensures a common ground for distinct strategies, evaluating solutions solely based on the game's rules. For each pair of strategies, we simulate the game over 5,000 repeats and calculate the average payoff for each strategy. These values are then organized into the payoff matrix, which is provided in Table~\ref{tab:gcg_payoff_matrix}. Each entry in the matrix represents the payoffs of strategies in the corresponding profile, with the first value indicating the payoff of the row player and the second value of the column player. The Nash equilibria are highlighted in bold, while nine of the top-ranked strategy profiles in the MCC are shaded in gray.\\~\\
         %
-        \begin{table*}[h!]
+        \begin{table}[h!]
             \centering
             \resizebox{\textwidth}{!}{%
             \begin{tabular}{lccccccccccc}
@@ -173,7 +174,7 @@
             \vspace{0.5em}
             \caption{Empirical Payoff Matrix for the Graph Coloring Game}
             \label{tab:gcg_payoff_matrix}
-        \end{table*}
+        \end{table}
         %
 
         From this matrix, we observe that (L, WL) and its symmetric counterpart (WL, L) both with payoffs of (3.15, 3.21) and (3.21, 3.15) respectively, are the only Nash equilibria. It is important to note here that these equilibria prescribe agents' strategies given that they do play the game with rational co-players, but they do not capture the overall dynamics of the game, considering the long-term effects of agents' interactions.
@@ -184,7 +185,92 @@
 
     \begin{flushleft}
 
-        .....\\~\\
+        Given the payoff matrix derived from the empirical analysis, we apply the \emph{$\alpha$-Rank} method to evaluate the performance of strategy profiles over time in terms of the MCC solution concept. Specifically, we ran the method 1,000 times, using values of $\alpha$ within the range $[0.1, 10]$ with step=0.01, while assuming populations of size $m=100$. We provide as input the strategies defined in Section~\ref{sec:5.1} and the empirical game payoff matrix. We focus on the rankings of the top 6 strategy profiles, to identify the stronger ones across different values of $\alpha$.\\~\\
+
+        As we observe from the rankings in Table~\ref{tab:ranking_table}, the strategy profile that prevails in the long run is (WL, CA); this is the primary component of the MCC. Although the table was derived using an $\alpha$ value of 2, the rankings remain consistent even when $\alpha$ is set to 10. We choose $\alpha=2$ over $\alpha=10$, to display the rankings of lower-performing strategy profiles, which would otherwise drop to zero. First, it is worth mentioning that the Nash equilibria (L, WL) and (WL, L) don't appear among the top-ranked strategy profiles. This is because MCC components are defined based on how well strategies perform when interacting with other strategies, based on long-term agents interactions. The individual strategies within the Nash equilibrium profile, either WL or L, may not result in favorable interactions with other strategies. As a result, the profile (WL, L) is ranked lower that others.\\~\\
+        %
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{lcc}
+                \hline
+                \textbf{Agent} & \textbf{Rank} & \textbf{Score} \\
+                \hline
+                (WL, CA) & 1 & 0.42 \\
+                (W, CA) & 2 & 0.13 \\
+                (M, CA) & 3 & 0.12 \\
+                (CA, M) & 4 & 0.08 \\
+                (CA, W) & 5 & 0.08 \\
+                (CA, LE) & 6 & 0.01 \\
+                \hline
+            \end{tabular}
+            \vspace{0.5em}
+            \caption{Rankings for $\alpha=2$}
+            \label{tab:ranking_table}
+        \end{table}
+        %
+
+        To further support our observations regarding the misalignment between the two solution concepts, let's examine why (CA, WL) is part of the MCCs, while (L, WL), the Nash equilibrium, is not. A closer look at the payoff matrix in Table~\ref{tab:gcg_payoff_matrix} reveals that L appears to be the worst-performing strategy for the row player, with an average payoff of 3.13. In this case, being in the Nash equilibrium means the player is stuck with a strategy that gives low rewards, making it the best among other options, rather than a strong choice. If it happens to play this strategy, it would expect its rational opponent to play WL. Strategy CA on the other hand, is the best-performing strategy for the row player, with an average payoff of 3.18. Combined with WL, which is the best performing strategy for the column player, with an average payoff of 3.18, they make profile (CA, WL) becomes the top ranked strategy profile in the ranking Table~\ref{tab:ranking_table}.\\~\\
+
+        Rankings within the MCC are also very intuitive. For example, strategies that prefer different color tones, such as (WL, CA) or (W, CA), tend to result into fewer conflicts since, they naturally avoid selecting the same colors. Similarly, strategies that prefer different blocks based on their difficulty, such as (WL, CA) or (CA, LE), tend to provide solutions with minimal delay, as they naturally avoid coloring the same blocks. Notably, profiles with mixed preferences across these dimensions demonstrate the most promising performance, which explains why (WL, CA), as such a profile, is a key component of the MCC. However, not all profile rankings can be easily explained through the game's rules alone; the expected influence of certain strategies on the quality of the solutions remains ambiguous. For example, profiles with strategies like M and E are more difficult to analyze.\\~\\
+
+        The response graph provides a visualization to interpret the \emph{$\alpha$-Rank} results. This graph illustrates the MCC, using the strategy profiles' masses from the stationary distribution, $\pi$, along with the fixation probability function $\rho$ provided by \emph{$\alpha$-Rank}. Figure~\ref{fig:response_graphs} shows the response graphs for for $\alpha = 0.4$, $1.3$, $1.9$ and $6.4$. We consider it to be part of the descriptive framework $\mathcal{D}$, as it offers insights into how rankings were derived.\\~\\
+        %
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[b]{0.39\linewidth}
+                \includegraphics[width=\linewidth]{images/rg_0.4.png}
+                \caption{$alpha=0.4$}
+                \label{fig:response_graph_0.4}
+            \end{subfigure}
+            \hfill
+            \begin{subfigure}[b]{0.39\linewidth}
+                \includegraphics[width=\linewidth]{images/rg_1.3.png}
+                \caption{$alpha=1.3$}
+                \label{fig:response_graph_1.3}
+            \end{subfigure}
+        
+            \begin{subfigure}[b]{0.39\linewidth}
+                \includegraphics[width=\linewidth]{images/rg_1.9.png}
+                \caption{$alpha=1.9$}
+                \label{fig:response_graph_1.9}
+            \end{subfigure}
+            \hfill
+            \begin{subfigure}[b]{0.39\linewidth}
+                \includegraphics[width=\linewidth]{images/rg_6.4.png}
+                \caption{$alpha=6.4$}
+                \label{fig:response_graph_6.4}
+            \end{subfigure}
+        
+            \caption{Response graphs of strategy profiles' dynamics.}
+            \label{fig:response_graphs}
+        \end{figure}
+        %
+
+        Each node in the graph represents a unique strategy profile in the MCC, while the edges indicate transitions between them. The values on the edges show the fixation probabilities normalized by the neutral fixation probability, denoted as $\rho_m$. The nodes and edges are color-coded. Darker blue nodes represent more strong joint profiles, while lighter blue nodes represent transient ones. Similarly, bold arrows suggest a strong advantage in shifting between the nodes, whereas faint ones suggest less of an advantage.\\~\\
+
+        The response graph describes the overall dynamics of the strategy profiles in the empirical game. One prominent feature is the primary component of the MCC, specifically the profile (WL, CA). This profile, indicated by a dark blue color, has multiple graph edges leading to it, while none from it, indicating that strategies in this profile are non-transient. This is further supported by the large fixation probabilities along the edges. A particularly prominent example is the cluster (CA, LE)-(CA, M)-(CA, W), which consists of three strongly connected profiles, indicating that once a player adopts one of these profiles, they will likely remain within their cluster. These components reflect stable regions in the game’s strategy dynamics, where transitions between profiles become locked into a cycle.\\~\\
+
+        To further investigate the effect of $\alpha$ on profile dominance, we plotted the stationary distribution $\pi$ across all $\alpha$ values used in the experiments, for the top-performing strategy profiles (see Figure~\ref{fig:alpha_x_pi}). This visualization —also part of $\mathcal{D}$— helps us understand how the stationary distribution changes as the selection intensity increases. The x-axis represents the different $\alpha$ values, ranging from $0.1$ to $3$ in Figure~\ref{fig:alpha_x_pi_3}, and from $0.1$ to $10$ in Figure~\ref{fig:alpha_x_pi_10}, while the y-axis in both figures shows the mass of each strategy profile in the stationary distribution $\pi$. As $\alpha$ increases, the distribution converges, indicating that the selection process stabilizes. The final mass distributions are highlighted in boxed regions. The legend on the right side of the plot displays the top-performing joint strategies, with the stronger ones appearing at the top.\\~\\
+
+        We plot two such graphs to observe how the mass of strategy profiles is distributed in the MCCs across different $\alpha$ values. In the stationary distribution resulting from a bigger $\alpha$, the dominant strategy profile (WL, CA) in the MCC achieves a mass of 1, with all other profiles dropping to 0. This is clearly illustrated in the second plot (see Figure~\ref{fig:alpha_x_pi_10}). However, regarding the mass distribution for a smaller range of $\alpha$, depicted n the first plot, the game has not yet converged to the final MCC.
+        %
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[b]{0.49\linewidth}
+                \includegraphics[width=\linewidth]{images/alpha_x_pi_3.png}
+                \caption{Mass across $\alpha \in [0.1, 3]$}
+                \label{fig:alpha_x_pi_3}
+            \end{subfigure}
+            \hfill
+            \begin{subfigure}[b]{0.49\linewidth}
+                \includegraphics[width=\linewidth]{images/alpha_x_pi_10.png}
+                \caption{Mass across $\alpha \in [0.1, 10]$}
+                \label{fig:alpha_x_pi_10}
+            \end{subfigure}
+            \caption{Effect of ranking intensity $\alpha$ on strategy profile mass in the stationary distribution $\pi$.}
+            \label{fig:alpha_x_pi}
+        \end{figure}
+        %
 
     \end{flushleft}
 
