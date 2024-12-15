@@ -251,8 +251,6 @@
         The response graph describes the overall dynamics of the strategy profiles in the empirical game. One prominent feature is the primary component of the MCC, specifically the profile (WL, CA). This profile, indicated by a dark blue color, has multiple graph edges leading to it, while none from it, indicating that strategies in this profile are non-transient. This is further supported by the large fixation probabilities along the edges. A particularly prominent example is the cluster (CA, LE)-(CA, M)-(CA, W), which consists of three strongly connected profiles, indicating that once a player adopts one of these profiles, they will likely remain within their cluster. These components reflect stable regions in the game’s strategy dynamics, where transitions between profiles become locked into a cycle.\\~\\
 
         To further investigate the effect of $\alpha$ on profile dominance, we plotted the stationary distribution $\pi$ across all $\alpha$ values used in the experiments, for the top-performing strategy profiles (see Figure~\ref{fig:alpha_x_pi}). This visualization —also part of $\mathcal{D}$— helps us understand how the stationary distribution changes as the selection intensity increases. The x-axis represents the different $\alpha$ values, ranging from $0.1$ to $3$ in Figure~\ref{fig:alpha_x_pi_3}, and from $0.1$ to $10$ in Figure~\ref{fig:alpha_x_pi_10}, while the y-axis in both figures shows the mass of each strategy profile in the stationary distribution $\pi$. As $\alpha$ increases, the distribution converges, indicating that the selection process stabilizes. The final mass distributions are highlighted in boxed regions. The legend on the right side of the plot displays the top-performing joint strategies, with the stronger ones appearing at the top.\\~\\
-
-        We plot two such graphs to observe how the mass of strategy profiles is distributed in the MCCs across different $\alpha$ values. In the stationary distribution resulting from a bigger $\alpha$, the dominant strategy profile (WL, CA) in the MCC achieves a mass of 1, with all other profiles dropping to 0. This is clearly illustrated in the second plot (see Figure~\ref{fig:alpha_x_pi_10}). However, regarding the mass distribution for a smaller range of $\alpha$, depicted n the first plot, the game has not yet converged to the final MCC.
         %
         \begin{figure}[H]
             \centering
@@ -271,6 +269,8 @@
             \label{fig:alpha_x_pi}
         \end{figure}
         %
+
+        We plot two such graphs to observe how the mass of strategy profiles is distributed in the MCCs across different $\alpha$ values. In the stationary distribution resulting from a bigger $\alpha$, the dominant strategy profile (WL, CA) in the MCC achieves a mass of 1, with all other profiles dropping to 0. This is clearly illustrated in the second plot (see Figure~\ref{fig:alpha_x_pi_10}). However, regarding the mass distribution for a smaller range of $\alpha$, depicted n the first plot, the game has not yet converged to the final MCC.
 
     \end{flushleft}
 
