@@ -2,6 +2,9 @@
 
 \begin{flushleft}
 
+    In this section, we address the challenge of identifying strong joint policies in dynamic games, focusing on strategies that are stable over time and robust to fluctuations. We begin by defining the core problem: how to identify stable joint strategies that persist across multiple iterations of the game. This involves a deeper understanding of how agents’ behaviors evolve and interact within the context of dynamic decision-making. We will present the problem statement that outlines the key challenges in modeling and analyzing strategies in such games.\\~\\
+
+    Following this, we propose an approach designed to identify and evaluate stable joint strategies in dynamic games. The methodology builds on existing frameworks, aiming to provide insights into the stability and effectiveness of strategies based on the long-term interactions between agents.
 
     \subsubsection{Problem Statement}
 
@@ -46,7 +49,7 @@
         \end{enumerate}
         %
 
-        Once the meta-game is defined, the next step is to define the function $\mathcal{R}$, which ranks joint strategies based on agents' long-term dynamics and objectives. To achieve this, we propose using the evolutionary \emph{$\alpha$-Rank} methodology, which determines rankings by assessing the evolutionary success of each strategy profile. This success is reflected in the probability of a given strategy profile being selected over time. This probability is captured by the stationary distribution $\pi$, which is computed by \emph{$\alpha$-Rank} in the limit of infinite ranking intensity $\alpha$. As demonstrated by \cite{omidshafiei2019alpharank}, once $\alpha$ reaches a sufficiently large value, the rankings stabilize, accurately capturing the system's long-term behavior.
+        Once the meta-game is defined, the next step is to define the function $\mathcal{R}$, which ranks joint strategies based on agents' long-term dynamics and objectives. To achieve this, we propose using the evolutionary \emph{$\alpha$-Rank} methodology, which determines rankings by assessing the evolutionary success of each strategy profile. This success is reflected in the probability of a given strategy profile being selected over time. This probability is captured by the stationary distribution $\pi$, which is computed by \emph{$\alpha$-Rank} in the limit of infinite ranking intensity $\alpha$. As demonstrated by \cite{omidshafiei2019alpharank}, once $\alpha$ reaches a sufficiently large value, the rankings stabilize, accurately capturing the system's long-term behavior.\\~\\
 
         To compute the stationary distribution $\pi$ over strategy profiles, the \emph{$\alpha$-Rank} methodology requires the payoff matrix $P$ of the empirical game. Along with the stationary distribution $\pi$, \emph{$\alpha$-Rank} also outputs the fixation probability function $\rho_{\mathcal{S}_i \to \mathcal{S}_j}$, where $\mathcal{S}_i, \mathcal{S}_j \in \mathcal{SP}$. One could abstractly illustrate \emph{$\alpha$-Rank} as a function:
         %
