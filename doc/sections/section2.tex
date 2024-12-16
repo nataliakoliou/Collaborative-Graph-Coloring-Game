@@ -53,7 +53,7 @@
         \end{equation}
         %
 
-        We consider the Graph Coloring Game (GCG) to be a two-player game that unfolds over multiple rounds. At the beginning of each round, the environment reveals the color of some of the hidden blocks, if any. The number of blocks that get un-hidden is random, which implies that the state of the graph is influenced not only by the agents' actions. We therefore consider the game to be stochastic. After the state update from the environment, the agents simultaneously choose their actions. As soon as all blocks in $B$ are uncovered and colored, the game ends.
+        We consider the \emph{Graph Coloring Game} (GCG) to be a two-player game that unfolds over multiple rounds. At the beginning of each round, the environment reveals the color of some of the hidden blocks, if any. The number of blocks that get un-hidden is random, which implies that the state of the graph is influenced not only by the agents' actions, but also by the environment.. We therefore consider the game to be stochastic. After the state update from the environment, the agents simultaneously choose their actions. As soon as all blocks in $B$ are uncovered and colored, the game ends.
     
     \end{flushleft}
 
@@ -63,7 +63,7 @@
 
         The reward function in the GCG is designed to encourage agents to adopt effective strategies for coloring blocks while discouraging undesirable actions. The total reward that an agent receives during the game is the sum of multiple components, including gains, penalties, sanctions, delays and adopted preferences.\\~\\
 
-        It is defined as follows:
+        These components are defined as follows:
 
         \begin{enumerate}
             \item \textbf{Gains:} An agent receives a gain of +1 for each neighboring block of $b$ that has a different color than the chosen color $c$. This reward encourages agents to color neighboring blocks with different colors, in line with the rules of the GCP, where adjacent blocks must have distinct colors.
