@@ -29,7 +29,7 @@
 
         The graph in the game corresponds to a grid of blocks, where each block is defined as one or more merged cells within the two-dimensional matrix. At the beginning of the game, the grid is initialized with a random number of rows and columns ($n \times m$), and this configuration remains the same throughout the entire game. The environment then randomly combines cells to create blocks. Merging cells is important as it allows for complex neighboring relationships to be defined, expanding beyond the standard constraints between adjacent blocks. In our experimental setup we assume a $4 \times 5$ grid with 10 blocks as illustrated in Figure~\ref{fig:grid_and_graph}.\\~\\
 
-        Blocks can be either (a) colored by the agents, (b) white (free to be colored) or (c) hidden (their colors cannot be observed and they can not be re-colored by the agents). Initially all blocks in the grid are white and hidden. These hidden blocks are symbolically represented in gray. Let $G$ denote the grid environment, $B$ the set of blocks in that environment and $CR$ the set of possible colors that an agent can use for coloring blocks. Then our first assumption is that every block $b$ in $B$ can potentially be assigned any color $c$ from $CR$:
+        Blocks can be either: (a) colored by the agents, (b) white i.e., available to be colored and (c) hidden i.e., cannot yet be colored until revealed by the environment. Initially all blocks in the grid are hidden and symbolically represented in gray. Let $G$ denote the grid environment, $B$ the set of blocks in that environment and $CR$ the set of possible colors that an agent can use for coloring blocks. Then our first assumption is that every block $b$ in $B$ can potentially be assigned any color $c$ from $CR$:
         %
         \begin{equation}
             \forall b \in B, \, \forall c \in CR, \, (b, c) \in R 
@@ -53,7 +53,7 @@
         \end{equation}
         %
 
-        We consider the \emph{Graph Coloring Game} (GCG) to be a two-player game that unfolds over multiple rounds. At the beginning of each round, the environment reveals the color of some of the hidden blocks, if any. The number of blocks that get un-hidden is random, which implies that the state of the graph is influenced not only by the agents' actions, but also by the environment.. We therefore consider the game to be stochastic. After the state update from the environment, the agents simultaneously choose their actions. As soon as all blocks in $B$ are uncovered and colored, the game ends.
+        We consider the \emph{Graph Coloring Game} (GCG) to be a two-player game that unfolds over multiple rounds. At the beginning of each round, the environment reveals the color of some of the hidden blocks, if any. The number of blocks that get un-hidden is random, which implies that the state of the graph is influenced not only by the agents' actions, but also by the environment. We therefore consider the game to be stochastic. After the state update from the environment, the agents simultaneously choose their actions. As soon as all blocks in $B$ are uncovered and colored, the game ends.
     
     \end{flushleft}
 
