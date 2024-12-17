@@ -1,25 +1,23 @@
 \subsection{Application on the Graph Coloring Game}
 
-\begin{flushleft}
+    In this section, we apply our methodology to the \emph{Graph Coloring Game} (GCG) defined in Section~\ref{sec:2.1}, to identify strong joint strategies. This analysis allows us to ultimately derive the strategies of the underlying dynamic game, providing an explainable link between the observed styles of play and the actions they represent.\tinydouble
 
-    In this section, we apply our methodology to the Graph Coloring Game (GCG) defined in Section~\ref{sec:2.1}, to identify strong joint strategies. This analysis allows us to ultimately derive the strategies of the underlying dynamic game, providing an explainable link between the observed styles of play and the actions they represent.\\~\\
-
-    We begin by defining the different styles of play and modeling them as policies using neural network (NN) models. Next, we define the empirical game payoff matrix, which measures how well these policies interact with each other over the long run. Finally, we apply \emph{$\alpha$-Rank} to evaluate and rank the joint policies, gaining insights into the game's dynamics.
+    \noindent
+    We begin by defining the different styles of play and modeling them as policies using \emph{neural network} (NN) models. Next, we define the empirical game payoff matrix, which measures how well these policies interact with each other over the long run. Finally, we apply \emph{$\alpha$-Rank} to evaluate and rank the joint policies, gaining insights into the game's dynamics.
 
     \subsubsection{Defining Styles of Play}
     \label{sec:5.1}
 
-    \begin{flushleft}
-
-        The process of transforming the underlying dynamic graph-coloring game into its empirical form begins by understanding the different ways in which agents respond in the game. This involves two essential steps:
+        The process of transforming the underlying dynamic GCG into its empirical form begins by understanding the different ways in which agents respond in the game. This involves two essential steps:
         %
         \begin{enumerate}
             \item Identifying agents' strategies.
-            \item Constructing the empirical game payoff matrix.\\~\\
+            \item Constructing the empirical game payoff matrix.\tinydouble
         \end{enumerate}
         %
 
-        Agents' strategies in the game can be thought of as different styles of play, which are typically revealed through their preferences and behaviors in response to the game’s structure. In our experiments, we specify different styles across three main dimensions: color tone (preference for which colors to use), block difficulty (preference for the types of blocks to choose), and coloring approach (preference for the number of colors to use), as shown in Table~\ref{tab:preferences}. These dimensions are combined to define a player's overall style, which can range from complete indifference—where no specific preference is observed in any of the dimensions (denoted by "I")—to highly specific preferences across all dimensions.\\~\\
+        \noindent
+        Agents' strategies in the game can be thought of as different styles of play, which are typically revealed through their preferences and behaviors in response to the game’s structure. In our experiments, we specify different styles across three main dimensions: color tone (preference for which colors to use), block difficulty (preference for the types of blocks to choose), and coloring approach (preference for the number of colors to use), as shown in Table~\ref{tab:preferences}. These dimensions are combined to define a player's overall style, which can range from complete indifference—where no specific preference is observed in any of the dimensions (denoted by "I")—to highly specific preferences across all dimensions.\tinydouble
         %
         \begin{table}[H]
             \centering
@@ -37,16 +35,13 @@
             \end{tabular}
         \end{table}
         %
-       
-        In our approach, policies corresponding to specific strategies are represented using convolutional neural networks (CNNs), which are trained to adapt to different styles of play in the graph-coloring game. To guide the training of these policies, we assign specific values to each of the three dimensions of the game's \emph{preference reward}—color tone, block difficulty, and coloring approach. These values, range from -1 to 1, where 1 indicates a strong preference for a particular dimension. For example, a value of 0.7 for warm colors suggests a relatively strong preference for warm tones, while values closer to 0 a tendency towards indifference. In our experimental setting, we define a total of 11 distinct styles of play: I, C, W, E, M, L, A, AE, CA, LE and WL, given ``I'' and combinations of preference values specified in Table~\ref{tab:preferences}. Assuming no inherent bias among the players of the empirical game, we allow populations to sample from the same list of strategies.
 
-    \end{flushleft}
+        \noindent
+        In our approach, policies corresponding to specific strategies are represented using \emph{convolutional neural networks} (CNNs), which are trained to adapt to different styles of play in the GCG. To guide the training of these policies, we assign specific values to each of the three dimensions of the game's \emph{preference reward} —color tone, block difficulty, and coloring approach. These values, range from -1 to 1, where 1 indicates a strong preference for a particular dimension. For example, a value of 0.7 for warm colors suggests a relatively strong preference for warm tones, while values closer to 0 a tendency towards indifference. In our experimental setting, we define a total of 11 distinct styles of play: I, C, W, E, M, L, A, AE, CA, LE and WL, given ``I'' and combinations of preference values specified in Table~\ref{tab:preferences}. Assuming no inherent bias among the players of the empirical game, we allow populations to sample from the same list of strategies.
 
     \subsubsection{Realizing the Empiricl Game Strategies}
 
-    \begin{flushleft}
-
-        All the policy models used to realize the empirical game strategies share a common underlying architecture and training setup. Although hyperparameter tuning is typically recommended, it doesn't make much difference in this case, as these models are relatively easy to optimize when trained in small settings. Regarding the convolutional neural network architecture, it consists of four convolutional layers, each defined with a kernel size of 3, stride of 1, and padding of 1. These parameters are chosen to ensure that the model is capable of extracting spatial features from the input data, which in this case is a grid representation of the game state. The input tensor has dimensions $10 \times 12$, where $|B|=10$ represents the number of blocks in the state and $|CR^*|=12$ represents the number of possible colors a block can have. Each block is encoded using one-hot encoding, meaning that each color is represented as a binary vector of length 12. The output is then flattened and passed through two fully connected layers, which process the data to produce the final output, as shown in Figure~\ref{fig:convDQN}.\\~\\
+        All the policy models used to realize the empirical game strategies share a common underlying architecture and training setup. Although hyperparameter tuning is typically recommended, it doesn't make much difference in this case, as these models are relatively easy to optimize when trained in small settings. Regarding the CNN architecture, it consists of four convolutional layers, each defined with a kernel size of 3, stride of 1, and padding of 1. These parameters are chosen to ensure that the model is capable of extracting spatial features from the input data, which in this case is a grid representation of the game state. The input tensor has dimensions $10 \times 12$, where $|B|=10$ represents the number of blocks in the state and $|CR^*|=12$ represents the number of possible colors a block can have. Each block is encoded using one-hot encoding, meaning that each color is represented as a binary vector of length 12. The output is then flattened and passed through two \emph{fully connected} (FC) layers, which process the data to produce the final output, as shown in Figure~\ref{fig:convDQN}.\tinydouble
         %
         \begin{figure}[H]
             \centering
@@ -56,7 +51,8 @@
         \end{figure}
         %
 
-        Policy models are trained independently in the underlying game using the deep Q-learning reinforcement learning algorithm specified in Algorithm~\ref{alg:dqn_algorithm}. We set $\gamma$ to 0.7. To optimize the model parameters, we use the smooth L1 loss function with $\beta$=1.0 and the Adam optimizer with a learning rate of 5e-4 and weight decay of 1e-5 to prevent over-fitting. To further enhance the learning process, we incorporate experience replay, with a memory that stores up to 10 million experiences \cite{10.1007/BF00992699}. A target network alongside the main policy network, is being used according to the Double-DQN approach \cite{vanhasselt2015deep}. To update the target network we apply a soft update with a factor $\tau$=5e-3. This gradually brings the target network closer to the policy network, balancing learning speed and stability. With a batch size of 64, we train the models for 10,000 episodes.\\~\\
+        \noindent
+        Policy models are trained independently in the underlying game using the deep Q-learning reinforcement learning algorithm specified in Algorithm~\ref{alg:dqn_algorithm}. We set $\gamma$ to 0.7. To optimize the model parameters, we use the smooth L1 loss function with $\beta$=1.0 and the Adam optimizer with a learning rate of 5e-4 and weight decay of 1e-5 to prevent over-fitting. To further enhance the learning process, we incorporate experience replay, with a memory that stores up to 10 million experiences \cite{10.1007/BF00992699}. A target network alongside the main policy network, is being used according to the \emph{Double-DQN} approach \cite{vanhasselt2015deep}. To update the target network we apply a soft update with a factor $\tau$=5e-3. This gradually brings the target network closer to the policy network, balancing learning speed and stability. With a batch size of 64, we train the models for 10,000 episodes.\tinydouble
         %
         \begin{algorithm}
             \caption{Double Deep Q-Learning with Experience Replay}
@@ -82,10 +78,12 @@
             \end{algorithmic}
         \end{algorithm}
         %
-        
-        In this setup, the agents are trained without any co-players, meaning that each model learns in isolation. This approach is intentional, as our goal is to develop agents that play optimally on their own, rather than in collaboration with others. The idea is to explore how different styles of independent players interact with each other. We expect that some styles will lead to more conflicts than others, and this behavior is key to our analysis. If we had trained the agents together, for example using a multi-agent reinforcement learning (MARL) approach designed for collaborative settings, the resulting agents would have learned joint policies, which would defeat the very purpose of evaluating how their individual  policies affect collaboration.\\~\\
 
-        Let us consider, for instance, the simulation statistics of two relatively compatible play styles that we expect to perform well together in the game: Player W (a human player with preferences for warm color tones) and Player C (a robot with preferences for cool color tones). In Figure~\ref{fig:cw-solution}, we observe how these players' individual preferences shape their interactions. The statistics in Figure~\ref{fig:cw-stats} reveal the most frequently selected actions in terms of blocks and colors. Player C prefers colors like blue, purple, and green, while Player W tends to choose colors like brown, orange, and red. Given these preferences, conflicts are unlikely to arise from color selection alone. Even in scenarios where they may choose to color neighboring blocks, it is highly impossible that both players will choose the same color.\\~\\
+        \noindent
+        In this setup, the agents are trained without any co-players, meaning that each model learns in isolation. This approach is intentional, as our goal is to develop agents that play optimally on their own, rather than in collaboration with others. The idea is to explore how different styles of independent players interact with each other. We expect that some styles will lead to more conflicts than others, and this behavior is key to our analysis. If we had trained the agents together, for example using a \emph{multi-agent reinforcement learning} (MARL) approach designed for collaborative settings, the resulting agents would have learned joint policies, which would defeat the very purpose of evaluating how their individual  policies affect collaboration.\tinydouble
+
+        \noindent
+        Let us consider, for instance, the simulation statistics of two relatively compatible play styles that we expect to perform well together in the game: Player W (a human player with preferences for warm color tones) and Player C (a robot with preferences for cool color tones). In Figure~\ref{fig:cw-solution}, we observe how these players' individual preferences shape their interactions. The statistics in Figure~\ref{fig:cw-stats} reveal the most frequently selected actions in terms of blocks and colors. Player C prefers colors like blue, purple, and green, while Player W tends to choose colors like brown, orange, and red. Given these preferences, conflicts are unlikely to arise from color selection alone. Even in scenarios where they may choose to color neighboring blocks, it is highly impossible that both players will choose the same color.\tinydouble
         %
         \begin{figure}[H]
             \centering
@@ -107,7 +105,8 @@
         \end{figure}
         %        
 
-        On the other hand, in Figure~\ref{fig:cc-solution}, we observe the interactions between two Player C agents. In this case, we expect more conflicts, as both players share similar color preferences. This increases the likelihood of both players selecting the same color for neighboring blocks. The statistics shown in in Figure~\ref{fig:cc-stats} further support this, as they reveal a high probability of color overlap, primarily due to the dominance of cool colors in both action spaces. However, these conflicts are not a result of insufficient training, but rather stem from the inherent similarity in their preferences.\\~\\
+        \noindent
+        On the other hand, in Figure~\ref{fig:cc-solution}, we observe the interactions between two Player C agents. In this case, we expect more conflicts, as both players share similar color preferences. This increases the likelihood of both players selecting the same color for neighboring blocks. The statistics shown in in Figure~\ref{fig:cc-stats} further support this, as they reveal a high probability of color overlap, primarily due to the dominance of cool colors in both action spaces. However, these conflicts are not a result of insufficient training, but rather stem from the inherent similarity in their preferences.\tinydouble
         %
         \begin{figure}[H]
             \centering
@@ -129,18 +128,16 @@
             \label{fig:cc-simulation}
         \end{figure}
         % 
-        
-        Other than that, both agents have been thoroughly trained in isolation, exploring a wide range of states and ultimately converging to stable policies. This allows them to respond effectively and optimally, even when paired with agents with conflicting styles of play. Therefore, even in the case of the most incompatible pairings, the number of mistakes remains minimal, and these mistakes are not due to inadequate exploration, but rather to the inherent conflicts in the agents’ preferences. 
 
-    \end{flushleft}
+        \noindent
+        Other than that, both agents have been thoroughly trained in isolation, exploring a wide range of states and ultimately converging to stable policies. This allows them to respond effectively and optimally, even when paired with agents with conflicting styles of play. Therefore, even in the case of the most incompatible pairings, the number of mistakes remains minimal, and these mistakes are not due to inadequate exploration, but rather to the inherent conflicts in the agents’ preferences. 
 
     \subsubsection{Extracting the Empirical Payoff Matrix}
 
-    \begin{flushleft}
+        We generate the empirical payoff matrix by simulating each strategy profile over multiple games. These payoffs represent how well different styles of play perform jointly, according to the game’s rules.\tinydouble
 
-        We generate the empirical payoff matrix by simulating each strategy profile over multiple games. These payoffs represent how well different styles of play perform jointly, according to the game’s rules.\\~\\
-
-        The values in the payoff matrix are computed in terms of the delay and the quality of the solution according to the game's constraints (gain, penalty, and sanction), excluding preferences. This ensures a common ground for distinct strategies, evaluating solutions solely based on the game's rules. For each pair of strategies, we simulate the game over 5,000 repeats and calculate the average payoff for each strategy. These values are then organized into the payoff matrix, which is provided in Table~\ref{tab:gcg_payoff_matrix}. Each entry in the matrix represents the payoffs of strategies in the corresponding profile, with the first value indicating the payoff of the row player and the second value of the column player. The Nash equilibria are highlighted in bold, while nine of the top-ranked strategy profiles in the MCC are shaded in gray.\\~\\
+        \noindent
+        The values in the payoff matrix are computed in terms of the delay and the quality of the solution according to the game's constraints (gain, penalty, and sanction), excluding preferences. This ensures a common ground for distinct strategies, evaluating solutions solely based on the game's rules. For each pair of strategies, we simulate the game over 5,000 repeats and calculate the average payoff for each strategy. These values are then organized into the payoff matrix, which is provided in Table~\ref{tab:gcg_payoff_matrix}. Each entry in the matrix represents the payoffs of strategies in the corresponding profile, with the first value indicating the payoff of the row player and the second value of the column player. The Nash equilibria are highlighted in bold, while nine of the top-ranked strategy profiles in the MCC are shaded in gray.\tinydouble
         %
         \begin{table}[h!]
             \centering
@@ -179,17 +176,15 @@
         \end{table}
         %
 
+        \noindent
         From this matrix, we observe that (L, WL) and its symmetric counterpart (WL, L) both with payoffs of (3.15, 3.21) and (3.21, 3.15) respectively, are the only Nash equilibria. It is important to note here that these equilibria prescribe agents' strategies given that they do play the game with rational co-players, but they do not capture the overall dynamics of the game, considering the long-term effects of agents' interactions.
-
-    \end{flushleft}
 
     \subsubsection{Evaluating and Ranking Joint Policies}
 
-    \begin{flushleft}
+        Given the payoff matrix derived from the empirical analysis, we apply the \emph{$\alpha$-Rank} method to evaluate the performance of strategy profiles over time in terms of the MCC solution concept. Specifically, we ran the method 1,000 times, using values of $\alpha$ within the range $[0.1, 10]$ with step=0.01, while assuming populations of size $m=100$. We provide as input the strategies defined in Section~\ref{sec:5.1} and the empirical game payoff matrix. We focus on the rankings of the top 6 strategy profiles, to identify the stronger ones across different values of $\alpha$.\tinydouble
 
-        Given the payoff matrix derived from the empirical analysis, we apply the \emph{$\alpha$-Rank} method to evaluate the performance of strategy profiles over time in terms of the MCC solution concept. Specifically, we ran the method 1,000 times, using values of $\alpha$ within the range $[0.1, 10]$ with step=0.01, while assuming populations of size $m=100$. We provide as input the strategies defined in Section~\ref{sec:5.1} and the empirical game payoff matrix. We focus on the rankings of the top 6 strategy profiles, to identify the stronger ones across different values of $\alpha$.\\~\\
-
-        As we observe from the rankings in Table~\ref{tab:ranking_table}, the strategy profile that prevails in the long run is (WL, CA); this is the primary component of the MCC. Although the table was derived using an $\alpha$ value of 2, the rankings remain consistent even when $\alpha$ is set to 10. We choose $\alpha=2$ over $\alpha=10$, to display the rankings of lower-performing strategy profiles, which would otherwise drop to zero. First, it is worth mentioning that the Nash equilibria (L, WL) and (WL, L) don't appear among the top-ranked strategy profiles. This is because MCC components are defined based on how well strategies perform when interacting with other strategies, based on long-term agents interactions. The individual strategies within the Nash equilibrium profile, either WL or L, may not result in favorable interactions with other strategies. As a result, the profile (WL, L) is ranked lower that others.\\~\\
+        \noindent
+        As we observe from the rankings in Table~\ref{tab:ranking_table}, the strategy profile that prevails in the long run is (WL, CA); this is the primary component of the MCC. Although the table was derived using an $\alpha$ value of 2, the rankings remain consistent even when $\alpha$ is set to 10. We choose $\alpha=2$ over $\alpha=10$, to display the rankings of lower-performing strategy profiles, which would otherwise drop to zero. First, it is worth mentioning that the Nash equilibria (L, WL) and (WL, L) don't appear among the top-ranked strategy profiles. This is because MCC components are defined based on how well strategies perform when interacting with other strategies, based on long-term agents interactions. The individual strategies within the Nash equilibrium profile, either WL or L, may not result in favorable interactions with other strategies. As a result, the profile (WL, L) is ranked lower that others.\tinydouble
         %
         \begin{table}[H]
             \centering
@@ -211,11 +206,14 @@
         \end{table}
         %
 
-        To further support our observations regarding the misalignment between the two solution concepts, let's examine why (CA, WL) is part of the MCCs, while (L, WL), the Nash equilibrium, is not. A closer look at the payoff matrix in Table~\ref{tab:gcg_payoff_matrix} reveals that L appears to be the worst-performing strategy for the row player, with an average payoff of 3.13. In this case, being in the Nash equilibrium means the player is stuck with a strategy that gives low rewards, making it the best among other options, rather than a strong choice. If it happens to play this strategy, it would expect its rational opponent to play WL. Strategy CA on the other hand, is the best-performing strategy for the row player, with an average payoff of 3.18. Combined with WL, which is the best performing strategy for the column player, with an average payoff of 3.18, they make profile (CA, WL) becomes the top ranked strategy profile in the ranking Table~\ref{tab:ranking_table}.\\~\\
+        \noindent
+        To further support our observations regarding the misalignment between the two solution concepts, let's examine why (CA, WL) is part of the MCCs, while (L, WL), the Nash equilibrium, is not. A closer look at the payoff matrix in Table~\ref{tab:gcg_payoff_matrix} reveals that L appears to be the worst-performing strategy for the row player, with an average payoff of 3.13. In this case, being in the Nash equilibrium means the player is stuck with a strategy that gives low rewards, making it the best among other options, rather than a strong choice. If it happens to play this strategy, it would expect its rational opponent to play WL. Strategy CA on the other hand, is the best-performing strategy for the row player, with an average payoff of 3.18. Combined with WL, which is the best performing strategy for the column player, with an average payoff of 3.18, they make profile (CA, WL) becomes the top ranked strategy profile in the ranking Table~\ref{tab:ranking_table}.\tinydouble
 
-        Rankings within the MCC are also very intuitive. For example, strategies that prefer different color tones, such as (WL, CA) or (W, CA), tend to result into fewer conflicts since, they naturally avoid selecting the same colors. Similarly, strategies that prefer different blocks based on their difficulty, such as (WL, CA) or (CA, LE), tend to provide solutions with minimal delay, as they naturally avoid coloring the same blocks. Notably, profiles with mixed preferences across these dimensions demonstrate the most promising performance, which explains why (WL, CA), as such a profile, is a key component of the MCC. However, not all profile rankings can be easily explained through the game's rules alone; the expected influence of certain strategies on the quality of the solutions remains ambiguous. For example, profiles with strategies like M and E are more difficult to analyze.\\~\\
+        \noindent
+        Rankings within the MCC are also very intuitive. For example, strategies that prefer different color tones, such as (WL, CA) or (W, CA), tend to result into fewer conflicts since, they naturally avoid selecting the same colors. Similarly, strategies that prefer different blocks based on their difficulty, such as (WL, CA) or (CA, LE), tend to provide solutions with minimal delay, as they naturally avoid coloring the same blocks. Notably, profiles with mixed preferences across these dimensions demonstrate the most promising performance, which explains why (WL, CA), as such a profile, is a key component of the MCC. However, not all profile rankings can be easily explained through the game's rules alone; the expected influence of certain strategies on the quality of the solutions remains ambiguous. For example, profiles with strategies like M and E are more difficult to analyze.\tinydouble
 
-        The response graph provides a visualization to interpret the \emph{$\alpha$-Rank} results. This graph illustrates the MCC, using the strategy profiles' masses from the stationary distribution, $\pi$, along with the fixation probability function $\rho$ provided by \emph{$\alpha$-Rank}. Figure~\ref{fig:response_graphs} shows the response graphs for for $\alpha = 0.4$, $1.3$, $1.9$ and $6.4$. We consider it to be part of the descriptive framework $\mathcal{D}$, as it offers insights into how rankings were derived.\\~\\
+        \noindent
+        The response graph provides a visualization to interpret the \emph{$\alpha$-Rank} results. This graph illustrates the MCC, using the strategy profiles' masses from the stationary distribution, $\pi$, along with the fixation probability function $\rho$ provided by \emph{$\alpha$-Rank}. Figure~\ref{fig:response_graphs} shows the response graphs for for $\alpha = 0.4$, $1.3$, $1.9$ and $6.4$. We consider it to be part of the descriptive framework $\mathcal{D}$, as it offers insights into how rankings were derived.\tinydouble
         %
         \begin{figure}[H]
             \centering
@@ -230,7 +228,7 @@
                 \caption{$alpha=1.3$}
                 \label{fig:response_graph_1.3}
             \end{subfigure}
-        
+
             \begin{subfigure}[b]{0.39\linewidth}
                 \includegraphics[width=\linewidth]{images/rg_1.9.png}
                 \caption{$alpha=1.9$}
@@ -242,17 +240,20 @@
                 \caption{$alpha=6.4$}
                 \label{fig:response_graph_6.4}
             \end{subfigure}
-        
+
             \caption{Response graphs of strategy profiles' dynamics.}
             \label{fig:response_graphs}
         \end{figure}
         %
 
-        Each node in the graph represents a unique strategy profile in the MCC, while the edges indicate transitions between them. The values on the edges show the fixation probabilities normalized by the neutral fixation probability, denoted as $\rho_m$. The nodes and edges are color-coded. Darker blue nodes represent more strong joint profiles, while lighter blue nodes represent transient ones. Similarly, bold arrows suggest a strong advantage in shifting between the nodes, whereas faint ones suggest less of an advantage.\\~\\
+        \noindent
+        Each node in the graph represents a unique strategy profile in the MCC, while the edges indicate transitions between them. The values on the edges show the fixation probabilities normalized by the neutral fixation probability, denoted as $\rho_m$. The nodes and edges are color-coded. Darker blue nodes represent more strong joint profiles, while lighter blue nodes represent transient ones. Similarly, bold arrows suggest a strong advantage in shifting between the nodes, whereas faint ones suggest less of an advantage.\tinydouble
 
-        The response graph describes the overall dynamics of the strategy profiles in the empirical game. One prominent feature is the primary component of the MCC, specifically the profile (WL, CA). This profile, indicated by a dark blue color, has multiple graph edges leading to it, while none from it, indicating that strategies in this profile are non-transient. This is further supported by the large fixation probabilities along the edges. A particularly prominent example is the cluster (CA, LE)-(CA, M)-(CA, W), which consists of three strongly connected profiles, indicating that once a player adopts one of these profiles, they will likely remain within their cluster. These components reflect stable regions in the game’s strategy dynamics, where transitions between profiles become locked into a cycle.\\~\\
+        \noindent
+        The response graph describes the overall dynamics of the strategy profiles in the empirical game. One prominent feature is the primary component of the MCC, specifically the profile (WL, CA). This profile, indicated by a dark blue color, has multiple graph edges leading to it, while none from it, indicating that strategies in this profile are non-transient. This is further supported by the large fixation probabilities along the edges. A particularly prominent example is the cluster (CA, LE)-(CA, M)-(CA, W), which consists of three strongly connected profiles, indicating that once a player adopts one of these profiles, they will likely remain within their cluster. These components reflect stable regions in the game’s strategy dynamics, where transitions between profiles become locked into a cycle.\tinydouble
 
-        To further investigate the effect of $\alpha$ on profile dominance, we plotted the stationary distribution $\pi$ across all $\alpha$ values used in the experiments, for the top-performing strategy profiles (see Figure~\ref{fig:alpha_x_pi}). This visualization —also part of $\mathcal{D}$— helps us understand how the stationary distribution changes as the selection intensity increases. The x-axis represents the different $\alpha$ values, ranging from $0.1$ to $3$ in Figure~\ref{fig:alpha_x_pi_3}, and from $0.1$ to $10$ in Figure~\ref{fig:alpha_x_pi_10}, while the y-axis in both figures shows the mass of each strategy profile in the stationary distribution $\pi$. As $\alpha$ increases, the distribution converges, indicating that the selection process stabilizes. The final mass distributions are highlighted in boxed regions. The legend on the right side of the plot displays the top-performing joint strategies, with the stronger ones appearing at the top.\\~\\
+        \noindent
+        To further investigate the effect of $\alpha$ on profile dominance, we plotted the stationary distribution $\pi$ across all $\alpha$ values used in the experiments, for the top-performing strategy profiles (see Figure~\ref{fig:alpha_x_pi}). This visualization —also part of $\mathcal{D}$— helps us understand how the stationary distribution changes as the selection intensity increases. The x-axis represents the different $\alpha$ values, ranging from $0.1$ to $3$ in Figure~\ref{fig:alpha_x_pi_3}, and from $0.1$ to $10$ in Figure~\ref{fig:alpha_x_pi_10}, while the y-axis in both figures shows the mass of each strategy profile in the stationary distribution $\pi$. As $\alpha$ increases, the distribution converges, indicating that the selection process stabilizes. The final mass distributions are highlighted in boxed regions. The legend on the right side of the plot displays the top-performing joint strategies, with the stronger ones appearing at the top.\tinydouble
         %
         \begin{figure}[H]
             \centering
@@ -272,8 +273,5 @@
         \end{figure}
         %
 
+        \noindent
         We plot two such graphs to observe how the mass of strategy profiles is distributed in the MCCs across different $\alpha$ values. In the stationary distribution resulting from a bigger $\alpha$, the dominant strategy profile (WL, CA) in the MCC achieves a mass of 1, with all other profiles dropping to 0. This is clearly illustrated in the second plot (see Figure~\ref{fig:alpha_x_pi_10}). However, regarding the mass distribution for a smaller range of $\alpha$, depicted n the first plot, the game has not yet converged to the final MCC.
-
-    \end{flushleft}
-
-\end{flushleft}

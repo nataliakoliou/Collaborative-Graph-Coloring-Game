@@ -1,19 +1,18 @@
 \subsection{Identifying Strong Joint Policies}
 
-\begin{flushleft}
+    In this section, we address the challenge of identifying strong joint policies in dynamic games, focusing on strategies that are stable over time and robust to fluctuations. We begin by defining the core problem: how to identify stable joint strategies that persist across multiple iterations of the game. This involves a deeper understanding of how agents’ behaviors evolve and interact within the context of dynamic decision-making. We will present the problem statement that outlines the key challenges in modeling and analyzing strategies in such games.\tinydouble
 
-    In this section, we address the challenge of identifying strong joint policies in dynamic games, focusing on strategies that are stable over time and robust to fluctuations. We begin by defining the core problem: how to identify stable joint strategies that persist across multiple iterations of the game. This involves a deeper understanding of how agents’ behaviors evolve and interact within the context of dynamic decision-making. We will present the problem statement that outlines the key challenges in modeling and analyzing strategies in such games.\\~\\
-
+    \noindent
     Following this, we propose an approach designed to identify and evaluate stable joint strategies in dynamic games. The methodology builds on existing frameworks, aiming to provide insights into the stability and effectiveness of strategies based on the long-term interactions between agents.
 
     \subsubsection{Problem Statement}
 
-    \begin{flushleft}
-
-        In dynamic games, understanding the long-term effect of agents' behaviors is crucial for identifying stable and effective joint strategies. In this context, stability refers to strategies that persist over time—strategies that are robust to fluctuations and deviations. These strategies are considered strong because they are well-aligned with the game’s structure and the agents' payoff expectations during interactions. To identify such stable strategies, one must define and analyze the payoff matrix.\\~\\
+        In dynamic games, understanding the long-term effect of agents' behaviors is crucial for identifying stable and effective joint strategies. In this context, stability refers to strategies that persist over time—strategies that are robust to fluctuations and deviations. These strategies are considered strong because they are well-aligned with the game’s structure and the agents' payoff expectations during interactions. To identify such stable strategies, one must define and analyze the payoff matrix.\tinydouble
         
-        Defining the payoff matrix in static games is relatively straightforward. For example, in Rock-Paper-Scissors, where strategies are individual actions, the payoffs can easily be determined by the game’s rules, such as rock beating scissors (see Table~\ref{tab:rps_payoff}). However, in dynamic games, where policies consist of sequences of actions, defining the payoff matrix is more complex. Even if we manage to estimate payoffs, computing solution concepts like the \emph{Nash equilibrium} can be computationally expensive and may not guarantee convergence, especially in complex or large games. Beyond simply identifying stable joint strategies, it is also crucial to explain why one strategy is better than another. This involves more than just ranking strategies; it requires providing clear evidence for why some strategy profiles are preferred \cite{Vouros_2022}, ensuring transparency in the decision-making process.\\~\\
+        \noindent
+        Defining the payoff matrix in static games is relatively straightforward. For example, in Rock-Paper-Scissors, where strategies are individual actions, the payoffs can easily be determined by the game’s rules, such as rock beating scissors (see Table~\ref{tab:rps_payoff}). However, in dynamic games, where policies consist of sequences of actions, defining the payoff matrix is more complex. Even if we manage to estimate payoffs, computing solution concepts like the \emph{Nash equilibrium} can be computationally expensive and may not guarantee convergence, especially in complex or large games. Beyond simply identifying stable joint strategies, it is also crucial to explain why one strategy is better than another. This involves more than just ranking strategies; it requires providing clear evidence for why some strategy profiles are preferred \cite{Vouros_2022}, ensuring transparency in the decision-making process.\tinydouble
 
+        \noindent
         We could, therefore, consider our problem as follows: Given a dynamic game $G$ with $K$ players, our goal is to identify styles of playing $G$, and thus, the set of strategy profiles $\mathcal{SP}$, and rank these profiles based on how stable they are over time, considering long-term agents' interactions towards achieving their objectives. Specifically, we aim to define a ranking function:
         %
         \begin{equation}
@@ -21,7 +20,6 @@
             \label{eq:ranking_function}
         \end{equation}
         %
-        
         where $\mathcal{R}(\mathcal{S}_i) > \mathcal{R}(\mathcal{S}_j)$ (resp. $\mathcal{R}(\mathcal{S}_i) \geq \mathcal{R}(\mathcal{S}_j)$) indicates that the strategy profile $\mathcal{S}_i$ is strictly (resp. weakly) preferred over $\mathcal{S}_j$, using a descriptive framework that provides transparency on how rankings are decided:
         %
         \begin{equation}
@@ -30,16 +28,14 @@
         \end{equation}
         %
 
+        \noindent
         Empirical game strategies are realized by agents' policies adhering to these strategies in the underlying game. Thus, identifying stable joint strategies in the empirical game translates to identifying stable joint policies adhering to these strategies in the underlying dynamic game.
-
-    \end{flushleft}
 
     \subsubsection{Proposed Methodology}
 
-    \begin{flushleft}
+        To address the challenge of identifying stable joint policies in dynamic games, we propose an approach that combines concepts from \emph{Empirical Game Theory} and \emph{Evolutionary Dynamics}, using \emph{$\alpha$-Rank}, providing transparency to rankings of agent's styles of play.\tinydouble
 
-        To address the challenge of identifying stable joint policies in dynamic games, we propose an approach that combines concepts from \emph{Empirical Game Theory} and \emph{Evolutionary Dynamics}, using \emph{$\alpha$-Rank}, providing transparency to rankings of agent's styles of play.\\~\\
-
+        \noindent
         Given that the set of agents' policies in dynamic games can be infinitely large we focus on a subset of policies that adhere to concrete and well-defined styles of play. A way to identify styles of play is to observe how players behave in the underlying game or exploit demonstrations of game playing. For instance, human experts performing a task usually follow a distinct set of specific styles based on well-established practices, preferences and experience. Having determined the game playing strategies, we can transform the dynamic game into its empirical form, defining the meta-game by:
         %
         \begin{enumerate}[label=(\alph*)]
@@ -49,8 +45,10 @@
         \end{enumerate}
         %
 
-        Once the meta-game is defined, the next step is to define the function $\mathcal{R}$, which ranks joint strategies based on agents' long-term dynamics and objectives. To achieve this, we propose using the evolutionary \emph{$\alpha$-Rank} methodology, which determines rankings by assessing the evolutionary success of each strategy profile. This success is reflected in the probability of a given strategy profile being selected over time. This probability is captured by the stationary distribution $\pi$, which is computed by \emph{$\alpha$-Rank} in the limit of infinite ranking intensity $\alpha$. As demonstrated by \cite{omidshafiei2019alpharank}, once $\alpha$ reaches a sufficiently large value, the rankings stabilize, accurately capturing the system's long-term behavior.\\~\\
+        \noindent
+        Once the meta-game is defined, the next step is to define the function $\mathcal{R}$, which ranks joint strategies based on agents' long-term dynamics and objectives. To achieve this, we propose using the evolutionary methodology \emph{$\alpha$-Rank}, which provides rankings by assessing the evolutionary success of each strategy profile. This success is reflected in the probability of a given strategy profile being selected over time. This probability is captured by the stationary distribution $\pi$, which is computed by \emph{$\alpha$-Rank} in the limit of infinite ranking intensity $\alpha$. As demonstrated by \cite{omidshafiei2019alpharank}, once $\alpha$ reaches a sufficiently large value, the rankings stabilize, accurately capturing the system's long-term behavior.\tinydouble
 
+        \noindent
         To compute the stationary distribution $\pi$ over strategy profiles, the \emph{$\alpha$-Rank} methodology requires the payoff matrix $P$ of the empirical game. Along with the stationary distribution $\pi$, \emph{$\alpha$-Rank} also outputs the fixation probability function $\rho_{\mathcal{S}_i \to \mathcal{S}_j}$, where $\mathcal{S}_i, \mathcal{S}_j \in \mathcal{SP}$. One could abstractly illustrate \emph{$\alpha$-Rank} as a function:
         %
         \begin{equation}
@@ -59,8 +57,10 @@
         \end{equation}
         %
 
-        While the stationary distribution $\pi$ provides valuable insight into the long-term behavior of strategies, it alone does not help us fully understand how strategies transition between one another. The fixation probability function $\rho$, which measures the likelihood of transitioning from one strategy profile $\mathcal{S}_i$ to another $\mathcal{S}_j$, fills this gap. Based on this, the descriptive framework $\mathcal{D}$ can be adequately represented by $\pi$ and $\rho$, which are constituents of the response graph, which provides a complete view of the empirical game dynamics.\\~\\
+        \noindent
+        While the stationary distribution $\pi$ provides valuable insight into the long-term behavior of strategies, it alone does not help us fully understand how strategies transition between one another. The fixation probability function $\rho$, which measures the likelihood of transitioning from one strategy profile $\mathcal{S}_i$ to another $\mathcal{S}_j$, fills this gap. Based on this, the descriptive framework $\mathcal{D}$ can be adequately represented by $\pi$ and $\rho$, which are constituents of the response graph, which provides a complete view of the empirical game dynamics.\tinydouble
 
+        \noindent
         Overall, building on the \emph{$\alpha$-Rank} descriptive framework, the method proposed here for computing strategy profile rankings in dynamic games is as follows:
         %
         \begin{algorithm}
@@ -81,7 +81,3 @@
             \end{algorithmic}
         \end{algorithm}
         %
-
-    \end{flushleft}
-
-\end{flushleft}
