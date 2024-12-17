@@ -54,7 +54,7 @@
             A point $x \in X$ is called \emph{transient} if it is not chain recurrent. This means that there does not exist an $(\epsilon, T)$-chain from $x$ to itself, and trajectories starting from a transient point eventually leave every neighborhood of $x$ without returning. Transient points do not exhibit any form of cyclic behavior; they eventually \emph{escape} from their initial region.
         
             \begin{definition}[Transient point]
-                A point $x \in X$ is transient if $x \notin \mathcal{R}_\phi$.\tinydouble
+                A point $x \in X$ is transient if $x \notin \mathcal{R}_\phi$.
             \end{definition}
 
         \noindent
@@ -62,7 +62,7 @@
         %
         \begin{itemize}
             \item For transient points, the value of $\gamma(\phi_t(x))$ strictly decreases over time as the system evolves along the flow $\phi_t$. This reflects how transient points are driven towards the recurrent part of the space.
-            \item For points within the recurrent set $\mathcal{R}_\phi$, $\gamma(\phi_t(x))$ remains constant. This signifies that all points within the same chain component share equivalent dynamic properties.\tinydouble
+            \item For points within the recurrent set $\mathcal{R}_\phi$, $\gamma(\phi_t(x))$ remains constant. This signifies that all points within the same chain component share equivalent dynamic properties.
         \end{itemize}
         %
 
@@ -118,7 +118,7 @@
             \label{eq:stationary_distribution}
         \end{equation}
         %
-        where $\mathbb{I}$ is the identity matrix (see Equation~\ref{eq:c_pi_equation} for the corresponding linear system representation). This means we are looking for a probability vector $\pi$ such that when multiplied by the transition matrix $C$, it remains unchanged. To solve for $\pi$, the augmented matrix from $C - \mathbb{I}$ is constructed and a normalization condition to ensure that probabilities sum to 1 is imposed\footnote{The system $\pi(C - \mathbb{I}) = 0$ by itself does not have a unique solution, as there are infinitely many vectors $\pi$ that satisfy it. To get a unique solution $\pi=(\pi_1,\pi_2,..., \allowbreak\pi_{|\mathcal(SP)|})$, it must hold that $\sum_{i} \pi_i = 1$.}. In this stationary distribution, $\pi=(\pi_1,\pi_2,..., \pi_{|\mathcal(SP)|})$, each $\pi_i$ represents the average time the system spends in strategy profile $i$.
+        where $\mathbb{I}$ is the identity matrix (see Equation~\ref{eq:c_pi_equation} for the corresponding linear system representation). This means we are looking for a probability vector $\pi$ such that when multiplied by the transition matrix $C$, it remains unchanged. To solve for $\pi$, the augmented matrix from $C - \mathbb{I}$ is constructed and a normalization condition to ensure that probabilities sum to 1 is imposed\footnote{The system $\pi(C - \mathbb{I}) = 0$ by itself does not have a unique solution, as there are infinitely many vectors $\pi$ that satisfy it. To get a unique solution $\pi=(\pi_1,\pi_2,..., \pi_{|\mathcal(SP)|})$, it must hold that $\sum_{i} \pi_i = 1$.}. In this stationary distribution, $\pi=(\pi_1,\pi_2,..., \pi_{|\mathcal(SP)|})$, each $\pi_i$ represents the average time the system spends in strategy profile $i$.
         %
         \begin{equation}
             \begin{bmatrix}
