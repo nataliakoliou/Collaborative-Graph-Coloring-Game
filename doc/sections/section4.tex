@@ -1,83 +1,76 @@
-\subsection{Identifying Strong Joint Policies}
+\subsection{The Graph Coloring Game}
+\label{sec:2.1}
 
-    In this section, we address the challenge of identifying strong joint policies in dynamic games, focusing on strategies that are stable over time and robust to fluctuations. We begin by defining the core problem: how to identify stable joint strategies that persist across multiple iterations of the game. This involves a deeper understanding of how agents’ behaviors evolve and interact within the context of dynamic decision-making. We will present the problem statement that outlines the key challenges in modeling and analyzing strategies in such games.\tinydouble
+    The \emph{Graph Coloring Problem} (GCP) is one of the most well-known problems in graph theory. It involves assigning colors to vertices in a graph such that no two adjacent vertices share the same color, and using the minimum number of colors, also known as the chromatic number \cite{watkins2023generating}.\tinydouble
 
     \noindent
-    Following this, we propose an approach designed to identify and evaluate stable joint strategies in dynamic games. The methodology builds on existing frameworks, aiming to provide insights into the stability and effectiveness of strategies based on the long-term interactions between agents.
+    In this study, we shift our focus from finding the chromatic number across graph configurations to a slightly different approach. Rather than solving the GCP itself, we use the concept of graph coloring to define a dynamic game that allows us to study the evolutionary dynamics in multi-agent interactions. Nonetheless, the concept of the chromatic number will reappear in our analysis, not as a problem to be solved but as a parameter to define a style of play. Through this, we aim to gain insights into whether individuals with this preference towards minimal solutions in terms of color actually ensure good collaboration, or if other styles of play are more effective when combined. To provide a consistent framework for our study, we assume a fixed grid configuration and a fixed number of colors available to the agents, as a static base to study agent interactions. Specifically, we set the number of colors to match the total number of blocks in the grid, allowing agents to consider even the most extravagant coloring approach, in cases when assigning a unique color to each block is the only valid solution.
+    %
+    \begin{figure}[h]
+        \centering
+        \begin{minipage}{0.46\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{images/grid.png}
+        \end{minipage}
+        \hfill
+        \begin{minipage}{0.49\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{images/graph.png}
+        \end{minipage}
+        \caption{A snaphsot of the game environment in grid and graph forms.}
+        \label{fig:grid_and_graph}
+    \end{figure}
+    %
 
-    \subsubsection{Problem Statement}
+    \subsubsection{State and Action Space}
 
-        In dynamic games, understanding the long-term effect of agents' behaviors is crucial for identifying stable and effective joint strategies. In this context, stability refers to strategies that persist over time—strategies that are robust to fluctuations and deviations. These strategies are considered strong because they are well-aligned with the game’s structure and the agents' payoff expectations during interactions. To identify such stable strategies, one must define and analyze the payoff matrix.\tinydouble
-        
+        The graph in the game corresponds to a grid of blocks, where each block is defined as one or more merged cells within the two-dimensional matrix. At the beginning of the game, the grid is initialized with a random number of rows and columns ($n \times m$), and this configuration remains the same throughout the entire game. The environment then randomly combines cells to create blocks. Merging cells is important as it allows for complex neighboring relationships to be defined, expanding beyond the standard constraints between adjacent blocks. In our experimental setup we assume a $4 \times 5$ grid with 10 blocks as illustrated in Figure~\ref{fig:grid_and_graph}.\tinydouble
+
         \noindent
-        Defining the payoff matrix in static games is relatively straightforward. For example, in Rock-Paper-Scissors, where strategies are individual actions, the payoffs can easily be determined by the game’s rules, such as rock beating scissors (see Table~\ref{tab:rps_payoff}). However, in dynamic games, where policies consist of sequences of actions, defining the payoff matrix is more complex. Even if we manage to estimate payoffs, computing solution concepts like the \emph{Nash equilibrium} can be computationally expensive and may not guarantee convergence, especially in complex or large games. Beyond simply identifying stable joint strategies, it is also crucial to explain why one strategy is better than another. This involves more than just ranking strategies; it requires providing clear evidence for why some strategy profiles are preferred \cite{Vouros_2022}, ensuring transparency in the decision-making process.\tinydouble
-
-        \noindent
-        We could, therefore, consider our problem as follows: Given a dynamic game $G$ with $K$ players, our goal is to identify styles of playing $G$, and thus, the set of strategy profiles $\mathcal{SP}$, and rank these profiles based on how stable they are over time, considering long-term agents' interactions towards achieving their objectives. Specifically, we aim to define a ranking function:
+        Blocks can be either: (a) colored by the agents, (b) white i.e., available to be colored and (c) hidden i.e., cannot yet be colored until revealed by the environment. Initially all blocks in the grid are hidden and symbolically represented in gray. Let $G$ denote the grid environment, $B$ the set of blocks in that environment and $CR$ the set of possible colors that an agent can use for coloring blocks. Then our first assumption is that every block $b$ in $B$ can potentially be assigned any color $c$ from $CR$:
         %
         \begin{equation}
-            \mathcal{R}: \mathcal{SP} \to \mathbb{R}
-            \label{eq:ranking_function}
+            \forall b \in B, \, \forall c \in CR, \, (b, c) \in R 
+            \label{eq:bc}
         \end{equation}
         %
-        where $\mathcal{R}(\mathcal{S}_i) > \mathcal{R}(\mathcal{S}_j)$ (resp. $\mathcal{R}(\mathcal{S}_i) \geq \mathcal{R}(\mathcal{S}_j)$) indicates that the strategy profile $\mathcal{S}_i$ is strictly (resp. weakly) preferred over $\mathcal{S}_j$, using a descriptive framework that provides transparency on how rankings are decided:
+
+        \noindent
+        The set of agents' actions $A$ is defined to be the Cartesian product of the set of blocks $B$ and the set of the available colors $CR$, denoted as:
         %
         \begin{equation}
-            \mathcal{D}: \mathcal{SP} \times \mathcal{SP} \to \mathbb{R}
-            \label{eq:descriptive framework}
+            A = B \times CR = \{(b, c) \mid b \in B, \, c \in CR\} 
+            \label{eq:action_space}
         \end{equation}
         %
 
         \noindent
-        Empirical game strategies are realized by agents' policies adhering to these strategies in the underlying game. Thus, identifying stable joint strategies in the empirical game translates to identifying stable joint policies adhering to these strategies in the underlying dynamic game.
-
-    \subsubsection{Proposed Methodology}
-
-        To address the challenge of identifying stable joint policies in dynamic games, we propose an approach that combines concepts from \emph{Empirical Game Theory} and \emph{Evolutionary Dynamics}, using \emph{$\alpha$-Rank}, providing transparency to rankings of agent's styles of play.\tinydouble
+        To specify states, let $CR^*$ include the elements of $CR$, and two additional elements representing hidden and white blocks: $CR^* = CR \cup \{\text{hidden}, \text{white}\}$. We define state $s$ as the Cartesian product of $B$ and $CR^*$, denoted as:
+        %
+        \begin{equation}
+            s = \{(b_i, c_i), i=1, \dots, |B|\}, s.t. \forall b \in B, \, \exists \text{a unique } c \in CR^*\text{, with } (b,c) \in s
+            \label{eq:state}
+        \end{equation}
+        %
 
         \noindent
-        Given that the set of agents' policies in dynamic games can be infinitely large we focus on a subset of policies that adhere to concrete and well-defined styles of play. A way to identify styles of play is to observe how players behave in the underlying game or exploit demonstrations of game playing. For instance, human experts performing a task usually follow a distinct set of specific styles based on well-established practices, preferences and experience. Having determined the game playing strategies, we can transform the dynamic game into its empirical form, defining the meta-game by:
-        %
-        \begin{enumerate}[label=(\alph*)]
-            \item Identifying empirical game strategies.
-            \item Training policies for agents to play the underlying game according to these strategies.
-            \item Defining the empirical game payoff matrix, through simulations, exploiting the trained policies.
+        We consider the \emph{Graph Coloring Game} (GCG) to be a two-player game that unfolds over multiple rounds. At the beginning of each round, the environment reveals the color of some of the hidden blocks, if any. The number of blocks that get un-hidden is random, which implies that the state of the graph is influenced not only by the agents' actions, but also by the environment. We therefore consider the game to be stochastic. After the state update from the environment, the agents simultaneously choose their actions. As soon as all blocks in $B$ are uncovered and colored, the game ends.
+
+    \subsubsection{Reward Function}
+
+        The reward function in the GCG is designed to encourage agents to adopt effective strategies for coloring blocks while discouraging undesirable ones. The total reward that an agent receives during the game is the sum of multiple components, including gains, penalties, sanctions, delays and adopted preferences.\tinydouble
+
+        \noindent
+        These components are defined as follows:
+
+        \begin{enumerate}
+            \item \textbf{Gains:} An agent receives a gain of +1 for each neighboring block $b'$ of $b$, such that $c \neq c'$ where $c$ is the color of $b$ and $c'$ is the color of $b'$. This reward encourages agents to color neighboring blocks with different colors, in line with the rules of the GCP, where adjacent blocks must have distinct colors.
+            
+            \item \textbf{Penalties:} An agent receives a penalty of -2 for each neighboring block $b'$ of $b$, such that $c = c'$. This reward serves the same purpose of ensuring proper coloring by discouraging agents from coloring adjacent blocks with the same color, which would violate the rules of the GCP.
+            
+            \item \textbf{Sanctions:} An agent receives a sanction, a large negative reward of -10, when it attempts to color a hidden block or a block that has already been colored. This reward ensures that agents follow the game’s rules and do not waste their actions on illegal moves.
+            
+            \item \textbf{Delays:} If both agents attempt to color the same block $b$ during the same round, a small negative reward of -1 is applied to both agents. This reward represents the time spent in resolving the conflict between the two agents over who will color the block.
+            
+            \item \textbf{Preference-Adoption:} Regardless of whether an agent’s action is successful, unsuccessful, or forbidden, the agent receives a preference-adoption reward for adhering to specific preferences or styles of play. This reward encourages agents to adopt behaviors that align with desired goals.
         \end{enumerate}
-        %
-
-        \noindent
-        Once the meta-game is defined, the next step is to define the function $\mathcal{R}$, which ranks joint strategies based on agents' long-term dynamics and objectives. To achieve this, we propose using the evolutionary methodology \emph{$\alpha$-Rank}, which provides rankings by assessing the evolutionary success of each strategy profile. This success is reflected in the probability of a given strategy profile being selected over time. This probability is captured by the stationary distribution $\pi$, which is computed by \emph{$\alpha$-Rank} in the limit of infinite ranking intensity $\alpha$. As demonstrated by \cite{omidshafiei2019alpharank}, once $\alpha$ reaches a sufficiently large value, the rankings stabilize, accurately capturing the system's long-term behavior.\tinydouble
-
-        \noindent
-        To compute the stationary distribution $\pi$ over strategy profiles, the \emph{$\alpha$-Rank} methodology requires the payoff matrix $P$ of the empirical game. Along with the stationary distribution $\pi$, \emph{$\alpha$-Rank} also outputs the fixation probability function $\rho_{\mathcal{S}_i \to \mathcal{S}_j}$, where $\mathcal{S}_i, \mathcal{S}_j \in \mathcal{SP}$. One could abstractly illustrate \emph{$\alpha$-Rank} as a function:
-        %
-        \begin{equation}
-            \alpha\text{-Rank}(P) \rightarrow (\pi, \rho) 
-            \label{eq:abstract_arank}
-        \end{equation}
-        %
-
-        \noindent
-        While the stationary distribution $\pi$ provides valuable insight into the long-term behavior of strategies, it alone does not help us fully understand how strategies transition between one another. The fixation probability function $\rho$, which measures the likelihood of transitioning from one strategy profile $\mathcal{S}_i$ to another $\mathcal{S}_j$, fills this gap. Based on this, the descriptive framework $\mathcal{D}$ can be adequately represented by $\pi$ and $\rho$, which are constituents of the response graph, which provides a complete view of the empirical game dynamics.\tinydouble
-
-        \noindent
-        Overall, building on the \emph{$\alpha$-Rank} descriptive framework, the method proposed here for computing strategy profile rankings in dynamic games is as follows:
-        %
-        \begin{algorithm}
-            \caption{Ranking Joint Policies in Dynamic Games}
-            \begin{algorithmic}[1]
-                \vspace{0.5em}
-                \State Identify players' styles of play.
-                \State Define the strategies of the empirical game based on those styles.
-                \State Train policies realizing the defined strategies.
-                \State Run game simulations to create the empirical payoff matrix $P$.
-                \State Apply $\alpha$-Rank to define $\mathcal{R}$ and $\mathcal{D}$:
-                \vspace{0.5em}
-                \State \hspace{1em} Calculate the Markov transition matrix $C$.
-                \State \hspace{1em} Find the unique stationary distribution $\pi$.
-                \State \hspace{1em} Rank joint strategies by ordering the masses of $\pi$.
-                \State \hspace{1em} Describe the rankings through the response graph.
-                \State \hspace{1em} Study the effect of different $\alpha$ values on $\pi$.
-            \end{algorithmic}
-        \end{algorithm}
-        %

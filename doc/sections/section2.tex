@@ -1,76 +1,182 @@
-\subsection{The Graph Coloring Game}
-\label{sec:2.1}
+\subsection{The \texorpdfstring{$\alpha$}{alpha}-Rank Method}
 
-    The \emph{Graph Coloring Problem} (GCP) is one of the most well-known problems in graph theory. It involves assigning colors to vertices in a graph such that no two adjacent vertices share the same color, and using the minimum number of colors, also known as the chromatic number \cite{watkins2023generating}.\tinydouble
+    Evolutionary dynamics studies how agents' interactions in multi-agent settings evolve over time. While single-agent systems have acquired a strong foundation over the years \cite{10.5555/2831071.2831085}, multi-agent systems are more challenging to analyze.\tinydouble
 
     \noindent
-    In this study, we shift our focus from finding the chromatic number across graph configurations to a slightly different approach. Rather than solving the GCP itself, we use the concept of graph coloring to define a dynamic game that allows us to study the evolutionary dynamics in multi-agent interactions. Nonetheless, the concept of the chromatic number will reappear in our analysis, not as a problem to be solved but as a way to color the grid, i.e., a style of play. Through this, we aim to gain insights into whether individuals with this preference actually ensure good collaboration, or if other styles of play are more effective when combined. To provide a consistent framework for our study, we assume a fixed grid configuration and a fixed number of colors available to the agents, as a static base to study agent interactions. Specifically, we set the number of colors to match the total number of blocks in the grid, allowing agents to consider even the worst-case scenario where assigning a unique color to each block is the only valid solution.
-    %
-    \begin{figure}[h]
-        \centering
-        \begin{minipage}{0.46\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{images/grid.png}
-        \end{minipage}
-        \hfill
-        \begin{minipage}{0.49\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{images/graph.png}
-        \end{minipage}
-        \caption{A snaphsot of the game environment in grid and graph forms.}
-        \label{fig:grid_and_graph}
-    \end{figure}
+    Current literature indicates a growing interest in studying the evolutionary dynamics of multi-agent systems. Although one might view evolutionary algorithms as mere tools for agents' hyper-parameter tuning \cite{Sinha_2023}\cite{ganapathy2020studygeneticalgorithmshyperparameter}, their contributions extend far beyond that. In the context of games, evolutionary algorithms are widely used to explore game-theoretic solution concepts. This area of study is also known as \emph{Evolutionary Game Theory} (EGT). An example of research in this field is the work of Paul and Deshmukh \cite{paul2022multiagentpathfinding}, who developed an evolutionary algorithm for multi-agent path-finding in stochastic environments. Their approach showed significant improvements in minimizing path length and computational efficiency, outperforming state-of-the-art reinforcement learning algorithms. In another work, David et al. \cite{David_2014} introduced a novel approach for evolving the key components --mainly the evaluation function and search mechanism-- of a chess program from randomly initialized values using genetic algorithms. By learning from databases of grand-master games, their program managed to outperform a world chess champion computer.\tinydouble
+    
+    \noindent
+    Building on work done in EGT, the evolutionary methodology \emph{$\alpha$-Rank} \cite{omidshafiei2019alpharank} introduces a novel game-theoretic approach to provide insights into the long-term dynamics of agents' interactions. At its core, \emph{$\alpha$-Rank} is designed to evaluate and rank strategy profiles in large-scale multi-agent interactions, using a new dynamic solution concept called \emph{Markov-Conley chains} (MCCs). It achieves this by calculating a stationary distribution from the transition probabilities between strategy profiles, reflecting how much time agents spend using each profile. This stationary distribution is then used to rank the strategy profiles, with the ranking intensity $\alpha$ adjusting the sensitivity of the rankings to the stability of the strategies over time.
     %
 
-    \subsubsection{State and Action Space}
+    \subsubsection{Markov-Conley Chains}
 
-        The graph in the game corresponds to a grid of blocks, where each block is defined as one or more merged cells within the two-dimensional matrix. At the beginning of the game, the grid is initialized with a random number of rows and columns ($n \times m$), and this configuration remains the same throughout the entire game. The environment then randomly combines cells to create blocks. Merging cells is important as it allows for complex neighboring relationships to be defined, expanding beyond the standard constraints between adjacent blocks. In our experimental setup we assume a $4 \times 5$ grid with 10 blocks as illustrated in Figure~\ref{fig:grid_and_graph}.\tinydouble
+        \emph{Markov-Conley chains} (MCCs) are a dynamic solution concept that extends the traditional idea of Nash equilibrium by considering the evolution of strategies over time, rather than focusing solely on fixed points. MCCs model the long-term behavior of agents’ interactions within a dynamical system to identify stable components where agents reach equilibria. They provide a more dynamic perspective on stability by shifting the focus from static points, where no player benefits from unilaterally changing their strategy, to trajectories that define how equilibrium is reached over time.\tinydouble
 
         \noindent
-        Blocks can be either: (a) colored by the agents, (b) white i.e., available to be colored and (c) hidden i.e., cannot yet be colored until revealed by the environment. Initially all blocks in the grid are hidden and symbolically represented in gray. Let $G$ denote the grid environment, $B$ the set of blocks in that environment and $CR$ the set of possible colors that an agent can use for coloring blocks. Then our first assumption is that every block $b$ in $B$ can potentially be assigned any color $c$ from $CR$:
+        To better understand the structure of MCCs, we can view the dynamics of agent interactions as flows within a topological space, where each strategy is represented as a point in this space. These flows describe how the system evolves over time, with the state of the system at any given moment depending solely on the current strategy, as defined by the Markov property:
         %
         \begin{equation}
-            \forall b \in B, \, \forall c \in CR, \, (b, c) \in R 
-            \label{eq:bc}
+            P(s_{t+1} = s_j \mid s_t = s_i) = P(s_{t+1} = s_j \mid s_t = s_i, s_{t-1}, \dots)
+            \label{eq:markov_property}
+        \end{equation}
+        %
+        where $P(s_{t+1} = s_j \mid s_t = s_i)$ represents the probability of transitioning from strategy $s_i$ to $s_j$ at time $t+1$, independent of past strategies. These dynamics can be expressed mathematically using a flow $\phi_t$ defined on a topological space $X$:
+        %
+        \begin{equation}
+            \phi_t: X \rightarrow X
+            \label{eq:flow_phi}
         \end{equation}
         %
 
         \noindent
-        The set of agents' actions $A$ is defined to be the Cartesian product of the set of blocks $B$ and the set of the available colors $CR$, denoted as:
+        For each time step $t \in \mathbb{R}$, the flow maps a point $x \in X$ to another point in the space, $\phi_t(x)$. This mapping represents the evolution of the agent’s strategy over time, with $x$ being the current strategy and $\phi_t(x)$ the updated one at time $t$.\tinydouble
+        
+        \noindent
+        This concept is further supported by \emph{Conley's Fundamental Theorem of Dynamical Systems}, which divides the state space into recurrent sets, representing stable behaviors, and transient points that eventually lead to recurrent sets \cite{conley1978isolated}\cite{Norton1995}. These recurrent sets, including fixed points, periodic orbits, and limit cycles, correspond to different forms of equilibrium. In the context of multi-agent games, the long-term dynamics of agent interactions can be modeled similarly, where each point in the space corresponds to a possible strategy. Specifically, these dynamics can be visualized through a graph, known as the \emph{response graph}, where each node represents a strategy and edges represent transitions between strategies. The main structures in this graph are the \emph{strongly connected components} (SCCs), which correspond to the recurrent sets in the topological space. Once players enter these components, they tend to remain, indicating equilibrium \cite{omidshafiei2019alpharank}.
+        
+        \paragraph{Chain Recurrent Set}
+
+            The \emph{chain recurrent set} $\mathcal{R}_\phi$ of the flow $\phi_t$ is the set of all points $x \in X$ that are chain recurrent under the flow $\phi_t$. A point $x$ is chain recurrent if there exists an $(\epsilon, T)$-chain from $x$ to itself, meaning there exists a sequence of points $(x_0, x_1, \dots, x_n)$ connecting back to $x$, with each step being arbitrarily close to the previous one.
+
+            \begin{definition}[Chain recurrent point]
+                An $(\epsilon, T)$-chain from $x$ to itself, with respect to the flow $\phi_t$ and distance function $d$, is a sequence $(x_0, x_1, \dots, x_n)$ such that:
+                %
+                \begin{equation}
+                    d(\phi_{t_i}(x_i), x_{i+1}) < \epsilon \quad \text{for each} \quad i = 0, 1, \dots, n-1, \quad t_i \geq T
+                    \nonumber
+                \end{equation}
+                %
+                where $\epsilon > 0$ represents the allowed perturbation at each step, and $T > 0$ is the minimum time-step between transitions. If such a chain exists from $x$ back to itself, the point $x$ is chain recurrent.
+            \end{definition}
+
+        \paragraph{Transient Points}
+
+            A point $x \in X$ is called \emph{transient} if it is not chain recurrent. This means that there does not exist an $(\epsilon, T)$-chain from $x$ to itself, and trajectories starting from a transient point eventually leave every neighborhood of $x$ without returning. Transient points do not exhibit any form of cyclic behavior; they eventually \emph{escape} from their initial region.
+        
+            \begin{definition}[Transient point]
+                A point $x \in X$ is transient if $x \notin \mathcal{R}_\phi$.
+            \end{definition}
+
+        \noindent
+        To visualize the flow representation of strategy evolution in agent interactions, consider the \emph{Coordination Game} in Table~\ref{tab:coordination_game}. This is a cooperative game where both players benefit from coordinating on the same strategy, $A$ or $B$, rather than playing different strategies. Figure~\ref{fig:coordination_game} illustrates the evolutionary dynamics of the agents' strategies in a response graph, as designed by the authors in \cite{omidshafiei2019alpharank}.\tinydouble
+
+        \noindent
+        Each point in the response graph corresponds to a mixed strategy profile for the two players, while the arrows represent the flow of strategies over time. The recurrent points in the graph (bottom-left and top-right corners) correspond to the two stable profiles: $(A,A)$ and $(B,B)$. These two recurrent points represent the attractors of the system, where the flows converge. On the other hand, $(A,B)$ and $(B,A)$ (top-left and bottom-right corners) are the transient points of the graph. The flow field directs trajectories away from these points, indicating their instability. Finally, the middle point in the graph represents a mixed strategy profile where both players assign equal probability to strategies $A$ and $B$ (i.e., 50\% for each in the probability distribution). Trajectories near this point diverge, moving towards one of the two recurrent points. This behavior represents the mixed Nash equilibrium of the \emph{Coordination Game}.
+        %
+        \begin{figure}[H]
+            \centering
+            \begin{minipage}{0.45\textwidth}
+                \centering
+                \begin{tabular}{c|c|c}
+                    & A & B \\ \hline
+                    A & 1,1 & -1,-1 \\
+                    B & -1,-1 & 1,1 \\
+                \end{tabular}
+                \vspace{2cm}
+                \subcaption{Payoff matrix.}
+                \label{tab:coordination_game}
+            \end{minipage}
+            \hspace{0.3em}
+            \begin{minipage}{0.45\textwidth}
+                \centering
+                \resizebox{0.5\textwidth}{!}{
+                    \includegraphics{images/coordination-game.png}
+                }
+                \subcaption{Response Graph.}
+                \label{fig:coordination_game_dynamics}
+            \end{minipage}
+            \caption{Payoff matrix (a) and response graph (b) in the Coordination Game.}
+            \label{fig:coordination_game}
+        \end{figure}
+        %
+
+        \noindent
+        To distinguish between recurrent sets and transient points in a dynamical system, the creators of \emph{$\alpha$-Rank} use a complete \emph{Lyapunov function} \cite{lyapunov1950}. This function, $\gamma: X \to \mathbb{R}$, assigns values to points in the space such that:
+        %
+        \begin{itemize}
+            \item For transient points, the value of $\gamma(\phi_t(x))$ strictly decreases over time as the system evolves along the flow $\phi_t$. This reflects how transient points are driven towards the recurrent part of the space.
+            \item For points within the recurrent set $\mathcal{R}_\phi$, $\gamma(\phi_t(x))$ remains constant. This signifies that all points within the same chain component share equivalent dynamic properties.
+        \end{itemize}
+        %
+
+        \noindent
+        MCCs offer a discrete-time approximation of the continuous-time dynamics described by \emph{Conley’s Fundamental Theorem}. In the context of MCCs, recurrent sets correspond to SCCs in the response graph, where strategies remain stable over time. On the other hand, transient points are strategies that are not part of any SCCs and eventually escape the system's flow.\tinydouble
+        
+        \noindent
+        The stability of strategies in MCCs is determined by the transition probabilities, similarly to the way the \emph{Lyapunov function} tracks the evolution of a dynamical system. Strategies within a SCC are considered stable because the transition probabilities between them are balanced. This means that, in the SCC, the probability of transitioning from one strategy to another is not biased in any particular direction. Each strategy has an equal chance of moving to another strategy within the same SCC. This balance in transition probabilities creates a situation where, once an agent enters the SCC, they are likely to remain within the same set of strategies over time. In contrast, strategies that are not part of any SCC are considered unstable because their transition probabilities are structured in a way that makes moving to a different strategy more likely than staying in the current one. This leads them to eventually escape the system's flow.
+
+    \subsubsection{Strategy Evolution Process}
+
+        Given a K-player game, \emph{$\alpha$-Rank} considers the empirical game with K player slots, called $populations$, where individual agents correspond to strategies, i.e. to styles of playing the underlying game. In \emph{$\alpha$-Rank}, populations of agents interact with each other through an evolutionary process following the dynamics of games. The rewards received from these interactions determine how well each strategy performs and, in turn, how often it is adopted by individuals in the populations. Strategies that perform well have a higher probability of being adopted and carried over to the next generation, while those performing poorly are less likely to be adopted. This process of competition and selection between populations leads to their evolution.\tinydouble
+
+        \noindent
+        To facilitate evolution, \emph{$\alpha$-Rank} uses the concept of mutation. Initially, populations are monomorphic, meaning all individuals within them choose the same strategy. During K-wise interactions, individuals have a small probability of mutating into different strategies or choosing to stick with their current one. The probability that the mutant will take over the population, defined to be the fixation probability function $\rho$, depends on the relative fitness of the mutant and the population being invaded. Fitness is a function that computes the expected reward an individual can receive when adopting a particular strategy, given the strategies of the other individuals. The stronger the fitness, the more likely it is for individuals to mutate, whereas the lower the fitness, the more likely it is for the mutant to go extinct. When the mutation rate is small, the fitness for any agent $k$ is:
         %
         \begin{equation}
-            A = B \times CR = \{(b, c) \mid b \in B, \, c \in CR\} 
-            \label{eq:action_space}
+            f^k(str^{k}, str^{-k}) = P^k(str^{k}, str^{-k}),
+            \label{eq:fitness_k}
         \end{equation}
         %
-
-        \noindent
-        To specify states, let $CR^*$ include the elements of $CR$, and two additional elements representing hidden and white blocks: $CR^* = CR \cup \{\text{hidden}, \text{white}\}$. We define state $s$ as the Cartesian product of $B$ and $CR^*$, denoted as:
+        where $P$ represents the empirical game payoff. Formally, the probability of a mutant strategy $str'$ fixating in some population where individuals play strategy $str$ is given by:
         %
         \begin{equation}
-            s = \{(b_i, c_i), i=1, \dots, |B|\}, s.t. \forall b \in B, \, \exists \text{a unique } c \in CR^*\text{, with } (b,c) \in s
-            \label{eq:state}
+            \rho_{str \to str'} = \frac{1 - e^{-\alpha \cdot \Delta f}}{1 - e^{-\alpha \cdot m \cdot \Delta f}} 
+            \label{eq:fixation_prob}
         \end{equation}
+        %
+        assuming that $\Delta f$ is non-zero. $\Delta f = f^k(str', str^{-k}) - f^k(str, str^{-k})$ represents the difference in fitness between the mutant strategy $str'$ and the resident strategy $str$ in the focal population $k$, while the remaining $K - 1$ populations are fixed in their monomorphic strategies $str^{-k}$. Parameter $m$ is the population size and $\alpha$ is the selection intensity. This adjusts the sensitivity of the system to fitness differences: with higher values of $\alpha$, even small differences in fitness lead to larger changes in $\rho$. The nominator measures the potential of the mutant to ``invade'' the resident population solely based on its fitness advantage. Note that, for example, as $\Delta f$ approaches zero, the probability of the mutant's success decreases. The denominator, on the other hand, normalizes the fixation probability using the population size $m$, making it more challenging for a mutant to dominate in larger populations. When $\Delta f$ is zero, the fixation probability equals to $1/m$, indicating that the mutant strategy has the same probability of taking over as any other strategy in the population. This probability is referred to as the \emph{neutral fixation probability}, denoted by $\rho_m$.
+
+    \subsubsection{Modeling Dynamics through MCCs}
+    
+        In the context of K-player games, \emph{$\alpha$-Rank} creates a Markov transition matrix over strategy profiles. This is an $|\mathcal{S}tr| \times |\mathcal{S}tr|$ matrix that defines the probability of moving from one strategy profile to another based on how likely each population is to change its strategy.
+        %
+        \begin{eqnarray}
+            C_{str \to str'} = 
+            \begin{cases} 
+                \eta \cdot \rho_{str \to str'} & \text{if } str \neq str' \\ 
+                1 - \sum_{str \neq str'} C_{str \to str'} & \text{otherwise}
+            \end{cases} 
+            \label{eq:transition_matrix_entry}
+        \end{eqnarray}
         %
 
         \noindent
-        We consider the \emph{Graph Coloring Game} (GCG) to be a two-player game that unfolds over multiple rounds. At the beginning of each round, the environment reveals the color of some of the hidden blocks, if any. The number of blocks that get un-hidden is random, which implies that the state of the graph is influenced not only by the agents' actions, but also by the environment. We therefore consider the game to be stochastic. After the state update from the environment, the agents simultaneously choose their actions. As soon as all blocks in $B$ are uncovered and colored, the game ends.
-
-    \subsubsection{Reward Function}
-
-        The reward function in the GCG is designed to encourage agents to adopt effective strategies for coloring blocks while discouraging undesirable actions. The total reward that an agent receives during the game is the sum of multiple components, including gains, penalties, sanctions, delays and adopted preferences.\tinydouble
+        Here, $C$ is the strategy-transition matrix where each entry $C_{str \to str'}$ represents the probability of transitioning from strategy $str$ to strategy $str'$. The first part of the formula, calculates the probability of transitioning from one strategy to a different one, scaled to ensure that the sum of probabilities for all possible transitions from that strategy sums up to 1. The second part of the formula, computes the probability of staying with the same strategy, $str$, by excluding transitions to all other strategies.\tinydouble
 
         \noindent
-        These components are defined as follows:
-
-        \begin{enumerate}
-            \item \textbf{Gains:} An agent receives a gain of +1 for each neighboring block of $b$ that has a different color than the chosen color $c$. This reward encourages agents to color neighboring blocks with different colors, in line with the rules of the GCP, where adjacent blocks must have distinct colors.
-            
-            \item \textbf{Penalties:} An agent receives a penalty of -2 for each neighboring block that shares the same color $c$ as the chosen one. This reward serves the same purpose of ensuring proper coloring by discouraging agents from coloring adjacent blocks with the same color, which would violate the rules of the GCP.
-            
-            \item \textbf{Sanctions:} An agent receives a sanction, a large negative reward of -10, when it attempts to color a hidden block or a block that has already been colored. This reward ensures that agents follow the game’s rules and do not waste their actions on illegal moves.
-            
-            \item \textbf{Delays:} If both agents attempt to color the same block $b$ during the same round, a small negative reward of -1 is applied to both agents. This reward represents the time spent in resolving the conflict between the two agents over who will color the block.
-            
-            \item \textbf{Preference-Adoption:} Regardless of whether an agent’s action is successful, unsuccessful, or forbidden, the agent receives a preference-adoption reward for adhering to specific preferences or styles of play. This reward encourages agents to adopt behaviors that align with desired goals.
-        \end{enumerate}
+        This evolutionary process of competition and selection among players' strategies leads to a unique stationary probability distribution $\pi$ of dimensionality $|\mathcal{SP}|$, where the mass assigned to a strategy profile indicates how likely it is to resist being ``invaded'' by other strategies as the dynamics evolve. To evaluate and rank strategy profiles —which is the ultimate goal— the method calculates $\pi$ over the game's Markov chain, using the strategy-transition matrix $C$. This distribution indicates how often the system is likely to remain in each profile over time, allowing us to identify the most dominant strategies that are expected to prevail in the long run. Formally, $\pi$ can be computed from the following equation:
+        %
+        \begin{equation}
+            \pi C = \pi \Rightarrow \pi (C - \mathbb{I}) = 0 
+            \label{eq:stationary_distribution}
+        \end{equation}
+        %
+        where $\mathbb{I}$ is the identity matrix (see Equation~\ref{eq:c_pi_equation} for the corresponding linear system representation). This means we are looking for a probability vector $\pi$ such that when multiplied by the transition matrix $C$, it remains unchanged. To solve for $\pi$, the augmented matrix from $C - \mathbb{I}$ is constructed and a normalization condition to ensure that probabilities sum to 1 is imposed\footnote{The system $\pi(C - \mathbb{I}) = 0$ by itself does not have a unique solution, as there are infinitely many vectors $\pi$ that satisfy it. To get a unique solution $\pi=(\pi_1,\pi_2,..., \pi_{|\mathcal(SP)|})$, it must hold that $\sum_{i} \pi_i = 1$.}. In this stationary distribution, $\pi=(\pi_1,\pi_2,..., \pi_{|\mathcal(SP)|})$, each $\pi_i$ represents the average time the system spends in strategy profile $i$.
+        %
+        \begin{equation}
+            \begin{bmatrix}
+                C_{11} - 1 & C_{12} & \cdots & C_{1n} & | & 0 \\
+                C_{21} & C_{22} - 1 & \cdots & C_{2n} & | & 0 \\
+                \vdots & \vdots & \ddots & \vdots & | & 0 \\
+                C_{n1} & C_{n2} & \cdots & C_{nn} - 1 & | & 0 \\
+                1 & 1 & \cdots & 1 & | & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+                \pi_1 \\
+                \pi_2 \\
+                \vdots \\
+                \pi_n \\
+                1
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+                0 \\
+                0 \\
+                \vdots \\
+                0 \\
+                1
+            \end{bmatrix}
+        \label{eq:c_pi_equation}
+        \end{equation}
+        %
