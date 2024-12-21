@@ -20,7 +20,7 @@
             \label{eq:ranking_function}
         \end{equation}
         %
-        where $\mathcal{R}(\mathcal{S}_i) > \mathcal{R}(\mathcal{S}_j)$ (resp. $\mathcal{R}(\mathcal{S}_i) \geq \mathcal{R}(\mathcal{S}_j)$) indicates that the strategy profile $\mathcal{S}_i$ is strictly (resp. weakly) preferred over $\mathcal{S}_j$, using a descriptive framework that provides transparency on how rankings are decided:
+        where $\mathcal{R}(\mathcal{S}_i) > \mathcal{R}(\mathcal{S}_j)$ (resp. $\mathcal{R}(\mathcal{S}_i) \geq \mathcal{R}(\mathcal{S}_j)$) indicates that the strategy profile $\mathcal{S}_i$ is strictly (resp. weakly) preferred over $\mathcal{S}_j$. In conjunction to that, we aim at providing a descriptive framework to promote transparency on how rankings are decided:
         %
         \begin{equation}
             \mathcal{D}: \mathcal{SP} \times \mathcal{SP} \to \mathbb{R}
@@ -46,7 +46,7 @@
         %
 
         \noindent
-        Once the meta-game is defined, the next step is to define the function $\mathcal{R}$, which ranks joint strategies based on agents' long-term dynamics and objectives. To achieve this, we propose using the evolutionary methodology \emph{$\alpha$-Rank}, which provides rankings by assessing the evolutionary success of each strategy profile. This success is reflected in the probability of a given strategy profile being selected over time. This probability is captured by the stationary distribution $\pi$, which is computed by \emph{$\alpha$-Rank} in the limit of infinite ranking intensity $\alpha$. As demonstrated earlier, once $\alpha$ reaches a sufficiently large value, the rankings stabilize, accurately capturing the system's long-term behavior.\tinydouble
+        Once the meta-game is defined, the next step is to define the function $\mathcal{R}$, which ranks joint strategies based on agents' long-term dynamics and objectives. To achieve this, we propose using the evolutionary methodology \emph{$\alpha$-Rank}, which provides rankings by assessing the evolutionary success of each strategy profile. This is reflected in the probability of a given strategy profile being selected over time. This probability is captured by the stationary distribution $\pi$, which is computed by \emph{$\alpha$-Rank} in the limit of infinite ranking intensity $\alpha$. As demonstrated earlier, once $\alpha$ reaches a sufficiently large value, the rankings stabilize, accurately capturing the system's long-term behavior.\tinydouble
 
         \noindent
         To compute the stationary distribution $\pi$ over strategy profiles, the \emph{$\alpha$-Rank} methodology requires the payoff matrix $P$ of the empirical game. Along with the stationary distribution $\pi$, \emph{$\alpha$-Rank} also outputs the fixation probability function $\rho_{\mathcal{S}_i \to \mathcal{S}_j}$, where $\mathcal{S}_i, \mathcal{S}_j \in \mathcal{SP}$. One could abstractly illustrate \emph{$\alpha$-Rank} as a function:
