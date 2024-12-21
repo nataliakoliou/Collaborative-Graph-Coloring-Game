@@ -59,28 +59,26 @@
             \end{definition}
 
         \noindent
-        To visualize the flow representation of strategy evolution in agent interactions, consider the \emph{Coordination Game} in Table~\ref{tab:coordination_game}. This is a cooperative game where both players benefit from coordinating on the same strategy, $A$ or $B$, rather than playing different strategies. Figure~\ref{fig:coordination_game} illustrates the evolutionary dynamics of the agents' strategies in a graph, as designed by the authors in \cite{omidshafiei2019alpharank}.\tinydouble
-
-        \noindent
-        Each point in the graph corresponds to a mixed strategy profile for the two players, while the arrows represent the flow of strategy profiles over time. The recurrent points in the graph (bottom-left and top-right corners) correspond to the two stable profiles: $(A,A)$ and $(B,B)$. These two recurrent points represent the attractors of the system, where the flows converge. On the other hand, $(A,B)$ and $(B,A)$ (top-left and bottom-right corners) are the transient points of the graph. The flow field directs trajectories away from these points, indicating their instability. Finally, the middle point in the graph represents a mixed strategy profile where both players assign equal probability to strategies $A$ and $B$ (i.e., 50\% for each in the probability distribution). Trajectories near this point diverge, moving towards one of the two recurrent points. This behavior represents the mixed-strategy Nash equilibrium of the \emph{Coordination Game}.
+        To visualize the flow representation of strategy evolution in agent interactions, consider the \emph{Coordination Game} in Table~\ref{tab:coordination_game}. This is a cooperative game where both players benefit from coordinating on the same strategy, $A$ or $B$, rather than playing different strategies. Figure~\ref{fig:coordination_game} illustrates the replicator dynamics of the agents' strategies in a graph, as designed by the authors in \cite{omidshafiei2019alpharank}.
         %
         \begin{figure}[H]
             \centering
             \begin{minipage}{0.45\textwidth}
                 \centering
+                \vspace{1.4cm}
                 \begin{tabular}{c|c|c}
                     & A & B \\ \hline
                     A & 1,1 & -1,-1 \\
                     B & -1,-1 & 1,1 \\
                 \end{tabular}
-                \vspace{2cm}
+                \vspace{1.4cm}
                 \subcaption{Payoff matrix.}
                 \label{tab:coordination_game}
             \end{minipage}
-            \hspace{0.3em}
+            \hspace{0.1em}
             \begin{minipage}{0.45\textwidth}
                 \centering
-                \resizebox{0.5\textwidth}{!}{
+                \resizebox{0.6\textwidth}{!}{
                     \includegraphics{images/coordination-game.png}
                 }
                 \subcaption{Response Graph.}
@@ -90,6 +88,9 @@
             \label{fig:coordination_game}
         \end{figure}
         %
+
+        \noindent
+        Each point in the graph corresponds to a mixed strategy profile for the two players, while the arrows represent the flow of strategy profiles over time. The recurrent points in the graph (bottom-left and top-right corners) correspond to the two stable profiles: $(A,A)$ and $(B,B)$. These two recurrent points represent the attractors of the system, where the flows converge. On the other hand, $(A,B)$ and $(B,A)$ (top-left and bottom-right corners) are the transient points of the graph. The flow field directs trajectories away from these points, indicating their instability. Finally, the middle point in the graph represents a mixed strategy profile where both players assign equal probability to strategies $A$ and $B$ (i.e., 50\% for each in the probability distribution). Trajectories near this point diverge, moving towards one of the two recurrent points. This behavior represents the mixed-strategy Nash equilibrium of the \emph{Coordination Game}.\tinydouble
 
         \noindent
         To distinguish between recurrent sets and transient points in a dynamical system, the creators of \emph{$\alpha$-Rank} use a complete \emph{Lyapunov function} \cite{lyapunov1950}. This function, $\gamma: X \to \mathbb{R}$, assigns values to points in the space such that:
