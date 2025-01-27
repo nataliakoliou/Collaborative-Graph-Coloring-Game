@@ -1,12 +1,11 @@
 # Collaborative-Graph-Coloring-Game
----
 
-This project aims to study and rank joint policies in dynamic games using evolutionary dynamics. It applies the $\alpha$-Rank evolutionary methodology to evaluate joint policies in a stochastic version of the graph coloring game. This repository contains the code accompanying the paper **_Ranking Joint Policies in Dynamic Games using Evolutionary Dynamics_**, which was submitted to and accepted at the 24th International Conference
-on Autonomous Agents and Multiagent Systems (AAMAS 2025).
+This project applies the $\alpha$-Rank evolutionary methodology to evaluate and rank joint strategies in a stochastic version of the Graph Coloring Game. Unlike traditional game-theoretic concepts like Nash equilibrium, which often fail to capture the complexity of agent dynamics, evolutionary approaches focus on how strategies persist over time. By transforming dynamic games into empirical forms and evaluating strategies based on their stability across repeated interactions, this approach identifies joint strategies that remain resistant to change in the long term.
+
+<sub> This repository contains the code for the paper **_Ranking Joint Policies in Dynamic Games using Evolutionary Dynamics_**, accepted at AAMAS 2025.
 
 <p align="center">
-  <img src="doc/images/graph.png" style="display: inline-block; width: 45%; margin-right: 5%">
-  <img src="doc/images/cw-solution.png" style="display: inline-block; width: 45%">
+  <img src="doc/images/graph.png"
 </p>
 
 ## Prerequisites
