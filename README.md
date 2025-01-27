@@ -4,8 +4,9 @@ This project applies the $\alpha$-Rank evolutionary methodology to evaluate and 
 
 <sub> This repository contains the code for the paper **_Ranking Joint Policies in Dynamic Games using Evolutionary Dynamics_**, accepted at AAMAS 2025.
 
-<p align="center">
-  <img src="doc/images/graph.png"
+<p align="center" style="margin-top: 30px; margin-bottom: 20px;">
+  <img src="doc/images/graph.png" style="display: inline-block; width: 36%; margin-right: 5%">
+  <img src="doc/images/cw-solution.png" style="display: inline-block; width: 45%">
 </p>
 
 ## Prerequisites
@@ -18,7 +19,7 @@ To set up the environment:
    ```
 2. Clone the repository and navigate into it:
    ```bash
-    git clone https://github.com/your_username/cgcg.git
+    git clone https://github.com/nataliakoliou/Collaborative-Graph-Coloring-Game.git
     cd cgcg
     ```
 3. Install dependencies:
