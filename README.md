@@ -38,7 +38,7 @@ poetry run learner
 # Generate the empirical payoff matrix through multiple game simulations
 poetry run simulator
 
-# Apply $\alpha$-Rank to rank joint policies
+# Apply α-Rank to rank joint policies
 poetry run evaluator
 ```
 
