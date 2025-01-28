@@ -28,7 +28,10 @@ human:
 
   style:
     name: A
-    weights: [1, 0, 0]
+    weights:
+    - 0
+    - 0
+    - 0
 
     difficulty:
       '0': -1.0
@@ -76,6 +79,9 @@ robot:
     name: I
     weights:
 
+    - 0
+    - 0
+    - 0
     difficulty:
       '0': 0
       '1': 0
@@ -116,6 +122,6 @@ robot:
   memory: 10000000
 
 simulate:
-  repeats: 5000
+  repeats: 2000
   visualize: true
   top_k: 20
